@@ -3,9 +3,9 @@
 <!-- current-demo:start -->
 ## Актуальная демка — обновляется автоматически
 
-**[ИГРАТЬ В ОБНОВЛЁННУЮ ДЕМКУ](https://amazin20.github.io/brainrot-portal/campaign-v67/?v=f0adf70)**
+**[ИГРАТЬ В ОБНОВЛЁННУЮ ДЕМКУ](https://amazin20.github.io/brainrot-portal/campaign-v67/?v=eb976be)**
 
-Публикация: **2026-10-28 09:55:08 UTC**. Исходник: [`f0adf70`](https://github.com/amazin20/brainrot-portal/tree/f0adf70b984c50d2306f72f307e8ba3475d43183).
+Публикация: **2026-10-29 07:56:26 UTC**. Исходник: [`eb976be`](https://github.com/amazin20/brainrot-portal/tree/eb976be2b21153c6a98efa65c2adf1fd5e656b3b).
 
 Демка собирается целиком из `upgrade/tz-completion-20261023` после каждого изменения ветки. Публикация выполняется только после успешной сборки, проверок сохранений/доступа и запуска в браузере. Затем проверяется уже публичная игра. Старый прогон не может заменить более новый исходник.
 
@@ -13,7 +13,7 @@
 
 **Это рабочая демоверсия, не завершённая приёмка всей кампании.** Полный поиск ошибок, человеческий плейтест, аппаратные замеры и живая проверка Яндекс Игр остаются отдельными задачами. Сохранения продолжают использовать прежний адрес; исторические версии и видео не удаляются. Яндекс Игры автоматически не публикуются.
 
-[Проверка этой публикации](https://github.com/amazin20/brainrot-portal/actions/runs/40667710883) · [Точный публичный штамп](https://amazin20.github.io/brainrot-portal/demo-publication.json) · [Автосборки](https://github.com/amazin20/brainrot-portal/actions/workflows/current-demo-build.yml)
+[Проверка этой публикации](https://github.com/amazin20/brainrot-portal/actions/runs/40838597147) · [Точный публичный штамп](https://amazin20.github.io/brainrot-portal/demo-publication.json) · [Автосборки](https://github.com/amazin20/brainrot-portal/actions/workflows/current-demo-build.yml)
 
 Ниже сохранены **исторические** отчёты отдельных релизов; их старые даты и числа проверок не являются датой обновления текущей демки.
 <!-- current-demo:end -->
