@@ -37,7 +37,10 @@ export const SECOND_CHAPTER_EARLY_ATTACKS=[
   d.mark('both jambs and crown approached without drive work');
  }},
  {level:11,name:'paired-idle-air-source-and-door-crossing',run(d){
-  d.aim(0,d.level.panels['wind-intake'].getFrame().center);d.aim(1,d.level.panels['wind-outlet'].getFrame().center);d.walk(1,7.5);d.pickup();d.walk(-3,-9.5);
+  d.aim(0,d.level.panels['wind-intake'].getFrame().center);d.aim(1,d.level.panels['wind-outlet'].getFrame().center);d.walk(1,7.5);d.pickup();
+  // The clutch now has a real enclosure. Reach the same partition attack
+  // position around its east side, rather than walking through its shroud.
+  d.walk(0,-9.5);d.walk(-3,-9.5);
   d.beginTarget('portal pair addresses the idle fan while the real latch stays down',d.game.portals.ready&&!d.level.state.blower.enabled&&!d.level.state.ratchet.engaged);
   for(const x of [-3,0,3])rush(d,x,0,-16,3,{jumpEvery:23});d.mark('paired apertures supplied no mechanical work');
  }},
