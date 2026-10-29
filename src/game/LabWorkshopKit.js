@@ -8,17 +8,17 @@ import {V,gate,wall,glass,consoleNode,terminalAccessible,tracePortalRay,rayTouch
 export {V,wall,glass,tracePortalRay,rayTouches};
 const UP=V(0,1,0),clamp=THREE.MathUtils.clamp;
 export class Flywheel {
- constructor(){this.reset();}reset(){this.omega=this.angle=this.work=0;this.brake=false;}
+ constructor({inertia=3,drag=.32}={}){if(![inertia,drag].every(v=>Number.isFinite(v)&&v>0))throw new RangeError('Positive finite flywheel inertia and bearing drag required');this.inertia=inertia;this.drag=drag;this.reset();}reset(){this.omega=this.angle=this.work=0;this.brake=false;}
  step(torque,load,dt){
   if(![torque,load,dt].every(Number.isFinite)||load<0||dt<0)throw new RangeError('Finite torque, nonnegative load and dt required');
   if(!dt)return 0;
-  const rate=.32/3,equilibrium=(torque-load-(this.brake?10:0))/.32,old=this.omega;
+  const rate=this.drag/this.inertia,equilibrium=(torque-load-(this.brake?10:0))/this.drag,old=this.omega;
   let h=dt;if(equilibrium<0)h=Math.min(dt,Math.max(0,-Math.log(-equilibrium/(old-equilibrium))/rate));
   const exp=Math.exp(-rate*h),turn=Math.max(0,equilibrium*h+(old-equilibrium)*(1-exp)/rate);
   this.omega=Math.max(0,equilibrium+(old-equilibrium)*exp);this.angle+=turn;
   const output=load*turn;this.work+=output;return output;
  }
- get energy(){return 1.5*this.omega*this.omega;}
+ get energy(){return .5*this.inertia*this.omega*this.omega;}
 }
 /** All mechanisms use the production collider registry and the same cargo body.
  * Values describe actuator state, not a hidden progression/win checklist. */

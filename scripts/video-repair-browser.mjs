@@ -63,12 +63,12 @@ try{
   const g=window.__NESI_DEMO_GAME__,update=g.updateVisuals,images=[];let frames=0,shots=0;const fire=g.firePortal;
   g.firePortal=function(...args){const result=fire.apply(this,args);if(result){shots++;frames=72;}return result;};
   g.updateVisuals=function(...args){update.apply(this,args);if(frames>0){frames--;this.render();images.push(this.renderer.domElement.toDataURL());}};
-  try{return{route:await window.__NESI_RUN_LEVEL_ROUTE__(),images,shots,terminals:g.firstLevel.terminals.length,automaticDoor:g.firstLevel.state.ratchet.engaged};}
+  try{return{route:await window.__NESI_RUN_LEVEL_ROUTE__(),images,shots,terminals:g.firstLevel.terminals.length,physicalDoor:g.firstLevel.state.outputDrive.stroke>=1};}
   finally{g.updateVisuals=update;g.firePortal=fire;}
  });
  route.images.forEach((data,i)=>image(`shot-${String(i).padStart(3,'0')}`,data));delete route.images;report.route=route;
- assert.ok(route.route.pass&&route.route.resets===0&&route.route.respawns===0&&route.automaticDoor);assert.equal(route.terminals,1);assert.ok(route.shots>=2);
- await page.screenshot({path:out+'/automatic-door-complete.png'});
+ assert.ok(route.route.pass&&route.route.resets===0&&route.route.respawns===0&&route.physicalDoor);assert.equal(route.terminals,2);assert.ok(route.shots>=2);
+ await page.screenshot({path:out+'/physical-door-complete.png'});
  // The altered open-top test enclosure is examined in-room, not from outside
  // the roof. This is art review only, not a positive passage shortcut fixture.
  await page.evaluate(async()=>{const g=window.__NESI_DEMO_GAME__;await g.selectLevel(8,false);g.renderer.setAnimationLoop(null);g.resetRun(true);document.querySelector('#win-screen').classList.remove('screen--active');g.updateVisuals(1/60,1);g.render();});

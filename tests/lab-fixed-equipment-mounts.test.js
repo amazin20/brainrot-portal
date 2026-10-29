@@ -42,6 +42,40 @@ test('wind service bus reaches the actual floor and remains the same continuous 
  for(const dx of [-.10,.10])for(const dz of [-.10,.10]){const h=hit([-11.6+dx,.05,-11.4+dz],[0,-1,0],.12);assert.ok(h&&Math.abs(h.point.y)<.025,'Bus foot floats above real rendered floor');}
  assert.ok(c.box.intersectsBox(rows[0].box));originalRoom11Contract(gameplayContract(g));
 });
+test('wind output-machine approval rejects altered guards, materials, queries, controls and old room records',async()=>{
+ await g.selectLevel(10,true);const contract=gameplayContract(g),golden=fixtures.rows.find(f=>f.index===10).sha256;
+ const retained=c=>digest(originalRoom11Contract(c));assert.equal(retained(contract),golden);
+ const drawing=[];g.firstLevel.world.root.traverse(m=>{if(m.isMesh&&m.name.startsWith('Wind clutch / '))drawing.push(m);});
+ const palette=g.firstLevel.world.materials,checkDrawing=()=>{
+  assert.equal(drawing.length,24,'The audited machine owns exactly its guard, fork, rotor, collar and two springs');
+  const uses={trim:0,floor:0,accent:0};
+  for(const mesh of drawing){
+   assert.equal(mesh.visible,true);for(let p=mesh;p;p=p.parent)assert.equal(p.visible,true);
+   assert.equal(mesh.material.visible,true);assert.equal(mesh.material.transparent,false);
+   const key=Object.keys(uses).find(name=>palette[name]===mesh.material);assert.ok(key,'The machine must reuse its three existing opaque palette materials');uses[key]++;
+  }
+  assert.deepEqual(uses,{trim:10,floor:2,accent:12});
+ };
+ checkDrawing();const first=drawing[0],material=first.material,clone=material.clone();
+ try{first.visible=false;assert.throws(checkDrawing);first.visible=true;first.material=clone;assert.throws(checkDrawing);}
+ finally{first.visible=true;first.material=material;clone.dispose();}
+ checkDrawing();
+ const shroud=c=>c.colliders.find(r=>r.mesh.name==='Wind clutch / spring-return air shroud');
+ const attacks=[
+  c=>{shroud(c).box.min.y+=.01;},
+  c=>{shroud(c).kinematic=false;},
+  c=>{shroud(c).enabled=false;},
+  c=>{c.camera.push(structuredClone(c.camera.find(r=>r.name==='Wind clutch / spring-return air shroud')));},
+  c=>{c.aim=c.aim.filter(r=>r.name!=='Wind clutch / left enclosure');},
+  c=>{c.portalRegistry.push(structuredClone(shroud(c).mesh));},
+  c=>{c.terminals.find(t=>t.kind==='drive-clutch').position[0]+=.1;},
+  c=>{c.state.outputDrive.stroke=.1;},
+  c=>{c.state.flywheel.clutch=true;},
+  c=>{c.panels['wind-outlet'].center[1]+=.1;},
+  c=>{c.colliders[0].enabled=false;},
+ ];
+ for(const mutate of attacks){const bad=structuredClone(contract);mutate(bad);assert.throws(()=>assert.equal(retained(bad),golden));}
+});
 test('both launch standards touch finite rendered rim faces and their own real bearing decks',async()=>{
  await g.selectLevel(42,true);const rows=checkRegistries(),p=g.firstLevel.launch;
  for(const side of ['deck','recovery']){

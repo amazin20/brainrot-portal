@@ -62,12 +62,13 @@ test('air on the back, side or behind an obstacle cannot power the receiver',()=
  assert.ok(!receivesFrontAir([seg([4,2,0],[-1,0,0],8)],inlet,normal,1));
  assert.ok(!receivesFrontAir([seg([0,2,4],[0,0,-1],2)],inlet,normal,1));
 });
-test('controls alone cannot open the door, power and accumulated work are reset',()=>{
- g.resetRun(true);const l=g.firstLevel,s=l.state;assert.equal(s.clutchControl,undefined);assert.equal(l.terminals.length,1);s['fan-switchControl'].action();
+test('controls without routed energy and forged cumulative work cannot open the physical gate; restart clears the actuator',()=>{
+ g.resetRun(true);const l=g.firstLevel,s=l.state;assert.ok(s['drive-clutchControl']);assert.equal(l.terminals.length,2);s['fan-switchControl'].action();
  for(let n=0;n<1200;n++)l.update(1/120);
  assert.equal(s.flywheel.wheel.work,0);assert.equal(s.ratchet.engaged,false);assert.equal(s.door.open,false);
- s.flywheel.wheel.work=71;l.update(1/120);assert.equal(s.door.open,true);
+ s.flywheel.wheel.work=1e9;l.update(1/120);assert.equal(s.outputDrive.stroke,0);assert.equal(s.door.open,false);
  g.resetRun(true);assert.equal(s.ratchet.engaged,false);assert.equal(s.flywheel.wheel.work,0);assert.equal(s.blower.enabled,false);assert.equal(s.door.open,false);
+ assert.equal(s.outputDrive.stroke,0);assert.equal(s.outputDrive.clutch,false);
 });
 test('requested round fan produces air; louvred drive receives it without rotating its casing',()=>{
  g.resetRun(true);const l=g.firstLevel,f=l.state.blower,drive=l.state.flywheel;

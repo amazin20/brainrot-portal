@@ -7,6 +7,8 @@ import {LabPhysics} from '../src/game/LabPhysics.js';
 import {LabCompanionBehavior} from '../src/game/LabCompanionBehavior.js';
 import {airAcceleration} from '../src/game/LabAirForces.js';
 import {sweepBox} from '../src/game/LabSweep.js';
+import {runV8Journey} from '../src/game/LabV8Journey.js';
+import {runWorkshopJourney} from '../src/game/LabWorkshopJourney.js';
 const V=(...p)=>new THREE.Vector3(...p),g=await createHeadlessGame();
 await g.selectLevel(10,false);
 function tick(n=1){for(let i=0;i<n;i++){g.updatePlaying(1/120);g.updatePlaying(1/120);g.updateVisuals(1/60,1);}}
@@ -29,13 +31,20 @@ test('video regression: sprint, jumps and fast alternating turns keep the same b
  }
 });
 
-test('held wall and corner pressure stays on the near side, releases naturally and never resets the room',()=>{
+test('held wall and corner pressure stays on the near side, releases naturally and retains a genuinely opened gate without resets',async()=>{
  for(const angle of [0,Math.PI/4,Math.PI/2]){
-  placeFixture([12,0,12],[12,.5,12.85]);g.facing=0;g.updateVisuals(0,1);g.interact();assert.equal(g.heldCube,g.cargo);tick(60);
-  g.yaw=angle+Math.PI;g.input.keys.add('KeyW');g.input.keys.add('ShiftLeft');const body=g.physics.cargoBody;
-  g.firstLevel.state.ratchet.engaged=true;
-  for(let i=0;i<300;i++){if(i%41===0)g.input.jumpQueued=true;tick();assert.ok(g.cargo.position.x<13.65&&g.cargo.position.z<14.65);assert.equal(g.heldCube,g.cargo);assert.equal(g.firstLevel.state.ratchet.engaged,true);}
-  g.input.keys.clear();g.interact();assert.equal(g.heldCube,null);tick(240);assert.equal(g.physics.cargoBody,body);assert.ok(g.cargo.position.y>-.1);assert.equal(g.firstLevel.state.ratchet.engaged,true);
+  const report=await runV8Journey(g,{scenario:async d=>{
+   await runWorkshopJourney(d,{stopAtOpenGate:true});
+   for(let attempt=0;attempt<12&&!g.heldCube;attempt++){const c=g.cargo.position.clone();d.walk(c.x,c.z+1.2);g.interact();d.wait(.2);}
+   assert.equal(g.heldCube,g.cargo);d.wait(.55);d.walk(12,12);d.wait(1);
+   const body=g.physics.cargoBody,stroke=g.firstLevel.state.outputDrive.stroke,start=g.playerPosition.clone();
+   assert.equal(g.heldCube,g.cargo);assert.equal(stroke,1);assert.equal(g.firstLevel.state.ratchet.engaged,true);
+   g.yaw=angle+Math.PI;g.input.keys.add('ShiftLeft');d.worldMove(Math.sin(angle),Math.cos(angle));
+   for(let i=0;i<300;i++){if(i%41===0)g.input.jumpQueued=true;d.frame();assert.ok(g.cargo.position.x<13.65&&g.cargo.position.z<14.65);assert.equal(g.heldCube,g.cargo);assert.equal(g.firstLevel.state.outputDrive.stroke,stroke);assert.equal(g.firstLevel.state.ratchet.engaged,true);}
+   assert.ok(g.playerPosition.clone().sub(start).dot(V(Math.sin(angle),0,Math.cos(angle)))>.2,'The ordinary movement input must actually press the held body toward the wall');
+   d.stop();g.interact();assert.equal(g.heldCube,null);d.wait(4);assert.equal(g.physics.cargoBody,body);assert.ok(g.cargo.position.y>-.1);assert.equal(g.firstLevel.state.outputDrive.stroke,stroke);assert.equal(g.firstLevel.state.ratchet.engaged,true);
+  }});
+  assert.equal(report.resets+report.respawns,0);
  }
 });
 
@@ -98,8 +107,9 @@ test('shot queues are bounded, render-only updates freeze travel and reset clear
  g.resetRun(true);assert.deepEqual(g.portalShots.diagnostics,{pending:0,flying:0,lastImpact:null});assert.ok(g.portalShots.pool.every(p=>!p.group.visible));
 });
 
-test('automatic receiving drive has no second terminal and the normal route opens it using real travelling shots',async()=>{
- const {runV8Journey}=await import('../src/game/LabV8Journey.js');g.resetRun(true);assert.equal(g.firstLevel.terminals.length,1);assert.equal(g.firstLevel.state.clutchControl,undefined);
+test('the manually isolated receiving drive opens through routed travelling shots, stopped airflow and its exposed clutch',async()=>{
+ g.resetRun(true);assert.equal(g.firstLevel.terminals.length,2);assert.ok(g.firstLevel.state['drive-clutchControl']);
  const r=await runV8Journey(g);assert.ok(r.pass);assert.equal(r.resets,0);assert.equal(r.respawns,0);assert.ok(g.firstLevel.state.ratchet.engaged);
+ assert.ok(r.milestones.some(m=>m.name==='manual clutch transfers stored rotation into the gate'));assert.equal(g.firstLevel.state.outputDrive.stroke,1);
  g.physics.dispose();g.portals.dispose();
 });

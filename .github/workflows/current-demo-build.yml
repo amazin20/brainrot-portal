@@ -64,6 +64,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - level: 11
+            tests: tests/lab-wind-room.test.js tests/lab-wind-alternatives.test.js tests/lab-room11-clutch.test.js tests/lab-room11-adversarial.test.js
           - level: 13
             tests: tests/lab-room13.test.js tests/lab-room13-portrait-attacks.test.js tests/second-chapter-early-attacks.test.js
           - level: 16

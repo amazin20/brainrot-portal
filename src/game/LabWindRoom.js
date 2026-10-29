@@ -3,9 +3,11 @@ import { Workshop, Flywheel, V, tracePortalRay } from './LabWorkshopKit.js';
 import { airAcceleration } from './LabAirForces.js';
 import { LabAirflowVisual } from './LabAirflowVisual.js';
 import { cargoLoadsPlate } from './LabPlateContact.js';
+import { terminalAccessible } from './LabPuzzleMechanics.js';
+import { WindClutchDrive, windDoorParameter } from './LabWindClutchDrive.js';
 
-/** Room 11 only. No new device, game rule or campaign entry.
- * Existing source meshes, air tracing, inertia and door actuator are retained.
+/** Room 11 only. Existing source meshes, air tracing and door are retained.
+ * A mechanically exclusive input/output clutch exposes stored rotation.
  * User's model roles: round model 31 is the blower; louvred model 35 is
  * the receiving drive. Only the blower's front impeller rotates. */
 export function generatorSkin(game) {
@@ -97,7 +99,9 @@ export function buildReadableWindRoom(game, spec) {
   const turbineBox = new THREE.Box3().setFromObject(turbineArt.art);
   const housing = game.colliders.at(-1);
   const inlet = V(turbineBox.max.x + .025, 2.1, -5);
-  const wheel = new Flywheel();
+  // Low-loss bearings leave time to walk, inspect the fork and collect the
+  // companion. This changes this rotor only, not other campaign flywheels.
+  const wheel = new Flywheel({ drag: .06 });
   const turbine = { art: turbineArt, wheel, position: inlet, normal: V(1, 0, 0), power: false, clutch: false, housing };
   k.state.flywheel = turbine;
 
@@ -137,14 +141,87 @@ export function buildReadableWindRoom(game, spec) {
   });
   k.wire([[-5.2,.052,-1.4],[-5.2,.052,-3.2],[-5.2,.052,-4.3]],() => driveTurn.loaded());
 
-  // Keep the existing exit and physical latch. Remove the unrelated loose
-  // cable reel and hovering progress stick; neither explained the old device.
+  // The existing swinging leaves now belong to a finite-work transmission.
+  // Its pawl holds partial angles; live power cannot be connected to output.
   const door = k.door(-12);
   const pawl = w.box([-2.65, 1.7, -11.63], [.6, .2, .7], w.materials.accent, false);
-  const ratchet = { engaged: false, progress: 0 }; k.state.ratchet = ratchet;
+  const outputDrive = new WindClutchDrive(wheel); k.state.outputDrive = outputDrive;
+  const ratchet = { get engaged() { return outputDrive.stroke === 1; }, get progress() { return outputDrive.stroke; } };
+  k.state.ratchet = ratchet;
   const fanControl = k.control('fan-switch', [-4.7, 0, 6], () => { fan.enabled = !fan.enabled; }, 'E — включить вентилятор.');
-  // The receiver is always connected to its door: no redundant second console.
-  turbine.clutch = true;
+  const solid = (name, position, size, material = w.materials.trim) => {
+    const mesh = w.box(position, size, material); mesh.name = 'Wind clutch / ' + name;
+    mesh.userData.firstChapterStructuralRole = 'wind-clutch';
+    return mesh;
+  };
+  const detail = (name, position, size, material = w.materials.trim, parent = w.root) => {
+    const mesh = game.box(...position, ...size, material, { parent, camera: false, aim: false });
+    mesh.name = 'Wind clutch / ' + name; mesh.userData.firstChapterStructuralRole = 'wind-clutch'; return mesh;
+  };
+  // This shroud is a physical enclosure, not an interaction-state permission.
+  // Fixed sides/back/roof prevent reaching the fork from another direction.
+  solid('left enclosure', [-3.70, 1.1, -8], [.15, 2.2, 1.65]);
+  solid('right enclosure', [-1.60, 1.1, -8], [.15, 2.2, 1.65]);
+  solid('rear enclosure', [-2.65, 1.1, -8.75], [1.95, 2.2, .15]);
+  solid('enclosure roof', [-2.65, 2.2, -8.075], [2.25, .16, 1.35]);
+  for (const [side, x] of [['left', -3.70], ['right', -1.60]])
+    solid('guide rail ' + side, [x, 2.2, -7.25], [.10, 4.4, .20]);
+  const coverMesh = solid('spring-return air shroud', [-2.65, 3.25, -7.25], [1.95, 2.1, .15], w.materials.floor);
+  const coverCollider = game.colliders.find(c => c.mesh === coverMesh); coverCollider.kinematic = true;
+  const leverSweepBox = new THREE.Box3(V(-2.92, .70, -7.50), V(-2.38, 1.65, -7.12));
+  outputDrive.cover.mesh = coverMesh; outputDrive.cover.collider = coverCollider;
+  outputDrive.leverSweepBox = leverSweepBox;
+  const clutchControl = k.control('drive-clutch', [-2.65, 0, -8], () => {
+    // The same physical hand ray guards direct calls as ordinary E input.
+    if (!terminalAccessible(game, clutchControl) || coverCollider.box.intersectsBox(leverSweepBox)) return;
+    outputDrive.toggleClutch(); turbine.clutch = outputDrive.clutch;
+  }, 'E — подключить маховик к створкам.');
+  clutchControl.collider.mesh.name = 'Wind clutch / command body';
+  const fork = detail('coupling fork', [-2.65, 1.30, -7.50], [.50, .09, .54], w.materials.accent);
+  const springs = [];
+  for (const x of [-3.70, -1.60]) {
+    const points = Array.from({ length: 145 }, (_, i) => {
+      const t = i / 144, angle = t * 18 * Math.PI;
+      return V(.10 * Math.cos(angle), t, .10 * Math.sin(angle));
+    });
+    const spring = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), 144, .015, 5, false), w.materials.accent);
+    spring.name = 'Wind clutch / return spring'; spring.position.set(x, 3.25, -7.25); w.root.add(spring); springs.push(spring);
+  }
+  // A visible shaft and external flywheel explain retained motion without
+  // spinning the receiving GLB's louvres or adding an energy progress stick.
+  solid('shaft casing', [-5.4, .18, -7.55], [.30, .36, 2.52]);
+  solid('flywheel pedestal', [-5.4, .34, -8.8], [1.40, .68, .62]);
+  solid('output shaft casing', [-3.98, .18, -8.8], [2.54, .36, .30]);
+  const rotor = new THREE.Group(); rotor.name = 'Wind clutch / stored-motion rotor'; rotor.position.set(-5.4, 1.35, -8.8); w.root.add(rotor);
+  const rim = new THREE.Mesh(new THREE.TorusGeometry(.63, .09, 8, 32), w.materials.floor); rim.name = 'Wind clutch / flywheel rim'; rotor.add(rim);
+  for (let i = 0; i < 4; i++) { const spoke = detail('flywheel spoke ' + i, [0, 0, 0], [1.17, .09, .10], w.materials.accent, rotor); spoke.rotation.z = i * Math.PI / 4; }
+  detail('flywheel hub', [0, 0, 0], [.24, .24, .30], w.materials.trim, rotor);
+  const rotorCollider = game.collisionProxy(new THREE.Box3(V(-6.12, .63, -8.98), V(-4.68, 2.07, -8.62)));
+  rotorCollider.mesh.name = 'Wind clutch / flywheel swept body';
+  // The input collar lies within the existing receiver housing and rotates
+  // with its turntable. Closing its visible vanes isolates the rotor from
+  // upstream pressure before the output dog can transmit any work.
+  const collar = new THREE.Group(); collar.name = 'Wind clutch / inlet collar'; w.root.add(collar);
+  const vanes = [];
+  for (let i = 0; i < 5; i++) vanes.push(detail('inlet vane ' + i, [0, (i - 2) * .28, 0], [1.40, .25, .045], w.materials.accent, collar));
+  outputDrive.rotor = rotor; outputDrive.collar = collar; outputDrive.fork = fork;
+  const syncDriveGeometry = dt => {
+    coverMesh.position.y = 1.05 + outputDrive.cover.opening;
+    coverMesh.updateWorldMatrix(true, true);
+    game.syncCollision(coverCollider, new THREE.Box3().setFromObject(coverMesh), dt);
+    collar.position.copy(inlet).addScaledVector(turbine.normal, -.03);
+    collar.quaternion.setFromUnitVectors(V(0, 0, 1), turbine.normal);
+    for (const vane of vanes) vane.rotation.x = outputDrive.clutch ? 0 : Math.PI / 2;
+    fork.rotation.x = outputDrive.clutch ? 0 : Math.PI / 2;
+    for (const spring of springs) { spring.position.y = 1.05 + outputDrive.cover.opening; spring.scale.y = 4.35 - spring.position.y; }
+    door.previous = windDoorParameter(outputDrive.previousStroke);
+    door.progress = windDoorParameter(outputDrive.stroke); door.open = outputDrive.stroke === 1;
+    door.mechanism.update(door.progress, k.time);
+    door.mechanism.getLeafBoxes().forEach((box, i) => game.syncCollision(door.colliders[i], box, dt));
+  };
+  // No boolean or doorway occupancy may manufacture the remaining stroke.
+  door.update = (_open, dt) => syncDriveGeometry(dt);
+  door.render = alpha => door.mechanism.update(windDoorParameter(THREE.MathUtils.lerp(outputDrive.previousStroke, outputDrive.stroke, alpha)), k.time);
   // A single grounded, continuous existing cable route, not a floating wire.
   k.wire([[turbineBox.min.x - .02, .065, -5], [turbineBox.min.x - .02, .065, -9], [-2.65, .065, -9], [-2.65, .065, -11.4], [-2.65, 1.7, -11.4]], () => turbine.power);
 
@@ -152,11 +229,11 @@ export function buildReadableWindRoom(game, spec) {
   // blockers/portal mapping and a physical-time clock; no extra physics/labels.
   const airflow = new LabAirflowVisual(w.root, { radius: 1.35, speed: 7.2 });
   const dust = airflow.mesh; // retained diagnostics alias; no sphere instances
-  let previousAngle = 0, previousPawl = 0;
+  let previousAngle = 0, previousPawl = 0, previousWheelAngle = 0;
   const lights = [];
   door.art.traverse(o => { if (o.isMesh && o.material.isMeshBasicMaterial) lights.push(o); });
   k.ticks.push(dt => {
-    previousAngle = fan.angle; previousPawl = ratchet.progress;
+    previousAngle = fan.angle; previousPawl = ratchet.progress; previousWheelAngle = wheel.angle;
     const target = fan.enabled ? 12 : 0, rate = fan.enabled ? 3.5 : 2.7, old = fan.rotorSpeed;
     fan.rotorSpeed = THREE.MathUtils.damp(old, target, rate, dt);
     fan.angle += target * dt + (old - target) * (1 - Math.exp(-rate * dt)) / rate;
@@ -165,33 +242,36 @@ export function buildReadableWindRoom(game, spec) {
     airflow.step(dt, strength); airflow.setPath(fan.segments, game.portals?.portals || []);
     const ready = Math.min(driveTurn.angle, Math.PI - driveTurn.angle) < .04;
     turbine.power = ready && receivesFrontAir(fan.segments, inlet, turbine.normal, 1.0);
-    wheel.step(turbine.power ? 24 * strength : 0, !ratchet.engaged ? 2.2 : 0, dt);
-    if (wheel.work > 70) ratchet.engaged = true;
-    ratchet.progress = THREE.MathUtils.damp(ratchet.progress, ratchet.engaged ? 1 : 0, 6, dt);
-    door.update(ratchet.engaged, dt, k.time);
+    outputDrive.step(turbine.power ? strength : 0, dt);
+    turbine.clutch = outputDrive.clutch;
+    syncDriveGeometry(dt);
+    rotor.rotation.z = wheel.angle;
     fanControl.lesson = fan.enabled ? 'E — выключить вентилятор.' : 'E — включить вентилятор.';
+    clutchControl.lesson = outputDrive.clutch ? 'E — отсоединить маховик от створок.' : 'E — подключить маховик к створкам.';
   });
   k.renders.push(alpha => {
     blowerArt.spin(THREE.MathUtils.lerp(previousAngle, fan.angle, alpha));
+    rotor.rotation.z = THREE.MathUtils.lerp(previousWheelAngle, wheel.angle, alpha);
     pawl.rotation.z = -.6 * THREE.MathUtils.lerp(previousPawl, ratchet.progress, alpha);
     for (const light of lights) light.material.color.setHex(ratchet.engaged ? 0x82d6c1 : 0xd4a254);
     airflow.render(alpha, game.quality?.shadows === false ? 'low' : 'balanced');
   });
   k.resets.push(() => {
-    fan.enabled = false;fan.touchingFriend=false; fan.segments = []; turbine.power = false; turbine.clutch = true; wheel.reset();
-    ratchet.engaged = false; ratchet.progress = previousPawl = previousAngle = 0;
+    fan.enabled = false;fan.touchingFriend=false; fan.segments = []; turbine.power = false; turbine.clutch = false; outputDrive.reset();
+    previousPawl = previousAngle = previousWheelAngle = 0;
     driveTurn.angle = 0; turbineArt.art.rotation.y = Math.PI / 2;
     turbineArt.art.updateWorldMatrix(true, true);
     game.syncCollision(housing, new THREE.Box3().setFromObject(turbineArt.art), 0);
     inlet.set(new THREE.Box3().setFromObject(turbineArt.art).max.x + .025, 2.1, -5);
     turbine.normal.set(1, 0, 0); plateMaterial.color.setHex(0x9d8269);
     fan.rotorSpeed = fan.angle = 0; blowerArt.spin(0); pawl.rotation.z = 0; airflow.reset();
+    rotor.rotation.z = 0; syncDriveGeometry(0);
   });
-  const level = k.finish([-1, 0, 8], [1.5, .55, 7.5], [0, 0, -16], { workshop: k, readability: { inlet, housing, dust, airflow, pawl, fanControl } });
+  const level = k.finish([-1, 0, 8], [1.5, .55, 7.5], [0, 0, -16], { workshop: k, readability: { inlet, housing, dust, airflow, pawl, fanControl, clutchControl, coverMesh, rotor, collar } });
   level.hints = [
-    spec.hints[0] + ' Пластина у приёмника поворачивает его, когда на ней стоит друг.',
-    spec.hints[1] + ' Поверни приёмник и попробуй пустить поток от левой стены.',
-    spec.hints[2] + ' Другой путь: оставь друга на пластине и направь воздух через правую стену к левой, затем вернись за ним.',
+    'Вращение маховика и ход створок разделены муфтой. Поток прижимает кожух к её рукояти.',
+    'У маховика остаётся вращение после прекращения подачи. Друг на пластине поворачивает приёмник к другой стене.',
+    'Раскрути маховик, прекрати поток и подключи муфту, когда пружина отведёт кожух. Слабого разгона хватит лишь на часть хода; можно зарядить снова.',
   ];
   // Context comes from the nearby existing control, not instructions painted
   // on the wall or a central overlay. No solution markers or forced ordering.

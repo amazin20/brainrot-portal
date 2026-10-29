@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 /** Positive playthroughs issue the same movement, aim and E interactions as a
  * player. No actor/body transform, mechanism state or success flag is assigned. */
-export async function runWorkshopJourney(d,{route='floor-feed'}={}){
+export async function runWorkshopJourney(d,{route='floor-feed',stopAtOpenGate=false}={}){
  const {game,level,walk,wait,aim,until,pickup,enter,mark,frame,worldMove,stop}=d;
  const k=level.workshop,s=k.state,p=level.panels,index=game.levelIndex;
  const assert=(ok,text)=>{if(!ok)throw Error(text);};
@@ -89,15 +89,43 @@ export async function runWorkshopJourney(d,{route='floor-feed'}={}){
    until(()=>s.driveTurn.loaded()&&s.driveTurn.angle>3.08,4,'The original friend did not turn the receiving grille');
    mark('friend turned the physical receiver to face the west wall');
    walk(-3.5,-1);aim(1,new THREE.Vector3(-13.975,2.3,-5));
-   lever('fan-switch',8);
-   until(()=>s.ratchet.engaged,15,'Westward air did not work on the reversed drive');
-   mark('west-wall stream spun the reversed receiver and opened the door');
-   collect();walk(0,-1.4);groundExit();
   }else{
    assert(route==='floor-feed',`Unknown stored-wind route: ${route}`);
-   shot(0,'wind-intake');shot(1,'wind-outlet');mark('portal pair addresses the wind drive before fan power');lever('fan-switch',8);
-   until(()=>s.ratchet.engaged,15,'Wind did not do mechanical work');mark('air spun flywheel and lifted ratchet');collect();groundExit();
+   shot(0,'wind-intake');shot(1,'wind-outlet');mark('portal pair addresses the wind drive before fan power');
   }
+  // Live flow charges the input rotor while its physical cover keeps the
+  // output clutch out of reach. The four observations are taken through the
+  // ordinary camera controls, without changing a body or mechanism pose.
+  // Approach the switch from the south, outside the live source plume. A
+  // long inspection beside its north face would legitimately blow the
+  // operator into the working portal and away from this control.
+  walk(0,8);walk(-4.7,7.45);wait(.2);game.interact();wait(12);
+  lookAt(new THREE.Vector3(-2.65,1.3,-8));
+  assert(s.flywheel.power&&s.flywheel.wheel.energy>0,'The routed air did not charge the input rotor');
+  assert(!s.outputDrive.clutch&&s.outputDrive.stroke===0,'Live air bypassed the disconnected output');
+  mark('live airflow charges the isolated flywheel while the output stays still');
+  game.interact();wait(2.4);walk(0,1);walk(-2.65,-5.9);
+  until(()=>s.outputDrive.leverClear(),6,'The spring cover did not return after actual flow stopped');
+  lookAt(new THREE.Vector3(-2.65,1.1,-8));
+  assert(!s.flywheel.power&&!s.outputDrive.clutch&&level.nearbyInteraction()?.kind==='drive-clutch','The cover must expose the still-disconnected output to ordinary interaction');
+  mark('stopped airflow lets the spring cover expose the clutch');
+  game.interact();frame();
+  assert(s.outputDrive.clutch&&s.outputDrive.stroke>0,'The accessible manual clutch did not transfer stored rotation');
+  mark('manual clutch transfers stored rotation into the gate');
+  until(()=>s.ratchet.engaged,15,'Stored rotation did not complete the physical gate stroke');
+  lookAt(new THREE.Vector3(0,1.8,-12));
+  mark('stored rotation completes the physical gate stroke');
+  if(stopAtOpenGate)return;
+  // The free companion keeps its ordinary idle stroll throughout the
+  // inspection. Track its current position while approaching rather than
+  // reaching toward a stale point captured across the entire room.
+  for(let attempt=0;attempt<12&&!game.heldCube;attempt++){
+   const c=game.cargo.position.clone(),offset=game.playerPosition.clone().sub(c);offset.y=0;
+   if(offset.length()<.1)offset.z=1;offset.normalize().multiplyScalar(1.2);
+   walk(c.x+offset.x,c.z+offset.z);game.interact();if(game.heldCube)wait(.55);else wait(.2);
+  }
+  assert(game.heldCube,'The original strolling friend could not be collected');
+  walk(0,-1.4);groundExit();
  }else if(index===11){
   shot(0,'work-front');shot(1,'carousel');lever('rotation',3);enter(p['work-front']);mark('moving portal served cargo balcony');collect();enter(p.carousel);put(-5,10);
   lever('rotation',3);collect();enter(p['work-front']);walk(0,-9);
