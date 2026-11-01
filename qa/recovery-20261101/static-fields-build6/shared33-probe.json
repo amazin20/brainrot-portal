@@ -1,0 +1,66 @@
+{
+  "kind": "ONE_ROOM_ACTUAL_CONSTRUCTION_AND_RELEASE_PROBE",
+  "stable": 33,
+  "pass": true,
+  "sourcePins": {
+    "src/game/LabOpticsArchitecture.js": "2960dcef866c9b489bf1cef730d1505dc55fa0710ae45bee74c2e2de3fa0757c",
+    "src/game/LabObservatoryFieldFinishes.js": "82b0f454f28ed06e6f06e49dc2866891f15753a8e8035f36c32919a546bd84c8"
+  },
+  "gameplaySimulationAccepted": false,
+  "nativeGlslCompiled": false,
+  "nativeImagesCaptured": false,
+  "appearanceAccepted": false,
+  "all51Accepted": false,
+  "errors": [],
+  "moving": {
+    "name": "Liquid driven archive lift",
+    "sharedMaterialAlias": true,
+    "analyticExclusion": {
+      "kind": "cutout",
+      "bodyMin": [
+        -8,
+        -1,
+        0
+      ],
+      "bodyMax": [
+        4,
+        0,
+        12
+      ],
+      "floorHeight": [
+        -0.05,
+        0.05
+      ],
+      "cutout": [
+        -8.1,
+        -0.1,
+        4.1,
+        12.1
+      ],
+      "minimumMargin": 0.09999999999999964
+    },
+    "copiedRecordNegativeChecks": 3,
+    "legacyJointStageSha256": "e6c001e186f5895dbcbdab85b40fc62909aedbfb1eb4aa6769ce9852493cf586",
+    "emittedSharedFragmentSha256": "6696468a2599eaee3079dcde855422be342f6345bc66591673eee5d2de0f6773",
+    "nativeOutputAccepted": false,
+    "rawOriginalRestored": true
+  },
+  "shaderHashes": [
+    {
+      "original": "Honed mineral walking deck",
+      "fragmentSha256": "6696468a2599eaee3079dcde855422be342f6345bc66591673eee5d2de0f6773",
+      "cacheKey": "onBeforeCompile( /* shaderobject, renderer */ ) {}|architectural-plinth67|observatory-continuous-instrument-panels-v2-reconstructedfloor|observatory-static-field-compositions-v2-shared-floor|33|floor"
+    },
+    {
+      "original": "Structural laboratory wall",
+      "fragmentSha256": "c8020bf4b445495f31cbc00b604ea96d621c5d7679431631426f3dc8c9464f69",
+      "cacheKey": "onBeforeCompile( /* shaderobject, renderer */ ) {}|architectural-plinth67|observatory-continuous-instrument-panels-v2-reconstructedroof|observatory-static-field-compositions-v2-shared-floor|33|roof"
+    },
+    {
+      "original": "Foundation service floor",
+      "fragmentSha256": "6696468a2599eaee3079dcde855422be342f6345bc66591673eee5d2de0f6773",
+      "cacheKey": "onBeforeCompile( /* shaderobject, renderer */ ) {}|architectural-plinth67|observatory-continuous-instrument-panels-v2-reconstructedfloor|observatory-static-field-compositions-v2-shared-floor|33|service-floor"
+    }
+  ],
+  "replacementResources": 3
+}

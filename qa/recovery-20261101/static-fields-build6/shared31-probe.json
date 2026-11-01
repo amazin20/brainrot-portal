@@ -1,0 +1,59 @@
+{
+  "kind": "ONE_ROOM_ACTUAL_CONSTRUCTION_AND_RELEASE_PROBE",
+  "stable": 31,
+  "pass": true,
+  "sourcePins": {
+    "src/game/LabOpticsArchitecture.js": "2960dcef866c9b489bf1cef730d1505dc55fa0710ae45bee74c2e2de3fa0757c",
+    "src/game/LabObservatoryFieldFinishes.js": "82b0f454f28ed06e6f06e49dc2866891f15753a8e8035f36c32919a546bd84c8"
+  },
+  "gameplaySimulationAccepted": false,
+  "nativeGlslCompiled": false,
+  "nativeImagesCaptured": false,
+  "appearanceAccepted": false,
+  "all51Accepted": false,
+  "errors": [],
+  "moving": {
+    "name": "rack-driven-crossing",
+    "sharedMaterialAlias": true,
+    "analyticExclusion": {
+      "kind": "height",
+      "bodyMin": [
+        -25,
+        5,
+        -1
+      ],
+      "bodyMax": [
+        -13,
+        6,
+        11
+      ],
+      "floorHeight": [
+        -4.05,
+        0.05
+      ]
+    },
+    "copiedRecordNegativeChecks": 3,
+    "legacyJointStageSha256": "e6c001e186f5895dbcbdab85b40fc62909aedbfb1eb4aa6769ce9852493cf586",
+    "emittedSharedFragmentSha256": "4bd5e7db62092c2b6ed098767ea3b01d2c53da5d5ebf4fe6019bc8c317e4a609",
+    "nativeOutputAccepted": false,
+    "rawOriginalRestored": true
+  },
+  "shaderHashes": [
+    {
+      "original": "Honed mineral walking deck",
+      "fragmentSha256": "4bd5e7db62092c2b6ed098767ea3b01d2c53da5d5ebf4fe6019bc8c317e4a609",
+      "cacheKey": "onBeforeCompile( /* shaderobject, renderer */ ) {}|architectural-plinth67|observatory-continuous-instrument-panels-v2-reconstructedfloor|observatory-static-field-compositions-v2-shared-floor|31|floor"
+    },
+    {
+      "original": "Structural laboratory wall",
+      "fragmentSha256": "9a38cb3b9d3b7cd6c6e2158f2d418bab5f7ce8d0d4916ce9b3c243ce593aa4af",
+      "cacheKey": "onBeforeCompile( /* shaderobject, renderer */ ) {}|architectural-plinth67|observatory-continuous-instrument-panels-v2-reconstructedroof|observatory-static-field-compositions-v2-shared-floor|31|roof"
+    },
+    {
+      "original": "Foundation service floor",
+      "fragmentSha256": "4bd5e7db62092c2b6ed098767ea3b01d2c53da5d5ebf4fe6019bc8c317e4a609",
+      "cacheKey": "onBeforeCompile( /* shaderobject, renderer */ ) {}|architectural-plinth67|observatory-continuous-instrument-panels-v2-reconstructedfloor|observatory-static-field-compositions-v2-shared-floor|31|service-floor"
+    }
+  ],
+  "replacementResources": 3
+}

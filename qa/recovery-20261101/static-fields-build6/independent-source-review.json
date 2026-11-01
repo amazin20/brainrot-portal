@@ -1,0 +1,48 @@
+{
+  "kind": "INDEPENDENT_WHOLE_SHARED_FLOOR_SOURCE_REVIEW",
+  "reviewer": "native_harness_recovery/ceil_floor_36_40",
+  "decision": "ACK_FINAL_SOURCE_PAIR_NO_CURRENT_LITERAL_BLOCKER_FOUND",
+  "pins": {
+    "beforeOpticsSha256": "2d67baca7fa0979579f39c92e0a68af2a0ae9f2f5a7539a92afd33df3c742276",
+    "beforeFieldsSha256": "ae81636980b16ea27e64f292d839717431ad0ada47b392d5bb92deea3e651530",
+    "finalOpticsSha256": "2960dcef866c9b489bf1cef730d1505dc55fa0710ae45bee74c2e2de3fa0757c",
+    "finalFieldsSha256": "82b0f454f28ed06e6f06e49dc2866891f15753a8e8035f36c32919a546bd84c8",
+    "wholePatchSha256": "b6ef9831184597a3d27264ce8b4682faa0f166efb0b4d02bd54581208b06e8b5",
+    "tinyHardeningPatchSha256": "ce60b9d6f4f874dc596bdf40100f1508c7632ffd578491b731242183fa602f2e",
+    "inversePatchSha256": "3dddf84ca77997480c56ac95d4dd6eb09671d3a6f83f55fe2194206bcaf489f8"
+  },
+  "readScope": [
+    "Whole draft source patch and complete resulting Optics installer, then entire final tiny hardening diff and direct preserved-draft-to-final file diff.",
+    "Full855-line new fields module, including every profile and all JavaScript strings/templates/GLSL functions; exact unchanged profile-table comparison exit0 for lines4-790 against ae816.",
+    "Primary Three Object3D.updateWorldMatrix and RoundedBoxGeometry implementations; actual four carrier construction/update/render paths; source36 rotor updates and source33 hydraulic updates.",
+    "Current room38 immutable full-contract helper's material alias assignment/ordering and restore/dispose context; no contract execution by reviewer."
+  ],
+  "findings": {
+    "sharedAlias": "movingClones and per-mesh shader/cache split are fully removed. Every mesh with the same pre-Optics floor material now receives clones.get(original), and registries bind that same shared clone. This removes the source-predicted extra actual material identity rather than hiding material.owner fields in the fixture.",
+    "firstMeshIndependent": "fields and fieldRole depend only on stable profile and original material class. A moving-first33 traversal cannot close over fields=null and disable static floor fields.",
+    "ownershipAndLifecycle": "Exactly one direct original->shared replacement changed[] entry per traversed mesh, with duplicate-entry guard. Registry restoration precedes replacement disposal and prior level disposer. One clones Map owns floor/roof replacement disposal; no extra moving material survives. Existing guarded room32 isolated rear-cover block and its disposal stay unchanged.",
+    "readonlyPreflight": "Exact actual state/name/level-field/material/floor registry/parent checks precede the existing once-only world matrix update and preflight. Preflight scans actual position attribute values without geometry/buffer/bbox writes. It requires identity world root, identity quaternion/unit scale, both matrixAutoUpdate and matrixWorldAutoUpdate, and finite current group/skin matrixWorld basis+translation consistent with actual positions. Instanced/skinned/position-morphed skins are rejected, preventing unaccounted instance/morph transforms.",
+    "actualBounds": "Current31 whole body Y[5,6] is outside floor[-4.05,0.05];36 bodyY[9,10] is outside[-4.05,-3.95];38 bodyY[-1,15] is outside[-4.05,-3.95]. Preflight reads actual station/current/render-group positions plus real geometry bounds and canonical profile window rather than hardcoded body limits.",
+    "room33Math": "Actual33 group remains(-2,h,0), skin local centre(0,-0.5,6), body12x1x12. Entire body and triangle fragments stay X[-8,4],Z[0,12] at any h; current canonical cutout[-8.1,-0.1,4.1,12.1] gives0.1m margin and boxSDF<=-0.1. For any finite positive AA, new smoothstep(0,AA,sd) allowance is exactly0 throughout the body. Base tone1 and zero mix weights leave its prior fine floor diffuse output unchanged. Preflight requires fixed XZ and canonical containing rect with margin>0.05.",
+    "room36Rotation": "Production rotor update rotates paddle.mesh, rotorArt and pawl only. The bridge carrier is not reparented/rotated/scaled: only bridge.stations[1].z changes within the existing translation carrier, with y10 invariant. The rotor's real rotation therefore does not invalidate the bridge height proof.",
+    "room33LaterMotion": "Hydraulic update later writes only lift.stations[1].y and target1; reset changes that y to0. Lift fixed XZ and skin quaternion/scale persist; water/rod/tube updates affect other objects. Thus all later vertical travel remains covered by the XZ exclusion proof.",
+    "profileMetadata": "All9 current profiles explicitly define floor.cutouts arrays;35 returns null before metadata map. Frozen floorHeight/cutouts are derived from the same current literal table as emitted GLSL. No profile, tone, height, shape, dimension or region count changed; only revision and one-sided cutout helper/usage plus metadata were added.",
+    "shaderAndCache": "Positive region coverage remains unchanged. Only exclusion coverage becomes one-sided. Previous fine7x12 world-joint/satin code, PBR/map values, prior shader callback/key, time behavior and roof-only scope are retained. Dedicated v2-shared-floor revision distinguishes new emitted shader source. No new varying/uniform/render callback/geometry/UV/camera/light/physical owner is introduced.",
+    "room35": "Null profile path retains original floor/roof math and old cache suffix behavior. No moving-owner preflight is selected for35.",
+    "lexicalRead": "Full module and final changed Optics section have paired ordinary-string/template delimiters and interpolation/call closures by manual source read. The two previously broken LF literals remain single escaped newline sequences. No JavaScript parser or import was executed."
+  },
+  "earlierFailures": "Original f2df syntax failure/withdrawn1c0 ACK and actual2d67 split-contract failure remain preserved and are not reclassified. ROOT reports its complete previous38 diff found exactly36 material.owner differences over1,136,419 values, all other fields equal; this report attributes that execution to ROOT only.",
+  "limits": [
+    "This ACK is for the exact final2960+82b0 pair and current frozen carrier/profile source. It is not acceptance of draft37ec/623987, the old split candidate, or arbitrary future runtime/geometry/shader code.",
+    "Startup preflight catches current authored layout/station/size/pose/cutout changes that invalidate its predicates. The all-motion proof still relies on the pinned translation-only carrier algorithm/current no-interchange calls and the explicitly reviewed later station-axis writes.",
+    "Finite-positive-AA math is not a native GPU derivative/GLSL compilation result. Shader compilation, actual entire current38 fixture equality, owner lifecycle execution, native contrast/contact readability and visual quality remain ROOT obligations.",
+    "No claim that all rooms are excellent/unique, physical empty-floor areas or shared beam silhouettes are resolved, or publication is ready."
+  ],
+  "mainEdited": false,
+  "candidateEditedByReviewer": false,
+  "fixtureOrTestsEdited": false,
+  "runtimeExecuted": false,
+  "nodeOrJsParserExecuted": false,
+  "browserGameBuildExecuted": false,
+  "nativeVisualAcceptance": false
+}

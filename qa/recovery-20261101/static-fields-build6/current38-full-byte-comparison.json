@@ -1,0 +1,10 @@
+{
+  "scope": "Byte-for-byte entire actual current38 physical/query/original-GLB contract against immutable pre-art baseline, no filtered/normalized/removed field or fixture changes.",
+  "equal": true,
+  "bytesBefore": 32704777,
+  "bytesAfter": 32704777,
+  "sha256Before": "e41919d4a37fdb905683376fdd5676d1ce6eafc75185ad61779abd7ee71a422b",
+  "sha256After": "e41919d4a37fdb905683376fdd5676d1ce6eafc75185ad61779abd7ee71a422b",
+  "runtimeSource": "2960dcef+82b0f454",
+  "fixtureChanged": false
+}

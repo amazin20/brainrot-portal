@@ -1,0 +1,86 @@
+{
+  "exitCode": 0,
+  "seconds": 12.907254934001685,
+  "maxRssKiB": 751812,
+  "sourceManifestSha256": "1469311b2086934b0dfe911bab82877c911879f92644bc27ac9ab7625896ab0d",
+  "sourceCount": 394,
+  "distManifestSha256": "f67f16f6a6bf570a6619b065dfebcf2d516d7b5d255b2371b508bf945b1c7401",
+  "distCount": 77,
+  "distBytes": 7392028,
+  "originalCampaignGlbs14": [
+    {
+      "path": "public/models/runtime/model-01-player.glb",
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+    },
+    {
+      "path": "public/models/runtime/model-02-cargo.glb",
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+    },
+    {
+      "path": "public/models/runtime/model-11-portal-gun.glb",
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+    },
+    {
+      "path": "public/models/runtime/model-19-lift-platform.glb",
+      "sha256": "afd039e831ff0baa514f076a505ffbb7c57dac2251959b3d858fc92dcf3d04b9"
+    },
+    {
+      "path": "public/models/runtime/model-22-terminal.glb",
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+    },
+    {
+      "path": "public/models/runtime/model-23-floor-tile.glb",
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+    },
+    {
+      "path": "public/models/runtime/model-24-wall-panel.glb",
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+    },
+    {
+      "path": "public/models/runtime/model-28-rotating-panel.glb",
+      "sha256": "3159916bad63903e73b8e660ce4aab8a3b1e38f1231152b68f3df63d6987ac4b"
+    },
+    {
+      "path": "public/models/runtime/model-29-pressure-platform.glb",
+      "sha256": "ee65bd9706ad4f4658e54ec5ad8f6f45b24d9027e4e6072f162358a4c1b3291b"
+    },
+    {
+      "path": "public/models/runtime/model-31-wind-generator.glb",
+      "sha256": "024f25db27e96e1efdaa5e200c13a665dee487e798338f86fef985feeae9019e"
+    },
+    {
+      "path": "public/models/runtime/model-32-spring-ram.glb",
+      "sha256": "958d5ed533736d5779da078be20ae2b0e84212bfc3a00b456dc0106bc0a093d7"
+    },
+    {
+      "path": "public/models/runtime/model-35-shutter-fan.glb",
+      "sha256": "8e11d5ab83250348f6e08f034ec87d82727162742d5a7be18f981fc523aa907a"
+    },
+    {
+      "path": "public/models/runtime/model-37-extension-bridge.glb",
+      "sha256": "96173a9ef89375066b08fad8dff1928425863c6b4e6b8c0373c497448f109c55"
+    },
+    {
+      "path": "public/models/runtime/model-39-cable-winch.glb",
+      "sha256": "301f148938ec83e2a8f4b45c7f9bdfd19fb40ca79d8fb9abc7601caf4fe0eafd"
+    }
+  ],
+  "sourceDrift": false,
+  "onlySourceChangesFromBuild5": [
+    {
+      "filename": "src/game/LabObservatoryFieldFinishes.js",
+      "before": null,
+      "after": "82b0f454f28ed06e6f06e49dc2866891f15753a8e8035f36c32919a546bd84c8"
+    },
+    {
+      "filename": "src/game/LabOpticsArchitecture.js",
+      "before": "f3de98359b16993f98298d824b14cbd8c4d2cef0facdeb1810ccfdfacef32aa5",
+      "after": "2960dcef866c9b489bf1cef730d1505dc55fa0710ae45bee74c2e2de3fa0757c"
+    }
+  ],
+  "globalPeakBytes": 4692320256,
+  "samples100ms": 125,
+  "abort": null,
+  "published": false,
+  "validation": "Shared-floor static field source reviewed; entire immutable current38 contract matched byte-for-byte; existing13 optics regressions and owner lifecycle required before this build. GPU compilation/native visual review pending. All51 excellence and publication not accepted."
+}

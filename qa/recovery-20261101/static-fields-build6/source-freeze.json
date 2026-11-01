@@ -1,0 +1,103 @@
+{
+  "kind": "FROZEN_V3_SHARED_FLOOR_SOURCE_RECEIPT",
+  "createdAt": "2026-11-01T11:40:39.420341+00:00",
+  "status": "TWO_FRESH_SOURCE_ACKS_ROOT_REPORTED_SYNTAX_PASS_AND_APPLIED_RUNTIME_PENDING",
+  "pins": {
+    "LabOpticsArchitecture.before-2d67.js": {
+      "sha256": "2d67baca7fa0979579f39c92e0a68af2a0ae9f2f5a7539a92afd33df3c742276",
+      "bytes": 14520
+    },
+    "LabObservatoryFieldFinishes.before-ae816.js": {
+      "sha256": "ae81636980b16ea27e64f292d839717431ad0ada47b392d5bb92deea3e651530",
+      "bytes": 12041
+    },
+    "candidate/src/game/LabOpticsArchitecture.js": {
+      "sha256": "2960dcef866c9b489bf1cef730d1505dc55fa0710ae45bee74c2e2de3fa0757c",
+      "bytes": 17620
+    },
+    "candidate/src/game/LabObservatoryFieldFinishes.js": {
+      "sha256": "82b0f454f28ed06e6f06e49dc2866891f15753a8e8035f36c32919a546bd84c8",
+      "bytes": 12380
+    },
+    "source-only.patch": {
+      "sha256": "b6ef9831184597a3d27264ce8b4682faa0f166efb0b4d02bd54581208b06e8b5",
+      "bytes": 11660
+    },
+    "inverse-to-valid-split.patch": {
+      "sha256": "3dddf84ca77997480c56ac95d4dd6eb09671d3a6f83f55fe2194206bcaf489f8",
+      "bytes": 11660
+    },
+    "from-draft1-guard-hardening.patch": {
+      "sha256": "ce60b9d6f4f874dc596bdf40100f1508c7632ffd578491b731242183fa602f2e",
+      "bytes": 1810
+    },
+    "independent-source-review-final.json": {
+      "sha256": "3c0908b43c0f8dfd4b23fb1ae0ca509619fef7e473fb169afe8022fde09dc140",
+      "bytes": 7225
+    },
+    "independent-static-lexical-math-review.json": {
+      "sha256": "ab259583aa956ad97bd98620a9251b2041e4b6125352b2bd9e744d29a1f03624",
+      "bytes": 4208
+    },
+    "prepared-one-room-shared-floor-probe.mjs": {
+      "sha256": "f8962309a8bf4048751c21465db454a3332f5279a2bd924bc9954ec31c2f88dc",
+      "bytes": 10092
+    },
+    "prepared-probe-proposal.json": {
+      "sha256": "8e695edb64204276073d46c3a0830b952132a9359678ca91d1eb90c7dec8440f",
+      "bytes": 1671
+    },
+    "legacy-floor-finish.glsl": {
+      "sha256": "35646219f8e1cf9e54bf361fef552c1c45c9527b3863c92d1089b67de4a4ebf5",
+      "bytes": 402
+    }
+  },
+  "sourceBeforePins": {
+    "src/game/LabOpticsArchitecture.js": "2d67baca7fa0979579f39c92e0a68af2a0ae9f2f5a7539a92afd33df3c742276",
+    "src/game/LabObservatoryFieldFinishes.js": "ae81636980b16ea27e64f292d839717431ad0ada47b392d5bb92deea3e651530"
+  },
+  "sourceAfterPins": {
+    "src/game/LabOpticsArchitecture.js": "2960dcef866c9b489bf1cef730d1505dc55fa0710ae45bee74c2e2de3fa0757c",
+    "src/game/LabObservatoryFieldFinishes.js": "82b0f454f28ed06e6f06e49dc2866891f15753a8e8035f36c32919a546bd84c8"
+  },
+  "sourceDataChecks": {
+    "forwardWholeFilesExact": true,
+    "inverseWholeFilesExact": true,
+    "profileCoefficientsLiteralByteExact": true,
+    "allNineFloorCutoutsArraysDefined": true,
+    "room35Absent": true,
+    "room32CoverBlockByteExact": true,
+    "lightBlockByteExact": true,
+    "visualClockWrapperByteExact": true,
+    "legacyFineFloorRoofLiteralByteExact": true,
+    "noMovingSplit": true,
+    "currentMainIsRootAppliedCandidate": true
+  },
+  "readonlyPreflight": "Reads actual position attributes/rigid noninstanced geometry; exact authored owner binding; group+mesh unit poses, both matrixAutoUpdate and matrixWorldAutoUpdate, rootI and live basis/translation consistency; canonical metadata. No geometry/transform/uniform/callback write.",
+  "exclusionProof": "Wholebody31Y[5,6],36Y[9,10],38Y[-1,15] outside canonical field height windows.33XZ[-8,4]x[0,12] always inside canonical expanded cutout with0.1m margin; one-sided cutoutAllowed is0 for every finite positiveAA. Positive region AA unchanged.",
+  "strictOldFixtureHelperAndTestPins": {
+    "tests/lab-optics-architecture.test.js": {
+      "sha256": "655d19c18ebfa81d9be23350d44b7240b398ff10e7915be055f9ef038bb58d6c",
+      "bytes": 5794
+    },
+    "tests/helpers/lab-room38-freight-contract.js": {
+      "sha256": "95306188ca14b461a523aa7790504f918d7515baf9c24c5b9bf2df09c85d0eac",
+      "bytes": 21184
+    },
+    "tests/fixtures/room38-freight-current-contract.json.gz": {
+      "sha256": "d3258a3c1cf7586819ec65ca43b5de38c40233929e0c0fccc5b5557b1031f04c",
+      "bytes": 860349
+    }
+  },
+  "strictOldFullContract": {
+    "path": "/workspace/scratch/c17b1f9ac2be/qa-recovery-20261101/room38-strict-current-baseline-capture2/full-contract.json",
+    "sha256": "e41919d4a37fdb905683376fdd5676d1ce6eafc75185ad61779abd7ee71a422b",
+    "bytes": 32704777
+  },
+  "historicalEvidence": "Old invalidf2df remains SOURCE_BLOCKED. Valid split2d67+ae first31probe PASS and13attempt38FAIL/OOM retained. ROOT entire38 diagnostic exactly36material.owner differences, no baseline/test edits.",
+  "preparedProbe": "Shared alias/common shader/preflight/direct restore plus3 TEST-only copied-record negatives; not executed. Existing full38 capture/13 tests may be prioritized by ROOT.",
+  "rootExecutionScope": "ROOT reported JS syntax PASS and applied exact final b6ef to MAIN. Fresh38 fullcapture owned byROOT; this source receipt does not claim its result.",
+  "mainFixtureTestEditedByPreparer": false,
+  "nodeImportGameCannonBuildBrowserOrGlslCompilerExecutedByPreparer": false,
+  "nativeOrAestheticOrAll51Accepted": false
+}

@@ -1,0 +1,55 @@
+{
+  "kind": "independent-final-v3-shared-floor-source-review",
+  "status": "FRESH_SOURCE_ONLY_ACK",
+  "moduleSha256": "82b0f454f28ed06e6f06e49dc2866891f15753a8e8035f36c32919a546bd84c8",
+  "opticsSha256": "2960dcef866c9b489bf1cef730d1505dc55fa0710ae45bee74c2e2de3fa0757c",
+  "patchSha256": "b6ef9831184597a3d27264ce8b4682faa0f166efb0b4d02bd54581208b06e8b5",
+  "lexicalReview": [
+    {
+      "file": "LabObservatoryFieldFinishes.js",
+      "sha256": "82b0f454f28ed06e6f06e49dc2866891f15753a8e8035f36c32919a546bd84c8",
+      "quotedLiterals": 274,
+      "templates": 10,
+      "rawQuotedLF": 0,
+      "openStates": 0,
+      "scope": "Data-only lexical scan plus whole source read; not a JavaScript parser or execution."
+    },
+    {
+      "file": "LabOpticsArchitecture.js",
+      "sha256": "2960dcef866c9b489bf1cef730d1505dc55fa0710ae45bee74c2e2de3fa0757c",
+      "quotedLiterals": 74,
+      "templates": 6,
+      "rawQuotedLF": 0,
+      "openStates": 0,
+      "scope": "Data-only lexical scan plus whole source read; not a JavaScript parser or execution."
+    }
+  ],
+  "profilesAndPositiveRegionCoverageByteExact": true,
+  "allNineProfilesDefineFloorCutoutsArray": true,
+  "room35NullOriginalShaderPath": true,
+  "sharedClone": "One original-to-clone Map, common fields/cache role independent of first visited mesh, one direct restoration entry per mesh and one disposal per clone. No movingClones remain.",
+  "preflightReview": "Read-only actual position.getX/getY/getZ bounds, finite nonempty3D attribute, actual canonical owner/registry/material/parent links; noninstanced/nonskinned/no-position-morph floor; unit quaternion/scale plus local/world automatic matrices, actual world matrix basis/translation consistency; stations/current/render poses checked. World matrix tolerance1e-8 is small compared with0.05m margin; canonical source transforms are exact translations. No geometry/pose/query/body/controller writes in new helper.",
+  "carrierMath": {
+    "31": "All floor body Y[5,6] outside pigment[-4.05,.05], including render interpolation.",
+    "36": "All floor body Y[9,10] outside pigment[-4.05,-3.95]. Rotor changes paddle quaternion and rotorArt rotation, while only bridge.stations[1].z changes; both bridge stations retain Y10.",
+    "38": "All floor body Y[-1,15] outside pigment[-4.05,-3.95], including interpolation.",
+    "33": "Only lift station Y changes. Group X=-2,Z=0, floorlocal center[0,-.5,6], width/depth12: every floor vertex remains within XZ[-8,4]\u00d7[0,12]. Rect cutout expands by0.1m; actual measured preflight requires>0.05m. Signed box distance is negative for all body fragments, so one-sided outside smoothstep is exactly0 for any finite positive AA. All RGB pigment mix weights are0 and floor tone stays1."
+  },
+  "sourcePinsForCarrierProof": {
+    "LabOpenArchitecture.js": "47eed4604b579860ae0707e185369be6f25b9f6086323ea90ae0bf2ed3cbad75",
+    "LabLateCampaignRoomsA.js": "727d6da39ec0e0c588586a4c8051b5c6a00ca46dfe8367c144c5e2a0aba369ea",
+    "LabSiphonObservatory.js": "2aad6e704ab6871cc5c932a59a8fe5e54e46f9d72026e671b7df9ee41d11615f",
+    "LabCreativeFinalRooms.js": "754bfe66229f1f81b341572af703d4b652aca2a0b4a5044b2256fbeef5a3b574",
+    "LabPostCampaignB.js": "53e33082005ea41b2ba77a2bbbb990f8ec6095493d8082697d75a5579c4e2c3e"
+  },
+  "unchangedScope": "Legacy floor joints/satin/prior AO, exact roof height/normal gate, optical rear cover32, original GLB/physical/query owners and direct render/win/control logic remain outside this minimal change. New helper returns diagnostic metadata only and introduces no per-frame callback.",
+  "unaccepted": [
+    "No Node syntax/import/game/Cannon/browser/build/test execution by reviewer. ROOT must run its separate actual syntax and required checks.",
+    "Full original38 fixture equality, runtime carrier owner/alias inventory, linked GLSL/GPU appearance, native ordinary routes and RAW review remain pending.",
+    "Old f2df invalid-source artifacts remain SOURCE_BLOCKED; no old acceptance is revived.",
+    "Semantic exclusion algebra is not a claim of bit-identical GPU pixels on a recompiled shader."
+  ],
+  "mainModifiedByReviewer": false,
+  "fixtureOrHelperModified": false,
+  "runtimeExecuted": false
+}

@@ -1,0 +1,20 @@
+--- prepared-one-room-shared-floor-probe.mjs
++++ root-shared-probe-v2.mjs
+@@ -57,7 +57,16 @@
+   assert.equal(k.m.floor,material,'Actual moving skin and static registry share the SAME material object');
+   level.world.root.traverse(mesh=>{if(mesh.isMesh&&mesh.material?.name==='Honed mineral walking deck')assert.equal(mesh.material,material,'Every authored floor draw retains the shared alias');});
+   const exclusion=assertObservatoryMovingFloorExcluded(art.fieldFinish,carrier,level.world.root);
+-  assert.deepEqual(exclusion,art.movingExclusion,'The actual geometry/owner layout still meets the recorded analytic exclusion');
++  // Normal room logic can move authored station XZ after installation. Both
++  // the installed and current whole-body bounds must satisfy the same proof;
++  // immutable snapshot equality is not a physical exclusion requirement.
++  const installed=art.movingExclusion;
++  assert.equal(exclusion.kind,installed.kind);
++  assert.deepEqual(exclusion.floorHeight,installed.floorHeight);
++  for(const proof of [installed,exclusion]){
++   if(proof.kind==='height')assert.ok(proof.bodyMax[1]<proof.floorHeight[0]||proof.bodyMin[1]>proof.floorHeight[1]);
++   else{assert.equal(proof.kind,'cutout');assert.deepEqual(proof.cutout,installed.cutout);assert.ok(proof.minimumMargin>.05);}
++  }
+   if(stable===33){assert.equal(exclusion.kind,'cutout');assert.ok(exclusion.minimumMargin>.05);}
+   else{assert.equal(exclusion.kind,'height');assert.ok(exclusion.bodyMax[1]<exclusion.floorHeight[0]||exclusion.bodyMin[1]>exclusion.floorHeight[1]);}
+   // TEST-only copied records: no actual station, mesh, actor or body is written.

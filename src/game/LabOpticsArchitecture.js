@@ -1,9 +1,42 @@
 import * as THREE from 'three';
 import {observatoryWallProfile,OBSERVATORY_WALL_PROFILE_REVISION} from './LabObservatoryWallProfiles.js';
 import {installObservatoryShadows} from './LabObservatoryShadows.js';
+import {observatoryFieldFinish,OBSERVATORY_FIELD_GLSL,OBSERVATORY_FIELD_REVISION} from './LabObservatoryFieldFinishes.js';
 
 export const OPTICS_ARCHITECTURE_REVISION=OBSERVATORY_WALL_PROFILE_REVISION;
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
+
+/** Read existing geometry and authored translation stations once. This does
+ * not alter geometry, transforms, input, callbacks or physical/query owners. */
+export function assertObservatoryMovingFloorExcluded(fieldFinish,carrier,world){
+ const check=(ok,message)=>{if(!ok)throw new Error('Moving floor exclusion: '+message);};
+ const identity=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],near=(a,b)=>Math.abs(a-b)<1e-8;
+ check(fieldFinish?.floorHeight&&fieldFinish.floorCutouts&&carrier?.mesh?.isMesh,'actual field metadata and visible carrier skin');
+ check(world.matrixWorld.elements.every((value,i)=>near(value,identity[i])),'untransformed laboratory world');
+ const mesh=carrier.mesh,group=carrier.group;
+ for(const object of [group,mesh])check(object.matrixAutoUpdate&&object.matrixWorldAutoUpdate&&object.quaternion.toArray().every((value,i)=>near(value,i===3?1:0))&&object.scale.toArray().every(value=>near(value,1)),'translation-only unit carrier and skin');
+ check(mesh.parent===group&&group.parent===world,'authored carrier parent chain');
+ for(const [object,translation]of [[group,group.position.toArray()],[mesh,group.position.toArray().map((value,i)=>value+mesh.position.toArray()[i])]]){
+  check(object.matrixWorld.elements.every((value,i)=>near(value,i>=12&&i<=14?translation[i-12]:identity[i])),'current world matrix matches the actual unit translation pose');
+ }
+ check(!mesh.isInstancedMesh&&!mesh.isSkinnedMesh&&!(mesh.geometry.morphAttributes.position?.length),'one rigid noninstanced floor geometry');
+ const position=mesh.geometry.attributes.position,min=[Infinity,Infinity,Infinity],max=[-Infinity,-Infinity,-Infinity];
+ check(position?.count>0&&position.itemSize===3,'actual position attribute');
+ for(let i=0;i<position.count;i++)for(let axis=0;axis<3;axis++){
+  const value=axis===0?position.getX(i):axis===1?position.getY(i):position.getZ(i);
+  check(Number.isFinite(value),'finite existing geometry');min[axis]=Math.min(min[axis],value);max[axis]=Math.max(max[axis],value);
+ }
+ check(Array.isArray(carrier.stations)&&carrier.stations.length>=2,'actual translation stations');
+ const poses=[...carrier.stations,carrier.position,group.position].map(value=>value.toArray()),local=mesh.position.toArray();
+ check([...poses.flat(),...local].every(Number.isFinite),'finite actual poses and stations');
+ const lower=min.map((value,axis)=>value+local[axis]+Math.min(...poses.map(p=>p[axis]))),upper=max.map((value,axis)=>value+local[axis]+Math.max(...poses.map(p=>p[axis])));
+ const [low,high]=fieldFinish.floorHeight;
+ if(upper[1]<low||lower[1]>high)return Object.freeze({kind:'height',bodyMin:lower,bodyMax:upper,floorHeight:[low,high]});
+ check(poses.every(p=>near(p[0],poses[0][0])&&near(p[2],poses[0][2])),'overlapping-height carrier remains vertically translated at fixed XZ');
+ const cutout=fieldFinish.floorCutouts.find(region=>region.shape==='rect'&&Math.min(lower[0]-region.p[0],lower[2]-region.p[1],region.p[2]-upper[0],region.p[3]-upper[2])>.05);
+ check(cutout,'entire rigid skin stays strictly inside the canonical one-sided cutout');
+ return Object.freeze({kind:'cutout',bodyMin:lower,bodyMax:upper,floorHeight:[low,high],cutout:[...cutout.p],minimumMargin:Math.min(lower[0]-cutout.p[0],lower[2]-cutout.p[1],cutout.p[2]-upper[0],cutout.p[3]-upper[2])});
+}
 
 /** An enclosed observatory, not a new puzzle. Replaces only the old 80 mm
  * mineral cladding; every new vertex stays in that same closed envelope.
@@ -13,7 +46,21 @@ const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
 export function installOpticsArchitecture(game,level){
  if(game.chamberEdition!=='foundation'||level.index<30||level.index>39||level.opticsArchitecture)return level;
  const k=level.workshop,world=level.world?.root;if(!k||!world)return level;
+ const stable=level.index+1,fieldFinish=observatoryFieldFinish(stable),originalFloor=k.m.floor;
+ // Authored carrier records identify their visible skins before any clone or
+ // registry replacement. Their floor.mesh is a separate physical proxy.
+ const movingBindings={31:['rack-driven-crossing','bridge'],33:['Liquid driven archive lift','lift'],36:['angular-bridge-cassette','bridge'],38:['original-cargo-hoist','freight']};
+ const movingBinding=movingBindings[stable];let movingCarrier=null;
+ if(movingBinding){
+  const [name,field]=movingBinding,carrier=k.state[name];
+  if(!carrier||carrier!==level[field]||carrier.name!==name||!carrier.mesh?.isMesh||!carrier.mesh.visible
+   ||carrier.mesh.parent!==carrier.group||carrier.group.parent!==world||carrier.mesh.material!==originalFloor
+   ||carrier.floor.mesh===carrier.mesh||!game.floors.includes(carrier.floor)||!k.world.floors.includes(carrier.floor))
+   throw new Error('Observatory moving floor requires its exact authored carrier record');
+  movingCarrier=carrier;
+ }
  world.updateWorldMatrix(true,true);
+ const movingExclusion=movingCarrier?assertObservatoryMovingFloorExcluded(fieldFinish,movingCarrier,world):null;
  const sources=[];world.traverse(m=>{
   if(m.isMesh&&m.visible&&m.name==='Manufactured architecture / Inset mineral wall cassettes')sources.push(m);
  });
@@ -62,6 +109,9 @@ export function installOpticsArchitecture(game,level){
   if(!mesh.isMesh||!mesh.visible||Array.isArray(mesh.material)||mesh.userData.collisionProxy||mesh.userData.portalTile||mesh.userData.portalable||game.portalPanels.includes(mesh))return;
   const original=mesh.material,roof=original.name==='Structural laboratory wall',floor=/^(Honed mineral walking deck|Foundation service floor)$/.test(original.name);
   if(!roof&&!floor)return;
+  const fields=fieldFinish?(roof?fieldFinish.roof:fieldFinish.floor):null;
+  const fieldRole=roof?'roof':original.name==='Foundation service floor'?'service-floor':'floor';
+  if(changed.some(record=>record.mesh===mesh))throw new Error('Architecture mesh already has a material restoration owner');
   if(!clones.has(original)){
    const m=original.clone(),prior=original.onBeforeCompile,priorKey=original.customProgramCacheKey.bind(original);m.name=original.name;
    m.color.setHex(roof?0x74809e:original.name==='Foundation service floor'?0x4c5d7a:0x97a5bf);m.roughness=roof?.72:.64;m.metalness=roof?.18:.18;
@@ -76,8 +126,8 @@ export function installOpticsArchitecture(game,level){
      #endif
      vOpticsWorld=(modelMatrix*op).xyz;
      vOpticsNormal=inverseTransformDirection(transformedNormal,viewMatrix);`);
-    shader.fragmentShader='varying vec3 vOpticsWorld;\nvarying vec3 vOpticsNormal;\nuniform float opticsClock;\n'+shader.fragmentShader;
-    const finish=floor?`
+    shader.fragmentShader=(fields?OBSERVATORY_FIELD_GLSL:'')+'varying vec3 vOpticsWorld;\nvarying vec3 vOpticsNormal;\nuniform float opticsClock;\n'+shader.fragmentShader;
+    let finish=floor?`
      vec2 tile=vOpticsWorld.xz/vec2(7.0,12.0);
      tile.x+=mod(floor(tile.y),2.0)*.5;
      vec2 edge=abs(fract(tile+.5)-.5)*vec2(7.0,12.0);
@@ -99,9 +149,14 @@ export function installOpticsArchitecture(game,level){
       diffuseColor.rgb=mix(vec3(.035,.05,.10),vec3(.43,.53,.76),max(orbit*.22,star*phase));
      }
     `;
+    if(fields)finish=floor?finish+'\n'+fields:`
+     if(vOpticsWorld.y>${(k.ceiling-.02).toFixed(4)} && normalize(vOpticsNormal).y<-.8){
+      ${fields}
+     }
+    `;
     shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>','#include <color_fragment>\n'+finish);
    };
-   m.customProgramCacheKey=()=>priorKey()+'|'+OPTICS_ARCHITECTURE_REVISION+(roof?'roof':'floor');m.needsUpdate=true;clones.set(original,m);
+   m.customProgramCacheKey=()=>priorKey()+'|'+OPTICS_ARCHITECTURE_REVISION+(roof?'roof':'floor')+(fieldFinish?'|'+OBSERVATORY_FIELD_REVISION+'|'+stable+'|'+fieldRole:'');m.needsUpdate=true;clones.set(original,m);
   }
   changed.push({mesh,original,replacement:clones.get(original)});mesh.material=clones.get(original);
  });
@@ -157,5 +212,5 @@ export function installOpticsArchitecture(game,level){
   if(level.renderUpdate===render)level.renderUpdate=oldRender;
  }
  level.dispose=function(...args){release();return oldDispose?.apply(this,args);};
- level.opticsArchitecture={root,stats,panels,banks,geometry,materials,clones,time,shadows,release,get disposed(){return disposed;}};return level;
+ level.opticsArchitecture={root,stats,panels,banks,geometry,materials,clones,fieldFinish,movingExclusion,time,shadows,release,get disposed(){return disposed;}};return level;
 }
