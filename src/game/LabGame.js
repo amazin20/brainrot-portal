@@ -1352,7 +1352,7 @@ export class LabGame {
         const exitStart = transformPortalPoint(travel.crossingPoint, entry, exit);
         const ignoreIds = new Set();
         for (const collider of this.colliders) if (collider.enabled && this.portalOpensCollider(collider, travel.position, CUBE_RADIUS, 0, this.physics.cargoBody.quaternion)) ignoreIds.add(collider.mesh.uuid);
-        this.physics.resolveCargoTransit(exitStart, { ignoreIds, mode: this.firstLevel?.readability?.cargoPortalTransitMode ?? null });
+        this.physics.resolveCargoTransit(exitStart, { ignoreIds, mode: this.firstLevel?.cargoPortalTransitMode ?? null });
         sample = this.physics.sample(1);
         this.companionBehavior?.reanchor(new THREE.Vector3().copy(sample.position)); this.companionAnimator.trigger('portal');
         this.cargoPortalCooldown = .07;
