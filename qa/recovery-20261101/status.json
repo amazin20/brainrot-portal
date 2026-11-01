@@ -1,10 +1,10 @@
 {
   "kind": "CURRENT_DEVELOPMENT_RECOVERY_STATUS",
-  "updatedAt": "2026-11-01T12:02:05.967384+00:00",
+  "updatedAt": "2026-11-01T12:45:03.946508+00:00",
   "repository": "amazin20/brainrot-portal",
   "publishedDemoCommit": "372089aae69ae49bae49c1ce4bb9c1dbd4c7f09e",
   "backupBranch": "checkpoint/recovery-20261101",
-  "lastVerifiedBackupCommit": "2dca8103923e095b918db82768a2c65e4adefaf9",
+  "lastVerifiedBackupCommit": "0357c74c03093ce6a949a2f7a9c3bb1a695f51a8",
   "releaseAccepted": false,
   "all51UniqueAndExcellentAccepted": false,
   "freshTargetedChecks": {
@@ -173,7 +173,7 @@
     "large undecorated observatory floors and shared ceiling language",
     "broader all51 visual/exploit review and actual whole-route GPU views"
   ],
-  "backupScope": "Current source includes shared-material static field compositions for9observatory rooms, unchanged13regressions/full32.7MBcurrent38 contract. Native build6 review is in progress. Earlier source/proof archives retained. Active44/48/camera36 candidates are outside production and not accepted full rooms. No deployment.",
+  "backupScope": "Production9-room surface source plus trial36entrysource and explicitlyscoped completeclosedproof/sourcecandidates. All40freshRAWPNGs, immutablefull38contracts, originalpositive failures and prototypes preserved losslessly.36trial1appearance and native32route are not accepted; release/all51false; no deployment.",
   "evidenceIndexSha256": "160c8ee730790d7be742e65263069b29176b085406705ecbc89ec80dbedd67cb",
   "room48Prototype": {
     "sourceOnly": false,
@@ -270,8 +270,90 @@
       "bytes": 32704777,
       "sha256": "e41919d4a37fdb905683376fdd5676d1ce6eafc75185ad61779abd7ee71a422b"
     },
-    "nativeEntryCaptureStatus": "8rooms completed, finalroom40 in progress; all51/whole-room visual and strict network acceptance OPEN",
+    "nativeEntryCaptureStatus": "All9rooms wide+portrait completed:18entryguardPASS/0FAIL; strictnetwork14PASS/4FAIL remain independentlyOPEN; all18ownedChromeclosedexit0.",
     "wholeRoomAppearanceAccepted": false,
-    "evidence": "qa/recovery-20261101/static-fields-build6/"
+    "evidence": "qa/recovery-20261101/static-fields-build6/",
+    "nativeRawPngFiles": 36,
+    "rootIndividuallyReviewedRawImages": 18
+  },
+  "build7": {
+    "pass": true,
+    "sourceManifestSha256": "4930c03bbc25a4b7773bd68d53afbd948009cc39935f12a2552e78ef1bbd0006",
+    "distManifestSha256": "734ed4dbc8fe231fe8353ad0f20d29a6551060d438f7a5037db32a37bcfeac02",
+    "sourceCount": 394,
+    "distFiles": 77,
+    "distBytes": 7392030,
+    "originalCampaignGlbs14Exact": true,
+    "onlyProductionChange": "36 normal initialcargoZ and yaw/pitch; geometry/physics/normalcamera unchanged",
+    "existingOpticsContractsPass": 13,
+    "fresh36NormalRoutes": {
+      "canonicalSteps": 9608,
+      "alternateSteps": 9774,
+      "zeroResets": true,
+      "originalOwnersAndBuffersRetained": true,
+      "all1260InputFilesUnchanged": true
+    },
+    "nativeEntryCases": {
+      "guardPass": 2,
+      "guardFail": 0,
+      "rawPng": 4,
+      "bothOwnedChromeClosed": true,
+      "visualAccepted": false,
+      "finding": "Trial1 is too top-down and actual machine remains partly occluded; trial2normalview source ready but not executed."
+    },
+    "published": false
+  },
+  "room44OwnedDriveV3": {
+    "mainIntegrated": false,
+    "coreSha256": "b8324a9fbb6578c20a81688df71aa288f90675ee353807a5c61f0c3bd939a74d",
+    "sourceManifestSha256": "51d6e8632d2fa10ea3b127bb565ef844c55f9bb7c7b3efae38aa156e92a9a030",
+    "actualProductionLabPhysicsComponentOnly": true,
+    "worldSleepPreserved": true,
+    "zeroStepConstructionPass": true,
+    "oneStepPass": true,
+    "contact120Pass": true,
+    "coldSleepNoChargePass": true,
+    "contact240Pass": true,
+    "positiveNativeQueryBindings120Pass": true,
+    "specificInvalidGuardRejections": 39,
+    "allowedOriginalCargoRigidTransferApiProbePass": true,
+    "originalGLBGeometryFilesInAttributeGuardProbe": 3,
+    "renderedModelOrOrdinaryRoomAccepted": false,
+    "loadedReturn120": {
+      "pass": false,
+      "steps": 480,
+      "peakArmatureQ": 0.29104683915843643,
+      "finalArmatureQ": 0.246739236,
+      "requiredFinalBelow": 0.14552342,
+      "finding": "Loaded contact againstoriginalcargo onunchangedflatfloor prevents half-return; fullRAW retained, no duration/threshold waiver."
+    },
+    "raisedStationV4": "SOURCEONLY constructor/inputgeometry proposal; +87.36Jdeclared initialgravity energy, newunloadcausal gates, noexecution oracceptance."
+  },
+  "room32NativeRenderedRouteAttempt": {
+    "pass": false,
+    "pngCount": 0,
+    "sourceVersion": "QA-v2",
+    "reason": "Erroneous fixed-friction guard on normalcompanionbehavior; independent6GiBmemoryabort; exactownedChromeclosedSIGKILL; cleanup failures retained.",
+    "v3Repair": "SOURCEONLY causally guarded friction and allocation reduction; no newnativeexecution yet.",
+    "ordinaryNativeRouteAccepted": false
+  },
+  "room48JointNativeGsV2": {
+    "sourceManifestSha256": "7e648062eafdcd81f19f1f04fae542df209882aa2c996925a8ea55de56217ae2",
+    "sourceOnly": true,
+    "runtimeExecuted": false,
+    "rootWholeImplementationReadAndParserPending": true,
+    "old73fcEvidenceAndContactGapsPreserved": true,
+    "wholeRoomAccepted": false
+  },
+  "continuationEvidenceArchive": {
+    "path": "qa/recovery-20261101/continuation-v1/ordered-parts-manifest.json",
+    "archiveSha256": "707dde79af7732195f13c3068d3de6ab5c2ca13688bcb867970d855568d80e1c",
+    "logicalFiles": 436,
+    "logicalBytes": 112122539,
+    "originalRawPng": 40,
+    "allMembersRoundtripVerified": true,
+    "secondSerializationByteExact": true,
+    "failedPositiveReturnAndNativeQaReportsRetained": true,
+    "sourceOnly35V4raised44V2joint48Preserved": true
   }
 }

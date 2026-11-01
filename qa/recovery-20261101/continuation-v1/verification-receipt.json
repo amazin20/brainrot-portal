@@ -1,0 +1,58 @@
+{
+  "archiveSha256": "707dde79af7732195f13c3068d3de6ab5c2ca13688bcb867970d855568d80e1c",
+  "archiveBytes": 8676279,
+  "logicalFiles": 436,
+  "logicalBytes": 112122539,
+  "uniquePayloads": 320,
+  "rawPngFiles": 40,
+  "allMembersRoundtripVerified": true,
+  "secondSerializationByteExact": true,
+  "originalSourceAndEvidenceUnchanged": true,
+  "secretMatches": 0,
+  "seconds": 9.520211541999743,
+  "parts": [
+    {
+      "path": "parts/continuation-proof9.part-001",
+      "bytes": 2097152,
+      "sha256": "0367b4d79b708a69d50825cd19ca6638a48e81b8b43f287c87a576d8b18ada1c"
+    },
+    {
+      "path": "parts/continuation-proof9.part-002",
+      "bytes": 2097152,
+      "sha256": "ceded77774e349a1a5e6eeb4d22c5b45a309da68bc4fb48a2922bd333c9d6885"
+    },
+    {
+      "path": "parts/continuation-proof9.part-003",
+      "bytes": 2097152,
+      "sha256": "d22d2d2ea1bc2647323b827bfa42f9049832ecf5e45b1862a9d0be50ca76eae0"
+    },
+    {
+      "path": "parts/continuation-proof9.part-004",
+      "bytes": 2097152,
+      "sha256": "383b22ca84e1e51604049340afda85608bb949853072d0c05eac5acd48a21130"
+    },
+    {
+      "path": "parts/continuation-proof9.part-005",
+      "bytes": 287671,
+      "sha256": "c92392e538191e921c7154ccb09e798c8abbd64a63b68c5c4704c9ad7cce9c25"
+    }
+  ],
+  "scope": {
+    "kind": "CONTINUATION_SOURCE_AND_UNEDITED_EVIDENCE_POINT_IN_TIME_SNAPSHOT",
+    "productionSource": "Build7/source4930c03b: shared surface fields plus trial36 cargoZ/yaw/pitch. Trial36 is not final visual acceptance.",
+    "staticFields": "13existing contracts PASS, complete immutable current38 bytes equal. All18build6 entry guards PASS; strict network14PASS/4FAIL remain unchanged.",
+    "room36": "13contracts and2ordinary routes PASS; fresh2format entry guards PASS. ROOT rejects excessive top-down trial1 as final composition; next source proposal pending.",
+    "room44": "Actual LabPhysics owned-component and query/GLB negative guards, with full positive/negative raw. Original4s loaded spring-return FAIL480steps retained. Raised-stationV4 SOURCE ONLY, no execution/whole-room acceptance.",
+    "room32": "First native route QA attempt FAIL with erroneous static-friction guard and6GiB abort; no PNG or route acceptance. Complete source, failures and prelaunch error preserved. V3 source repair excluded.",
+    "room35": "Existing capstan continuation source plan only; actual long-wrap full-aperture clearance remains SOURCE_BLOCKED.",
+    "room48": "New joint-native-GS candidate source snapshot only. Final review/root whole-read/parser/real execution remain pending. Prior73fc component335MBfullraw are referenced in earlier durable archives and not duplicated.",
+    "excluded": [
+      "dist copies/dependencies/executables/git indexes",
+      "active room32V3 source repair",
+      "earlier155MB and335MB proof already backed in preceding archive parts"
+    ],
+    "published": false,
+    "releaseAccepted": false,
+    "all51UniqueAndExcellentAccepted": false
+  }
+}

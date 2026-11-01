@@ -1,0 +1,42 @@
+{
+  "archiveBytes": 8676279,
+  "archiveSha256": "707dde79af7732195f13c3068d3de6ab5c2ca13688bcb867970d855568d80e1c",
+  "parts": [
+    {
+      "path": "parts/continuation-proof9.part-001",
+      "bytes": 2097152,
+      "sha256": "0367b4d79b708a69d50825cd19ca6638a48e81b8b43f287c87a576d8b18ada1c",
+      "repoPath": "qa/recovery-20261101/continuation-v1/parts/continuation-proof9.part-001",
+      "gitSha1": "08dde5b62fcced3ad52cd3692e6b8dec25ea63c7"
+    },
+    {
+      "path": "parts/continuation-proof9.part-002",
+      "bytes": 2097152,
+      "sha256": "ceded77774e349a1a5e6eeb4d22c5b45a309da68bc4fb48a2922bd333c9d6885",
+      "repoPath": "qa/recovery-20261101/continuation-v1/parts/continuation-proof9.part-002",
+      "gitSha1": "b071017833f0badc177a12e9887ba5d71468cec9"
+    },
+    {
+      "path": "parts/continuation-proof9.part-003",
+      "bytes": 2097152,
+      "sha256": "d22d2d2ea1bc2647323b827bfa42f9049832ecf5e45b1862a9d0be50ca76eae0",
+      "repoPath": "qa/recovery-20261101/continuation-v1/parts/continuation-proof9.part-003",
+      "gitSha1": "f21f66a3d7ab577fa4d1de00131488ab269c0fad"
+    },
+    {
+      "path": "parts/continuation-proof9.part-004",
+      "bytes": 2097152,
+      "sha256": "383b22ca84e1e51604049340afda85608bb949853072d0c05eac5acd48a21130",
+      "repoPath": "qa/recovery-20261101/continuation-v1/parts/continuation-proof9.part-004",
+      "gitSha1": "ad6b68d316e53d1047c776d51645b62142017c5b"
+    },
+    {
+      "path": "parts/continuation-proof9.part-005",
+      "bytes": 287671,
+      "sha256": "c92392e538191e921c7154ccb09e798c8abbd64a63b68c5c4704c9ad7cce9c25",
+      "repoPath": "qa/recovery-20261101/continuation-v1/parts/continuation-proof9.part-005",
+      "gitSha1": "a73ef60659c9555e4ea9dabd38fb39c47b4fdfd4"
+    }
+  ],
+  "restore": "Concatenate parts in listed order; verify SHA256, then restore lossless tar.gz. Alloriginalfailure/source-onlyscope preserved."
+}
