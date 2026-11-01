@@ -1,0 +1,20 @@
+{
+  "kind": "FAILED_NATIVE_TEST_ATTEMPT",
+  "exitCode": 137,
+  "tapFile": "native-step-attempt1.tap",
+  "tapBytes": 0,
+  "memoryEvents": {
+    "oom": 1,
+    "oom_kill": 1
+  },
+  "finding": "Fixture used one static solid, but native LabPhysics streaming only activates at750. An object-identity assertion against null attempted to format the entire cyclic World on failure and exhausted memory.",
+  "independentBoundedReproduction": {
+    "nativeWorldSteps": 360,
+    "ownerSteps": 360,
+    "nativeSolids": 1,
+    "farSolidStillRegistered": true,
+    "manualWork": 0
+  },
+  "correction": "Use real750-solid activation threshold and compact boolean identity assertions; no native implementation thresholds or execution budgets changed.",
+  "mechanismAccepted": false
+}

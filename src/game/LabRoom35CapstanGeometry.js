@@ -26,19 +26,24 @@ export function segmentSeparation(a,b,c,d){
 
 /** Authoring coordinates only. Runtime tracing derives both tangencies and
  * winding from these actual points, the entry collar and current aperture. */
-export function createRoom35CapstanGuide({center=[12,20,10],radius=.65,pitch=.20,ropeRadius=.04}={}){
+export function createRoom35CapstanGuide({center=[12,20,10],radius=.65,pitch=.20,ropeRadius=.04,involuteLength=5}={}){
+ if(!Number.isFinite(involuteLength)||involuteLength<=0)throw new RangeError('The involute needs a finite positive length');
  const k=pitch/TAU,a=4,leg=Math.sqrt(a*a-radius*radius),alpha=Math.PI+Math.acos(radius/a);
  const contact=add(center,[radius*Math.cos(alpha),radius*Math.sin(alpha),0]);
  const tangent=unit([-radius*Math.sin(alpha),radius*Math.cos(alpha),k]);
- const guide={center:[...center],radius,pitch,k,ropeRadius,grooveHalfWidth:.065,outerKeeperRadius:radius+.105,
+ const guide={center:[...center],radius,pitch,k,ropeRadius,involuteLength,grooveHalfWidth:.065,outerKeeperRadius:radius+.105,
   loadPoint:add(center,[-a,0,-leg*k/radius]),
   entryCollar:{center:sub(contact,scale(tangent,.30)),axis:tangent,clearRadius:.055},
   grooveStart:contact,grooveEndTurn:5.45,
   /** These centres lie on a true equal-length involute. No route name or
    * mode is passed to the force model. A future game face must enforce this
-   * physical locus or account for any placement work explicitly. */
+   * physical locus or account for any placement work explicitly. The 5m
+   * planar budget extends BOTH former 4m leads equally: at the long pocket
+   * the entire native .85m front-clearance prism now ends beyond the real
+   * drum, lips, hood and collar, not merely beyond the thin rope opening.
+   * The cell derives its finite rest length from this same authored guide. */
   portalAt(theta){
-   const beta=alpha+theta,s=4-radius*theta;
+   const beta=alpha+theta,s=involuteLength-radius*theta;
    if(!(s>.1))throw new RangeError('The finite involute has ended');
    const t=unit([-radius*Math.sin(beta),radius*Math.cos(beta),k]);
    const contact=add(center,[radius*Math.cos(beta),radius*Math.sin(beta),k*theta]);

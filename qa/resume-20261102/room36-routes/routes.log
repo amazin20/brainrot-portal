@@ -1,0 +1,13 @@
+off-centre-impact Floor-to-wall pair is aimed at the long arm of the real dynamic rotor
+off-centre-impact The original loose companion retains its falling momentum through the portal
+off-centre-impact Actual angular momentum turns the spindle and translates the bridge into its dock
+off-centre-impact The same companion is recovered on the lower service floor
+off-centre-impact Both travellers walk across the physically docked high cassette
+off-centre-impact both at exit
+scout-impact-first Floor-to-wall pair is aimed at the long arm of the real dynamic rotor
+scout-impact-first The original loose companion retains its falling momentum through the portal
+scout-impact-first Actual angular momentum turns the spindle and translates the bridge into its dock
+scout-impact-first The same companion is recovered on the lower service floor
+scout-impact-first Both travellers walk across the physically docked high cassette
+scout-impact-first both at exit
+{"pass":true,"rows":[{"route":"off-centre-impact","pass":true,"state":"won","physicsSteps":9626,"observations":9626,"zeroResets":true,"sameOriginalOwners":true,"assetBuffersUnchanged":true,"frames":4813},{"route":"scout-impact-first","pass":true,"state":"won","physicsSteps":9808,"observations":9808,"zeroResets":true,"sameOriginalOwners":true,"assetBuffersUnchanged":true,"frames":4904}]}

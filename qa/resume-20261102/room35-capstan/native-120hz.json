@@ -1,0 +1,1588 @@
+{
+  "scope": "assetless120Hz mechanics component using the original LabPhysics step; not a full-game route, owned-shape CCD/query coverage or exact-energy claim",
+  "source": {
+    "LabRoom35CapstanGeometry.js": "45c9b272b9a28f412e2df8c52769a411fab2fcd0821d694efec7bfd7d5ee93c6",
+    "LabRoom35CapstanCell.js": "62ea10f003172b53c4a776784c4421897d86d6f326c7057ada212845f71be925",
+    "LabPhysics.js": "b33a38272299193f701e232b1ab4eeb5d032155330b4d274a14ba9cd466f804b",
+    "qa-room35-capstan-120hz.mjs": "44e05b82b166e7f3ac63f8cc2c75f9257473ed121a61300750ccb600a43d549a"
+  },
+  "ordinary": [
+    {
+      "theta": 0.35,
+      "binding": {
+        "scope": "Actual LabPhysics world, original cargo body/shape/material and original owner step; assetless native fixture position",
+        "bodyId": 0,
+        "shapeId": 0,
+        "defaultsUnchangedOnCreate": true,
+        "preparedSteps": 3000,
+        "finishedSteps": 3000,
+        "originalRetainedBeforeFixtureTeardown": true,
+        "defaultsUnchangedOnDispose": true,
+        "originalStepMethodsRetained": true,
+        "worldSteps": 3000,
+        "ownerSteps": 3000
+      },
+      "before": {
+        "scope": "assetless passive prototype; no production/game-player load claim",
+        "time": 2.999999999999992,
+        "steps": 360,
+        "dt": 0.008333333333333333,
+        "phase": "idle",
+        "worldStep": 360,
+        "angle": -0.9000000625363005,
+        "maxAngle": -0.9000000000000001,
+        "energyResidual": -6.691642561193646,
+        "originalCargoBodyId": 0,
+        "originalCargoShapeId": 0,
+        "cargoBodyId": 0,
+        "cargoShapeId": 0,
+        "cargoMass": 3.2,
+        "cargoPosition": [
+          -18,
+          5.147009339501292,
+          16
+        ],
+        "cargoVelocity": [
+          0,
+          -4.661611830522314e-14,
+          0
+        ],
+        "bridgePosition": [
+          -1.3740121662153552e-8,
+          -0.3660731579939588,
+          5.152452959741662
+        ],
+        "bridgeAngularVelocity": [
+          1.016061461529827e-9,
+          8.172431516703089e-8,
+          1.4290815182251644e-7
+        ],
+        "theta": 0.34999999999999964,
+        "curvatureTurn": 0.3495810797781742,
+        "pathLength": 8.957555606320643,
+        "crossingClearance": 0.14661459814832395,
+        "restLength": 56.941864836690954,
+        "slip": -0.42219066049871123,
+        "tensions": {
+          "slip": -0.42219066049871123,
+          "leftTension": 66.5728985099735,
+          "rightTension": 62.3999999999908,
+          "elasticEnergy": 1.3876184693363471,
+          "frictionHeat": 0,
+          "materialTravel": 0,
+          "ratio": 1.1500810658236402
+        },
+        "mechanicalEnergy": 208.34617596536924,
+        "initialEnergy": 284.52126395372983,
+        "ledger": {
+          "manualWork": 0,
+          "manualPositiveWork": 0,
+          "manualNegativeWork": 0,
+          "fixtureInsertionWork": 0,
+          "capstanHeat": 6.2714597341359255,
+          "disconnectHeat": 0,
+          "passiveDampingLoss": 8.917607218776462,
+          "ropeDampingLoss": 54.294378474254536,
+          "portalGeometryWork": 0,
+          "maxPortalGeometryWork": 0,
+          "maxSlipEnergyGain": 0,
+          "maxResidual": 1.2116446182091636,
+          "minResidual": -6.975970459014093,
+          "maxResidualAt": {
+            "time": 0.3583333333333336,
+            "angle": -0.9000000839925478,
+            "springDiscretizationWork": 3.3058151344570783,
+            "integratorAndConstraintWork": -2.0941705162479183
+          },
+          "springDiscretizationWork": 7.747369506964563,
+          "integratorAndConstraintWork": -14.439012068158208,
+          "maxLeftStretch": 0.0495302626775006,
+          "maxRightStretch": 0.056963746300027096,
+          "maxTotalStretch": 0.10649394725088968,
+          "maxConeViolation": 0,
+          "maxManualPower": 0,
+          "minManualPower": 0,
+          "maxManualForce": 0,
+          "steps": 360
+        },
+        "lastManual": {
+          "active": false,
+          "force": 0,
+          "power": 0,
+          "work": 0,
+          "controlDistance": 0
+        },
+        "manualApplications": 0,
+        "motorEquationPresent": false,
+        "keeperBodyId": 7,
+        "keeperShapeCount": 226,
+        "keeperInWorld": true,
+        "surrogateContacts": [],
+        "energyBarriers": [
+          {
+            "targetAngle": -0.5,
+            "bridgePotential": 745.759670200612,
+            "maxCargoGravityCredit": 278.11382797569144,
+            "minimumNetExternalWork": 467.6458422249206
+          },
+          {
+            "targetAngle": 0,
+            "bridgePotential": 1936.2947360462701,
+            "maxCargoGravityCredit": 569.073146346151,
+            "minimumNetExternalWork": 1367.2215897001192
+          }
+        ],
+        "control": {
+          "position": [
+            0,
+            6,
+            22
+          ],
+          "pressed": false
+        },
+        "budget": {
+          "gravity": 19.5,
+          "bridgeMass": 16,
+          "length": 16,
+          "width": 8,
+          "thickness": 0.32,
+          "originalMass": 3.2,
+          "originalCargoProvided": true,
+          "worldProvided": true,
+          "solverIterations": 18,
+          "solverTolerance": 1e-8,
+          "cargoLinearDamping": 0.035,
+          "cargoAngularDamping": 0.16,
+          "contactEquationStiffness": 100000000,
+          "mu": 0.4,
+          "stiffness": 3000,
+          "ropeViscosity": 195.95917942265424,
+          "ropeDiameter": 0.08,
+          "maxElasticExtension": 0.65,
+          "manualPower": 240,
+          "manualForce": 405,
+          "controlRange": 1.3,
+          "crank": [
+            0,
+            6,
+            22
+          ],
+          "gamePlayerMass": 0,
+          "surrogatePlayerMass": 0
+        }
+      },
+      "wound": {
+        "scope": "assetless passive prototype; no production/game-player load claim",
+        "time": 16.999999999999677,
+        "steps": 2040,
+        "dt": 0.008333333333333333,
+        "phase": "idle",
+        "worldStep": 2040,
+        "angle": 0.004282700240907438,
+        "maxAngle": 0.005704108748761092,
+        "energyResidual": -631.6508948683932,
+        "originalCargoBodyId": 0,
+        "originalCargoShapeId": 0,
+        "cargoBodyId": 0,
+        "cargoShapeId": 0,
+        "cargoMass": 3.2,
+        "cargoPosition": [
+          -18,
+          -2.1667642069276476,
+          16
+        ],
+        "cargoVelocity": [
+          0,
+          1.9130710931299853e-14,
+          0
+        ],
+        "bridgePosition": [
+          -0.005869973346281604,
+          5.873788585768469,
+          1.9997394946160438
+        ],
+        "bridgeAngularVelocity": [
+          6.148834588628332e-8,
+          0.000004092164155954166,
+          -1.2994764103354731e-8
+        ],
+        "theta": 0.34999999999999964,
+        "curvatureTurn": 0.3495810797781742,
+        "pathLength": 8.957555606320643,
+        "crossingClearance": 0.14661459814832395,
+        "restLength": 56.941864836690954,
+        "slip": -7.7359642069276475,
+        "tensions": {
+          "slip": -7.7359642069276475,
+          "leftTension": 60.884351918296886,
+          "rightTension": 62.400000000003786,
+          "elasticEnergy": 1.2667773847519157,
+          "frictionHeat": 0,
+          "materialTravel": 0,
+          "ratio": 1.1500810658236402
+        },
+        "mechanicalEnergy": 1698.6827293121094,
+        "initialEnergy": 284.52126395372983,
+        "ledger": {
+          "manualWork": 2500.238945478346,
+          "manualPositiveWork": 2500.238945478346,
+          "manualNegativeWork": 0,
+          "fixtureInsertionWork": 0,
+          "capstanHeat": 220.91395752361413,
+          "disconnectHeat": 0,
+          "passiveDampingLoss": 165.67443376950143,
+          "ropeDampingLoss": 67.83819395845777,
+          "portalGeometryWork": 0,
+          "maxPortalGeometryWork": 0,
+          "maxSlipEnergyGain": 0,
+          "maxResidual": 1.2116446182091636,
+          "minResidual": -631.6508948683932,
+          "maxResidualAt": {
+            "time": 0.3583333333333336,
+            "angle": -0.9000000839925478,
+            "springDiscretizationWork": 3.3058151344570783,
+            "integratorAndConstraintWork": -2.0941705162479183
+          },
+          "springDiscretizationWork": 177.22882280344098,
+          "integratorAndConstraintWork": -808.8797176718299,
+          "maxLeftStretch": 0.0495302626775006,
+          "maxRightStretch": 0.056963746300027096,
+          "maxTotalStretch": 0.10649394725088968,
+          "maxConeViolation": 0,
+          "maxManualPower": 240.00000000001364,
+          "minManualPower": 0,
+          "maxManualForce": 405,
+          "steps": 2040
+        },
+        "lastManual": {
+          "active": true,
+          "force": 405,
+          "power": 96.2054587534385,
+          "work": 0.8017121562786542,
+          "controlDistance": 0
+        },
+        "manualApplications": 1680,
+        "motorEquationPresent": false,
+        "keeperBodyId": 7,
+        "keeperShapeCount": 226,
+        "keeperInWorld": true,
+        "surrogateContacts": [],
+        "energyBarriers": [
+          {
+            "targetAngle": -0.5,
+            "bridgePotential": 745.759670200612,
+            "maxCargoGravityCredit": 278.11382797569144,
+            "minimumNetExternalWork": 467.6458422249206
+          },
+          {
+            "targetAngle": 0,
+            "bridgePotential": 1936.2947360462701,
+            "maxCargoGravityCredit": 569.073146346151,
+            "minimumNetExternalWork": 1367.2215897001192
+          }
+        ],
+        "control": {
+          "position": [
+            0,
+            6,
+            22
+          ],
+          "pressed": true
+        },
+        "budget": {
+          "gravity": 19.5,
+          "bridgeMass": 16,
+          "length": 16,
+          "width": 8,
+          "thickness": 0.32,
+          "originalMass": 3.2,
+          "originalCargoProvided": true,
+          "worldProvided": true,
+          "solverIterations": 18,
+          "solverTolerance": 1e-8,
+          "cargoLinearDamping": 0.035,
+          "cargoAngularDamping": 0.16,
+          "contactEquationStiffness": 100000000,
+          "mu": 0.4,
+          "stiffness": 3000,
+          "ropeViscosity": 195.95917942265424,
+          "ropeDiameter": 0.08,
+          "maxElasticExtension": 0.65,
+          "manualPower": 240,
+          "manualForce": 405,
+          "controlRange": 1.3,
+          "crank": [
+            0,
+            6,
+            22
+          ],
+          "gamePlayerMass": 0,
+          "surrogatePlayerMass": 0
+        }
+      },
+      "after": {
+        "scope": "assetless passive prototype; no production/game-player load claim",
+        "time": 24.999999999999222,
+        "steps": 3000,
+        "dt": 0.008333333333333333,
+        "phase": "idle",
+        "worldStep": 3000,
+        "angle": -0.900000050387127,
+        "maxAngle": 0.005704108748761092,
+        "energyResidual": -657.1374119796255,
+        "originalCargoBodyId": 0,
+        "originalCargoShapeId": 0,
+        "cargoBodyId": 0,
+        "cargoShapeId": 0,
+        "cargoMass": 3.2,
+        "cargoPosition": [
+          -18,
+          5.146217436717413,
+          16
+        ],
+        "cargoVelocity": [
+          0,
+          -4.491165380636109e-14,
+          0
+        ],
+        "bridgePosition": [
+          -0.000010331647102581717,
+          -0.3660731067156866,
+          5.152452882454912
+        ],
+        "bridgeAngularVelocity": [
+          -1.2909205360060738e-8,
+          -0.000002333860033726922,
+          6.61025622120977e-8
+        ],
+        "theta": 0.34999999999999964,
+        "curvatureTurn": 0.3495810797781742,
+        "pathLength": 8.957555606320643,
+        "crossingClearance": 0.14661459814832395,
+        "restLength": 56.941864836690954,
+        "slip": -0.42298256328258854,
+        "tensions": {
+          "slip": -0.42298256328258854,
+          "leftTension": 68.9484387137418,
+          "rightTension": 62.39999999999113,
+          "elasticEnergy": 1.44127453351025,
+          "frictionHeat": 0,
+          "materialTravel": 0,
+          "ratio": 1.1500810658236402
+        },
+        "mechanicalEnergy": 208.35043332894332,
+        "initialEnergy": 284.52126395372983,
+        "ledger": {
+          "manualWork": 2500.238945478346,
+          "manualPositiveWork": 2500.238945478346,
+          "manualNegativeWork": 0,
+          "fixtureInsertionWork": 0,
+          "capstanHeat": 800.6236621907572,
+          "disconnectHeat": 0,
+          "passiveDampingLoss": 967.2785908869242,
+          "ropeDampingLoss": 151.37011104582564,
+          "portalGeometryWork": 0,
+          "maxPortalGeometryWork": 0,
+          "maxSlipEnergyGain": 0,
+          "maxResidual": 1.2116446182091636,
+          "minResidual": -657.1959778052401,
+          "maxResidualAt": {
+            "time": 0.3583333333333336,
+            "angle": -0.9000000839925478,
+            "springDiscretizationWork": 3.3058151344570783,
+            "integratorAndConstraintWork": -2.0941705162479183
+          },
+          "springDiscretizationWork": 738.3511179868328,
+          "integratorAndConstraintWork": -1395.4885299664513,
+          "maxLeftStretch": 0.0495302626775006,
+          "maxRightStretch": 0.056963746300027096,
+          "maxTotalStretch": 0.10649394725088968,
+          "maxConeViolation": 0,
+          "maxManualPower": 240.00000000001364,
+          "minManualPower": 0,
+          "maxManualForce": 405,
+          "steps": 3000
+        },
+        "lastManual": {
+          "active": false,
+          "force": 0,
+          "power": 0,
+          "work": 0,
+          "controlDistance": 20
+        },
+        "manualApplications": 1680,
+        "motorEquationPresent": false,
+        "keeperBodyId": 7,
+        "keeperShapeCount": 226,
+        "keeperInWorld": true,
+        "surrogateContacts": [],
+        "energyBarriers": [
+          {
+            "targetAngle": -0.5,
+            "bridgePotential": 745.759670200612,
+            "maxCargoGravityCredit": 278.11382797569144,
+            "minimumNetExternalWork": 467.6458422249206
+          },
+          {
+            "targetAngle": 0,
+            "bridgePotential": 1936.2947360462701,
+            "maxCargoGravityCredit": 569.073146346151,
+            "minimumNetExternalWork": 1367.2215897001192
+          }
+        ],
+        "control": {
+          "position": [
+            20,
+            6,
+            22
+          ],
+          "pressed": true
+        },
+        "budget": {
+          "gravity": 19.5,
+          "bridgeMass": 16,
+          "length": 16,
+          "width": 8,
+          "thickness": 0.32,
+          "originalMass": 3.2,
+          "originalCargoProvided": true,
+          "worldProvided": true,
+          "solverIterations": 18,
+          "solverTolerance": 1e-8,
+          "cargoLinearDamping": 0.035,
+          "cargoAngularDamping": 0.16,
+          "contactEquationStiffness": 100000000,
+          "mu": 0.4,
+          "stiffness": 3000,
+          "ropeViscosity": 195.95917942265424,
+          "ropeDiameter": 0.08,
+          "maxElasticExtension": 0.65,
+          "manualPower": 240,
+          "manualForce": 405,
+          "controlRange": 1.3,
+          "crank": [
+            0,
+            6,
+            22
+          ],
+          "gamePlayerMass": 0,
+          "surrogatePlayerMass": 0
+        }
+      },
+      "workAfterDeparture": 0,
+      "observedExpectedBehavior": true
+    },
+    {
+      "theta": 4.8,
+      "binding": {
+        "scope": "Actual LabPhysics world, original cargo body/shape/material and original owner step; assetless native fixture position",
+        "bodyId": 8,
+        "shapeId": 467,
+        "defaultsUnchangedOnCreate": true,
+        "preparedSteps": 3000,
+        "finishedSteps": 3000,
+        "originalRetainedBeforeFixtureTeardown": true,
+        "defaultsUnchangedOnDispose": true,
+        "originalStepMethodsRetained": true,
+        "worldSteps": 3000,
+        "ownerSteps": 3000
+      },
+      "before": {
+        "scope": "assetless passive prototype; no production/game-player load claim",
+        "time": 2.999999999999992,
+        "steps": 360,
+        "dt": 0.008333333333333333,
+        "phase": "idle",
+        "worldStep": 360,
+        "angle": -0.9000000779708747,
+        "maxAngle": -0.9000000000000001,
+        "energyResidual": -22.085204509171433,
+        "originalCargoBodyId": 8,
+        "originalCargoShapeId": 467,
+        "cargoBodyId": 8,
+        "cargoShapeId": 467,
+        "cargoMass": 3.2,
+        "cargoPosition": [
+          -18,
+          5.1625964179810415,
+          16
+        ],
+        "cargoVelocity": [
+          0,
+          3.2621986645029234e-14,
+          0
+        ],
+        "bridgePosition": [
+          -1.2421099294429441e-8,
+          -0.36607324182041145,
+          5.152453057094072
+        ],
+        "bridgeAngularVelocity": [
+          -9.874276570009943e-11,
+          -1.1603119350249144e-7,
+          -2.3289743888254853e-7
+        ],
+        "theta": 4.800000000000001,
+        "curvatureTurn": 4.794254808386395,
+        "pathLength": 8.957555606320643,
+        "crossingClearance": 0.13064003737474028,
+        "restLength": 56.941864836690954,
+        "slip": -0.4066035820189553,
+        "tensions": {
+          "slip": -0.4066035820189553,
+          "leftTension": 19.811928169453985,
+          "rightTension": 62.40000000000645,
+          "elasticEnergy": 0.7143787496320683,
+          "frictionHeat": 0,
+          "materialTravel": 0,
+          "ratio": 6.805301381417559
+        },
+        "mechanicalEnergy": 208.64554378389633,
+        "initialEnergy": 284.52126395372983,
+        "ledger": {
+          "manualWork": 0,
+          "manualPositiveWork": 0,
+          "manualNegativeWork": 0,
+          "fixtureInsertionWork": 0,
+          "capstanHeat": 0.9107703813233095,
+          "disconnectHeat": 0,
+          "passiveDampingLoss": 8.499750757074576,
+          "ropeDampingLoss": 44.379994522264205,
+          "portalGeometryWork": 0,
+          "maxPortalGeometryWork": 0,
+          "maxSlipEnergyGain": 0,
+          "maxResidual": 0,
+          "minResidual": -22.12153834877654,
+          "maxResidualAt": null,
+          "springDiscretizationWork": 1.8618311888770407,
+          "integratorAndConstraintWork": -23.9470356980484,
+          "maxLeftStretch": 0.006603979911363744,
+          "maxRightStretch": 0.04494160976079531,
+          "maxTotalStretch": 0.05154552151164182,
+          "maxConeViolation": 0,
+          "maxManualPower": 0,
+          "minManualPower": 0,
+          "maxManualForce": 0,
+          "steps": 360
+        },
+        "lastManual": {
+          "active": false,
+          "force": 0,
+          "power": 0,
+          "work": 0,
+          "controlDistance": 0
+        },
+        "manualApplications": 0,
+        "motorEquationPresent": false,
+        "keeperBodyId": 15,
+        "keeperShapeCount": 226,
+        "keeperInWorld": true,
+        "surrogateContacts": [],
+        "energyBarriers": [
+          {
+            "targetAngle": -0.5,
+            "bridgePotential": 745.759670200612,
+            "maxCargoGravityCredit": 278.11382797569144,
+            "minimumNetExternalWork": 467.6458422249206
+          },
+          {
+            "targetAngle": 0,
+            "bridgePotential": 1936.2947360462701,
+            "maxCargoGravityCredit": 569.073146346151,
+            "minimumNetExternalWork": 1367.2215897001192
+          }
+        ],
+        "control": {
+          "position": [
+            0,
+            6,
+            22
+          ],
+          "pressed": false
+        },
+        "budget": {
+          "gravity": 19.5,
+          "bridgeMass": 16,
+          "length": 16,
+          "width": 8,
+          "thickness": 0.32,
+          "originalMass": 3.2,
+          "originalCargoProvided": true,
+          "worldProvided": true,
+          "solverIterations": 18,
+          "solverTolerance": 1e-8,
+          "cargoLinearDamping": 0.035,
+          "cargoAngularDamping": 0.16,
+          "contactEquationStiffness": 100000000,
+          "mu": 0.4,
+          "stiffness": 3000,
+          "ropeViscosity": 195.95917942265424,
+          "ropeDiameter": 0.08,
+          "maxElasticExtension": 0.65,
+          "manualPower": 240,
+          "manualForce": 405,
+          "controlRange": 1.3,
+          "crank": [
+            0,
+            6,
+            22
+          ],
+          "gamePlayerMass": 0,
+          "surrogatePlayerMass": 0
+        }
+      },
+      "wound": {
+        "scope": "assetless passive prototype; no production/game-player load claim",
+        "time": 16.999999999999677,
+        "steps": 2040,
+        "dt": 0.008333333333333333,
+        "phase": "idle",
+        "worldStep": 2040,
+        "angle": 0.003608890517683396,
+        "maxAngle": 0.004334486389700594,
+        "energyResidual": -783.7384355725394,
+        "originalCargoBodyId": 8,
+        "originalCargoShapeId": 467,
+        "cargoBodyId": 8,
+        "cargoShapeId": 467,
+        "cargoMass": 3.2,
+        "cargoPosition": [
+          -18,
+          -2.1486646339392252,
+          16
+        ],
+        "cargoVelocity": [
+          0,
+          -7.82889040493364e-15,
+          0
+        ],
+        "bridgePosition": [
+          -0.005686631260216932,
+          5.868398353574623,
+          1.99982631357619
+        ],
+        "bridgeAngularVelocity": [
+          2.8194964966053726e-7,
+          0.000018818972189745176,
+          -5.994414450649996e-8
+        ],
+        "theta": 4.800000000000001,
+        "curvatureTurn": 4.794254808386395,
+        "pathLength": 8.957555606320643,
+        "crossingClearance": 0.13064003737474028,
+        "restLength": 56.941864836690954,
+        "slip": -7.717864633939227,
+        "tensions": {
+          "slip": -7.717864633939227,
+          "leftTension": 28.288480982981312,
+          "rightTension": 62.39999999999846,
+          "elasticEnergy": 0.7823330260540505,
+          "frictionHeat": 0,
+          "materialTravel": 0,
+          "ratio": 6.805301381417559
+        },
+        "mechanicalEnergy": 1697.6459457283313,
+        "initialEnergy": 284.52126395372983,
+        "ledger": {
+          "manualWork": 2761.8863220112075,
+          "manualPositiveWork": 2761.8863220112075,
+          "manualNegativeWork": 0,
+          "fixtureInsertionWork": 0,
+          "capstanHeat": 68.70192403116974,
+          "disconnectHeat": 0,
+          "passiveDampingLoss": 144.38959326905035,
+          "ropeDampingLoss": 351.9316873638468,
+          "portalGeometryWork": 0,
+          "maxPortalGeometryWork": 0,
+          "maxSlipEnergyGain": 0,
+          "maxResidual": 0,
+          "minResidual": -783.7384355725394,
+          "maxResidualAt": null,
+          "springDiscretizationWork": 62.2765945304428,
+          "integratorAndConstraintWork": -846.0150301029879,
+          "maxLeftStretch": 0.01025751180146095,
+          "maxRightStretch": 0.04494160976079531,
+          "maxTotalStretch": 0.05154552151164182,
+          "maxConeViolation": 0,
+          "maxManualPower": 240.00000000001364,
+          "minManualPower": 0,
+          "maxManualForce": 405,
+          "steps": 2040
+        },
+        "lastManual": {
+          "active": true,
+          "force": 405,
+          "power": 96.17560973985746,
+          "work": 0.8014634144988122,
+          "controlDistance": 0
+        },
+        "manualApplications": 1680,
+        "motorEquationPresent": false,
+        "keeperBodyId": 15,
+        "keeperShapeCount": 226,
+        "keeperInWorld": true,
+        "surrogateContacts": [],
+        "energyBarriers": [
+          {
+            "targetAngle": -0.5,
+            "bridgePotential": 745.759670200612,
+            "maxCargoGravityCredit": 278.11382797569144,
+            "minimumNetExternalWork": 467.6458422249206
+          },
+          {
+            "targetAngle": 0,
+            "bridgePotential": 1936.2947360462701,
+            "maxCargoGravityCredit": 569.073146346151,
+            "minimumNetExternalWork": 1367.2215897001192
+          }
+        ],
+        "control": {
+          "position": [
+            0,
+            6,
+            22
+          ],
+          "pressed": true
+        },
+        "budget": {
+          "gravity": 19.5,
+          "bridgeMass": 16,
+          "length": 16,
+          "width": 8,
+          "thickness": 0.32,
+          "originalMass": 3.2,
+          "originalCargoProvided": true,
+          "worldProvided": true,
+          "solverIterations": 18,
+          "solverTolerance": 1e-8,
+          "cargoLinearDamping": 0.035,
+          "cargoAngularDamping": 0.16,
+          "contactEquationStiffness": 100000000,
+          "mu": 0.4,
+          "stiffness": 3000,
+          "ropeViscosity": 195.95917942265424,
+          "ropeDiameter": 0.08,
+          "maxElasticExtension": 0.65,
+          "manualPower": 240,
+          "manualForce": 405,
+          "controlRange": 1.3,
+          "crank": [
+            0,
+            6,
+            22
+          ],
+          "gamePlayerMass": 0,
+          "surrogatePlayerMass": 0
+        }
+      },
+      "after": {
+        "scope": "assetless passive prototype; no production/game-player load claim",
+        "time": 24.999999999999222,
+        "steps": 3000,
+        "dt": 0.008333333333333333,
+        "phase": "idle",
+        "worldStep": 3000,
+        "angle": -0.0027669416086583765,
+        "maxAngle": 0.004334486389700594,
+        "energyResidual": -782.8635529370436,
+        "originalCargoBodyId": 8,
+        "originalCargoShapeId": 467,
+        "cargoBodyId": 8,
+        "cargoShapeId": 467,
+        "cargoMass": 3.2,
+        "cargoPosition": [
+          -18,
+          -2.1486646339392252,
+          16
+        ],
+        "cargoVelocity": [
+          0,
+          -7.814887909263121e-15,
+          0
+        ],
+        "bridgePosition": [
+          4.785917410917372e-16,
+          5.8178650916866275,
+          2.0004733517639304
+        ],
+        "bridgeAngularVelocity": [
+          1.994931997373328e-15,
+          1.5176891039259996e-19,
+          -3.750047745980469e-21
+        ],
+        "theta": 4.800000000000001,
+        "curvatureTurn": 4.794254808386395,
+        "pathLength": 8.957555606320643,
+        "crossingClearance": 0.13064003737474028,
+        "restLength": 56.941864836690954,
+        "slip": -7.717864633939227,
+        "tensions": {
+          "slip": -7.717864633939227,
+          "leftTension": 233.2054731319193,
+          "rightTension": 62.39999999999846,
+          "elasticEnergy": 9.713092116447024,
+          "frictionHeat": 0,
+          "materialTravel": 0,
+          "ratio": 6.805301381417559
+        },
+        "mechanicalEnergy": 1690.8103275648639,
+        "initialEnergy": 284.52126395372983,
+        "ledger": {
+          "manualWork": 2761.8863220112075,
+          "manualPositiveWork": 2761.8863220112075,
+          "manualNegativeWork": 0,
+          "fixtureInsertionWork": 0,
+          "capstanHeat": 68.70192403116974,
+          "disconnectHeat": 0,
+          "passiveDampingLoss": 144.7800837623261,
+          "ropeDampingLoss": 359.2516976695342,
+          "portalGeometryWork": 0,
+          "maxPortalGeometryWork": 0,
+          "maxSlipEnergyGain": 0,
+          "maxResidual": 0,
+          "minResidual": -783.7714837250765,
+          "maxResidualAt": null,
+          "springDiscretizationWork": 62.751796725924265,
+          "integratorAndConstraintWork": -845.6153496629731,
+          "maxLeftStretch": 0.08671323572115419,
+          "maxRightStretch": 0.04494160976079531,
+          "maxTotalStretch": 0.10751323572115368,
+          "maxConeViolation": 0,
+          "maxManualPower": 240.00000000001364,
+          "minManualPower": 0,
+          "maxManualForce": 405,
+          "steps": 3000
+        },
+        "lastManual": {
+          "active": false,
+          "force": 0,
+          "power": 0,
+          "work": 0,
+          "controlDistance": 20
+        },
+        "manualApplications": 1680,
+        "motorEquationPresent": false,
+        "keeperBodyId": 15,
+        "keeperShapeCount": 226,
+        "keeperInWorld": true,
+        "surrogateContacts": [],
+        "energyBarriers": [
+          {
+            "targetAngle": -0.5,
+            "bridgePotential": 745.759670200612,
+            "maxCargoGravityCredit": 278.11382797569144,
+            "minimumNetExternalWork": 467.6458422249206
+          },
+          {
+            "targetAngle": 0,
+            "bridgePotential": 1936.2947360462701,
+            "maxCargoGravityCredit": 569.073146346151,
+            "minimumNetExternalWork": 1367.2215897001192
+          }
+        ],
+        "control": {
+          "position": [
+            20,
+            6,
+            22
+          ],
+          "pressed": true
+        },
+        "budget": {
+          "gravity": 19.5,
+          "bridgeMass": 16,
+          "length": 16,
+          "width": 8,
+          "thickness": 0.32,
+          "originalMass": 3.2,
+          "originalCargoProvided": true,
+          "worldProvided": true,
+          "solverIterations": 18,
+          "solverTolerance": 1e-8,
+          "cargoLinearDamping": 0.035,
+          "cargoAngularDamping": 0.16,
+          "contactEquationStiffness": 100000000,
+          "mu": 0.4,
+          "stiffness": 3000,
+          "ropeViscosity": 195.95917942265424,
+          "ropeDiameter": 0.08,
+          "maxElasticExtension": 0.65,
+          "manualPower": 240,
+          "manualForce": 405,
+          "controlRange": 1.3,
+          "crank": [
+            0,
+            6,
+            22
+          ],
+          "gamePlayerMass": 0,
+          "surrogatePlayerMass": 0
+        }
+      },
+      "workAfterDeparture": 0,
+      "observedExpectedBehavior": true
+    }
+  ],
+  "unpowered": [
+    {
+      "protocol": "continuous-readdress",
+      "binding": {
+        "scope": "Actual LabPhysics world, original cargo body/shape/material and original owner step; assetless native fixture position",
+        "bodyId": 16,
+        "shapeId": 934,
+        "defaultsUnchangedOnCreate": true,
+        "preparedSteps": 5600,
+        "finishedSteps": 5600,
+        "originalRetainedBeforeFixtureTeardown": true,
+        "defaultsUnchangedOnDispose": true,
+        "originalStepMethodsRetained": true,
+        "worldSteps": 5600,
+        "ownerSteps": 5600
+      },
+      "cycles": 1000,
+      "accepted": 1000,
+      "rejected": 0,
+      "actualSlackCaptures": 1,
+      "actualTautToSlack": 0,
+      "final": {
+        "scope": "assetless passive prototype; no production/game-player load claim",
+        "time": 46.66666666666466,
+        "steps": 5600,
+        "dt": 0.008333333333333333,
+        "phase": "idle",
+        "worldStep": 5600,
+        "angle": -0.9000000608380749,
+        "maxAngle": -0.9000000000000001,
+        "energyResidual": -18.958599520426276,
+        "originalCargoBodyId": 16,
+        "originalCargoShapeId": 934,
+        "cargoBodyId": 16,
+        "cargoShapeId": 934,
+        "cargoMass": 3.2,
+        "cargoPosition": [
+          -18,
+          5.145278613168779,
+          16
+        ],
+        "cargoVelocity": [
+          0,
+          -2.2138174610390202e-14,
+          0
+        ],
+        "bridgePosition": [
+          -2.2605398102716526e-9,
+          -0.3660731485984464,
+          5.152452949031154
+        ],
+        "bridgeAngularVelocity": [
+          5.332088416631908e-11,
+          1.0890120511404275e-7,
+          1.583646178972321e-7
+        ],
+        "theta": 0.34999999999999964,
+        "curvatureTurn": 0.3495810797781742,
+        "pathLength": 8.957555606320643,
+        "crossingClearance": 0.14661459814832395,
+        "restLength": 56.941864836690954,
+        "slip": -0.4239213868312222,
+        "tensions": {
+          "slip": -0.4239213868312222,
+          "leftTension": 71.76504813366974,
+          "rightTension": 62.39999999999563,
+          "elasticEnergy": 1.5073303556045647,
+          "frictionHeat": 0,
+          "materialTravel": 0,
+          "ratio": 1.1500810658236402
+        },
+        "mechanicalEnergy": 208.35789345424658,
+        "initialEnergy": 284.52126395372983,
+        "ledger": {
+          "manualWork": 0,
+          "manualPositiveWork": 0,
+          "manualNegativeWork": 0,
+          "fixtureInsertionWork": 0,
+          "capstanHeat": 3.902774069272561,
+          "disconnectHeat": 0,
+          "passiveDampingLoss": 8.52016615211541,
+          "ropeDampingLoss": 44.78183075766899,
+          "portalGeometryWork": 0,
+          "maxPortalGeometryWork": 0,
+          "maxSlipEnergyGain": 0,
+          "maxResidual": 0.2517730993785676,
+          "minResidual": -18.971884020669336,
+          "maxResidualAt": {
+            "time": 0.3583333333333336,
+            "angle": -0.9000000839925478,
+            "springDiscretizationWork": 2.345943615626437,
+            "integratorAndConstraintWork": -2.0941705162479183
+          },
+          "springDiscretizationWork": 3.959424552079934,
+          "integratorAndConstraintWork": -22.918024072506267,
+          "maxLeftStretch": 0.030195817366351796,
+          "maxRightStretch": 0.03490261239046044,
+          "maxTotalStretch": 0.0650983769031761,
+          "maxConeViolation": 0,
+          "maxManualPower": 0,
+          "minManualPower": 0,
+          "maxManualForce": 0,
+          "steps": 5600
+        },
+        "lastManual": {
+          "active": false,
+          "force": 0,
+          "power": 0,
+          "work": 0,
+          "controlDistance": 0
+        },
+        "manualApplications": 0,
+        "motorEquationPresent": false,
+        "keeperBodyId": 23,
+        "keeperShapeCount": 226,
+        "keeperInWorld": true,
+        "surrogateContacts": [],
+        "energyBarriers": [
+          {
+            "targetAngle": -0.5,
+            "bridgePotential": 745.759670200612,
+            "maxCargoGravityCredit": 278.11382797569144,
+            "minimumNetExternalWork": 467.6458422249206
+          },
+          {
+            "targetAngle": 0,
+            "bridgePotential": 1936.2947360462701,
+            "maxCargoGravityCredit": 569.073146346151,
+            "minimumNetExternalWork": 1367.2215897001192
+          }
+        ],
+        "control": {
+          "position": [
+            0,
+            6,
+            22
+          ],
+          "pressed": false
+        },
+        "budget": {
+          "gravity": 19.5,
+          "bridgeMass": 16,
+          "length": 16,
+          "width": 8,
+          "thickness": 0.32,
+          "originalMass": 3.2,
+          "originalCargoProvided": true,
+          "worldProvided": true,
+          "solverIterations": 18,
+          "solverTolerance": 1e-8,
+          "cargoLinearDamping": 0.035,
+          "cargoAngularDamping": 0.16,
+          "contactEquationStiffness": 100000000,
+          "mu": 0.4,
+          "stiffness": 3000,
+          "ropeViscosity": 195.95917942265424,
+          "ropeDiameter": 0.08,
+          "maxElasticExtension": 0.65,
+          "manualPower": 240,
+          "manualForce": 405,
+          "controlRange": 1.3,
+          "crank": [
+            0,
+            6,
+            22
+          ],
+          "gamePlayerMass": 0,
+          "surrogatePlayerMass": 0
+        }
+      },
+      "horizontalBarrierToWorstGain": 5430.3720019125485,
+      "evenMinusHalfRadianBarrierToWorstGain": 1857.409879686016,
+      "observedNoOpen": true,
+      "observedNoManualSource": true
+    },
+    {
+      "protocol": "cut-and-rethread",
+      "binding": {
+        "scope": "Actual LabPhysics world, original cargo body/shape/material and original owner step; assetless native fixture position",
+        "bodyId": 24,
+        "shapeId": 1401,
+        "defaultsUnchangedOnCreate": true,
+        "preparedSteps": 6600,
+        "finishedSteps": 6600,
+        "originalRetainedBeforeFixtureTeardown": true,
+        "defaultsUnchangedOnDispose": true,
+        "originalStepMethodsRetained": true,
+        "worldSteps": 6600,
+        "ownerSteps": 6600
+      },
+      "cycles": 1000,
+      "accepted": 7,
+      "rejected": 993,
+      "actualSlackCaptures": 0,
+      "actualTautToSlack": 0,
+      "final": {
+        "scope": "assetless passive prototype; no production/game-player load claim",
+        "time": 54.99999999999752,
+        "steps": 6600,
+        "dt": 0.008333333333333333,
+        "phase": "idle",
+        "worldStep": 6600,
+        "angle": -0.9000000843462364,
+        "maxAngle": -0.9000000000000001,
+        "energyResidual": -641.7574333514196,
+        "originalCargoBodyId": 24,
+        "originalCargoShapeId": 1401,
+        "cargoBodyId": 24,
+        "cargoShapeId": 1401,
+        "cargoMass": 3.2,
+        "cargoPosition": [
+          -18.00000127590399,
+          -9.610001853677412,
+          16.000001964102946
+        ],
+        "cargoVelocity": [
+          0,
+          0,
+          0
+        ],
+        "bridgePosition": [
+          -2.3381056126262524e-8,
+          -0.366073277831295,
+          5.152453097296516
+        ],
+        "bridgeAngularVelocity": [
+          2.32316145018264e-9,
+          3.4163657697115534e-8,
+          2.1313222812665968e-7
+        ],
+        "theta": null,
+        "curvatureTurn": null,
+        "pathLength": null,
+        "crossingClearance": null,
+        "restLength": 56.941864836690954,
+        "slip": -0.38060616967452493,
+        "tensions": {
+          "leftTension": 0,
+          "rightTension": 0,
+          "elasticEnergy": 0,
+          "ratio": 1
+        },
+        "mechanicalEnergy": -713.8789783528141,
+        "initialEnergy": 284.52126395372983,
+        "ledger": {
+          "manualWork": 0,
+          "manualPositiveWork": 0,
+          "manualNegativeWork": 0,
+          "fixtureInsertionWork": 0,
+          "capstanHeat": 1.4877257836963391,
+          "disconnectHeat": 0,
+          "passiveDampingLoss": 355.1550831714279,
+          "ropeDampingLoss": 0,
+          "portalGeometryWork": 0,
+          "maxPortalGeometryWork": 0,
+          "maxSlipEnergyGain": 0,
+          "maxResidual": 0,
+          "minResidual": -641.8862022831474,
+          "maxResidualAt": null,
+          "springDiscretizationWork": 1.4877257836963391,
+          "integratorAndConstraintWork": -643.2451591351155,
+          "maxLeftStretch": 0,
+          "maxRightStretch": 0,
+          "maxTotalStretch": 0,
+          "maxConeViolation": 0,
+          "maxManualPower": 0,
+          "minManualPower": 0,
+          "maxManualForce": 0,
+          "steps": 6600
+        },
+        "lastManual": {
+          "active": false,
+          "force": 0,
+          "power": 0,
+          "work": 0,
+          "controlDistance": 0
+        },
+        "manualApplications": 0,
+        "motorEquationPresent": false,
+        "keeperBodyId": 31,
+        "keeperShapeCount": 226,
+        "keeperInWorld": true,
+        "surrogateContacts": [],
+        "energyBarriers": [
+          {
+            "targetAngle": -0.5,
+            "bridgePotential": 745.759670200612,
+            "maxCargoGravityCredit": 278.11382797569144,
+            "minimumNetExternalWork": 467.6458422249206
+          },
+          {
+            "targetAngle": 0,
+            "bridgePotential": 1936.2947360462701,
+            "maxCargoGravityCredit": 569.073146346151,
+            "minimumNetExternalWork": 1367.2215897001192
+          }
+        ],
+        "control": {
+          "position": [
+            0,
+            6,
+            22
+          ],
+          "pressed": false
+        },
+        "budget": {
+          "gravity": 19.5,
+          "bridgeMass": 16,
+          "length": 16,
+          "width": 8,
+          "thickness": 0.32,
+          "originalMass": 3.2,
+          "originalCargoProvided": true,
+          "worldProvided": true,
+          "solverIterations": 18,
+          "solverTolerance": 1e-8,
+          "cargoLinearDamping": 0.035,
+          "cargoAngularDamping": 0.16,
+          "contactEquationStiffness": 100000000,
+          "mu": 0.4,
+          "stiffness": 3000,
+          "ropeViscosity": 195.95917942265424,
+          "ropeDiameter": 0.08,
+          "maxElasticExtension": 0.65,
+          "manualPower": 240,
+          "manualForce": 405,
+          "controlRange": 1.3,
+          "crank": [
+            0,
+            6,
+            22
+          ],
+          "gamePlayerMass": 0,
+          "surrogatePlayerMass": 0
+        }
+      },
+      "horizontalBarrierToWorstGain": null,
+      "evenMinusHalfRadianBarrierToWorstGain": null,
+      "observedNoOpen": true,
+      "observedNoManualSource": true
+    }
+  ],
+  "surrogate": {
+    "label": "Separate3.2kg dynamic contact fixture; real game avatar remains mass0",
+    "binding": {
+      "scope": "Actual LabPhysics world, original cargo body/shape/material and original owner step; assetless native fixture position",
+      "bodyId": 32,
+      "shapeId": 1868,
+      "defaultsUnchangedOnCreate": true,
+      "preparedSteps": 3000,
+      "finishedSteps": 3000,
+      "originalRetainedBeforeFixtureTeardown": true,
+      "defaultsUnchangedOnDispose": true,
+      "originalStepMethodsRetained": true,
+      "worldSteps": 3000,
+      "ownerSteps": 3000
+    },
+    "wound": {
+      "scope": "assetless passive prototype; no production/game-player load claim",
+      "time": 16.999999999999677,
+      "steps": 2040,
+      "dt": 0.008333333333333333,
+      "phase": "idle",
+      "worldStep": 2040,
+      "angle": 0.003608890517683396,
+      "maxAngle": 0.004334486389700594,
+      "energyResidual": -783.7384355725394,
+      "originalCargoBodyId": 32,
+      "originalCargoShapeId": 1868,
+      "cargoBodyId": 32,
+      "cargoShapeId": 1868,
+      "cargoMass": 3.2,
+      "cargoPosition": [
+        -18,
+        -2.1486646339392252,
+        16
+      ],
+      "cargoVelocity": [
+        0,
+        -7.82889040493364e-15,
+        0
+      ],
+      "bridgePosition": [
+        -0.005686631260216932,
+        5.868398353574623,
+        1.99982631357619
+      ],
+      "bridgeAngularVelocity": [
+        2.8194964966053726e-7,
+        0.000018818972189745176,
+        -5.994414450649996e-8
+      ],
+      "theta": 4.800000000000001,
+      "curvatureTurn": 4.794254808386395,
+      "pathLength": 8.957555606320643,
+      "crossingClearance": 0.13064003737474028,
+      "restLength": 56.941864836690954,
+      "slip": -7.717864633939227,
+      "tensions": {
+        "slip": -7.717864633939227,
+        "leftTension": 28.288480982981312,
+        "rightTension": 62.39999999999846,
+        "elasticEnergy": 0.7823330260540505,
+        "frictionHeat": 0,
+        "materialTravel": 0,
+        "ratio": 6.805301381417559
+      },
+      "mechanicalEnergy": 1697.6459457283313,
+      "initialEnergy": 284.52126395372983,
+      "ledger": {
+        "manualWork": 2761.8863220112075,
+        "manualPositiveWork": 2761.8863220112075,
+        "manualNegativeWork": 0,
+        "fixtureInsertionWork": 0,
+        "capstanHeat": 68.70192403116974,
+        "disconnectHeat": 0,
+        "passiveDampingLoss": 144.38959326905035,
+        "ropeDampingLoss": 351.9316873638468,
+        "portalGeometryWork": 0,
+        "maxPortalGeometryWork": 0,
+        "maxSlipEnergyGain": 0,
+        "maxResidual": 0,
+        "minResidual": -783.7384355725394,
+        "maxResidualAt": null,
+        "springDiscretizationWork": 62.2765945304428,
+        "integratorAndConstraintWork": -846.0150301029879,
+        "maxLeftStretch": 0.01025751180146095,
+        "maxRightStretch": 0.04494160976079531,
+        "maxTotalStretch": 0.05154552151164182,
+        "maxConeViolation": 0,
+        "maxManualPower": 240.00000000001364,
+        "minManualPower": 0,
+        "maxManualForce": 405,
+        "steps": 2040
+      },
+      "lastManual": {
+        "active": true,
+        "force": 405,
+        "power": 96.17560973985746,
+        "work": 0.8014634144988122,
+        "controlDistance": 0
+      },
+      "manualApplications": 1680,
+      "motorEquationPresent": false,
+      "keeperBodyId": 39,
+      "keeperShapeCount": 226,
+      "keeperInWorld": true,
+      "surrogateContacts": [],
+      "energyBarriers": [
+        {
+          "targetAngle": -0.5,
+          "bridgePotential": 745.759670200612,
+          "maxCargoGravityCredit": 278.11382797569144,
+          "minimumNetExternalWork": 467.6458422249206
+        },
+        {
+          "targetAngle": 0,
+          "bridgePotential": 1936.2947360462701,
+          "maxCargoGravityCredit": 569.073146346151,
+          "minimumNetExternalWork": 1367.2215897001192
+        }
+      ],
+      "control": {
+        "position": [
+          0,
+          6,
+          22
+        ],
+        "pressed": true
+      },
+      "budget": {
+        "gravity": 19.5,
+        "bridgeMass": 16,
+        "length": 16,
+        "width": 8,
+        "thickness": 0.32,
+        "originalMass": 3.2,
+        "originalCargoProvided": true,
+        "worldProvided": true,
+        "solverIterations": 18,
+        "solverTolerance": 1e-8,
+        "cargoLinearDamping": 0.035,
+        "cargoAngularDamping": 0.16,
+        "contactEquationStiffness": 100000000,
+        "mu": 0.4,
+        "stiffness": 3000,
+        "ropeViscosity": 195.95917942265424,
+        "ropeDiameter": 0.08,
+        "maxElasticExtension": 0.65,
+        "manualPower": 240,
+        "manualForce": 405,
+        "controlRange": 1.3,
+        "crank": [
+          0,
+          6,
+          22
+        ],
+        "gamePlayerMass": 0,
+        "surrogatePlayerMass": 0
+      }
+    },
+    "bodyId": 40,
+    "maxContactForce": 373.94677601935814,
+    "maxContacts": 4,
+    "final": {
+      "scope": "assetless passive prototype; no production/game-player load claim",
+      "time": 24.999999999999222,
+      "steps": 3000,
+      "dt": 0.008333333333333333,
+      "phase": "idle",
+      "worldStep": 3000,
+      "angle": -0.0053224990577377465,
+      "maxAngle": 0.004334486389700594,
+      "energyResidual": -784.1894308680211,
+      "originalCargoBodyId": 32,
+      "originalCargoShapeId": 1868,
+      "cargoBodyId": 32,
+      "cargoShapeId": 1868,
+      "cargoMass": 3.2,
+      "cargoPosition": [
+        -18,
+        -2.1486646339392252,
+        16
+      ],
+      "cargoVelocity": [
+        0,
+        -7.814887909263121e-15,
+        0
+      ],
+      "bridgePosition": [
+        -0.000008513387117824265,
+        5.79742247368037,
+        2.0009649356170107
+      ],
+      "bridgeAngularVelocity": [
+        2.4607358158068582e-8,
+        6.13136173152001e-11,
+        4.070833232667424e-9
+      ],
+      "theta": 4.800000000000001,
+      "curvatureTurn": 4.794254808386395,
+      "pathLength": 8.957555606320643,
+      "crossingClearance": 0.13064003737474028,
+      "restLength": 56.941864836690954,
+      "slip": -7.717864633939227,
+      "tensions": {
+        "slip": -7.717864633939227,
+        "leftTension": 315.2067192127834,
+        "rightTension": 62.39999999999846,
+        "elasticEnergy": 17.208172639481052,
+        "frictionHeat": 0,
+        "materialTravel": 0,
+        "ratio": 6.805301381417559
+      },
+      "mechanicalEnergy": 2136.558375848507,
+      "initialEnergy": 284.52126395372983,
+      "ledger": {
+        "manualWork": 2761.8863220112075,
+        "manualPositiveWork": 2761.8863220112075,
+        "manualNegativeWork": 0,
+        "fixtureInsertionWork": 453.6507222464073,
+        "capstanHeat": 68.70192403116974,
+        "disconnectHeat": 0,
+        "passiveDampingLoss": 145.11441597840252,
+        "ropeDampingLoss": 365.4941614852445,
+        "portalGeometryWork": 0,
+        "maxPortalGeometryWork": 0,
+        "maxSlipEnergyGain": 0,
+        "maxResidual": 0,
+        "minResidual": -784.5731647155925,
+        "maxResidualAt": null,
+        "springDiscretizationWork": 63.15754516755379,
+        "integratorAndConstraintWork": -847.3469760355762,
+        "maxLeftStretch": 0.12638762991317343,
+        "maxRightStretch": 0.04494160976079531,
+        "maxTotalStretch": 0.1471876299131729,
+        "maxConeViolation": 0,
+        "maxManualPower": 240.00000000001364,
+        "minManualPower": 0,
+        "maxManualForce": 405,
+        "steps": 3000
+      },
+      "lastManual": {
+        "active": false,
+        "force": 0,
+        "power": 0,
+        "work": 0,
+        "controlDistance": 20
+      },
+      "manualApplications": 1680,
+      "motorEquationPresent": false,
+      "keeperBodyId": 39,
+      "keeperShapeCount": 226,
+      "keeperInWorld": true,
+      "surrogateContacts": [
+        {
+          "bodyId": 40,
+          "mass": 3.2,
+          "contacts": 4,
+          "normalForce": 62.39823228717708,
+          "position": [
+            -0.002710640764292206,
+            7.125497840161281,
+            -4.000359052230333
+          ]
+        }
+      ],
+      "energyBarriers": [
+        {
+          "targetAngle": -0.5,
+          "bridgePotential": 745.759670200612,
+          "maxCargoGravityCredit": 278.11382797569144,
+          "minimumNetExternalWork": 467.6458422249206
+        },
+        {
+          "targetAngle": 0,
+          "bridgePotential": 1936.2947360462701,
+          "maxCargoGravityCredit": 569.073146346151,
+          "minimumNetExternalWork": 1367.2215897001192
+        }
+      ],
+      "control": {
+        "position": [
+          20,
+          6,
+          22
+        ],
+        "pressed": true
+      },
+      "budget": {
+        "gravity": 19.5,
+        "bridgeMass": 16,
+        "length": 16,
+        "width": 8,
+        "thickness": 0.32,
+        "originalMass": 3.2,
+        "originalCargoProvided": true,
+        "worldProvided": true,
+        "solverIterations": 18,
+        "solverTolerance": 1e-8,
+        "cargoLinearDamping": 0.035,
+        "cargoAngularDamping": 0.16,
+        "contactEquationStiffness": 100000000,
+        "mu": 0.4,
+        "stiffness": 3000,
+        "ropeViscosity": 195.95917942265424,
+        "ropeDiameter": 0.08,
+        "maxElasticExtension": 0.65,
+        "manualPower": 240,
+        "manualForce": 405,
+        "controlRange": 1.3,
+        "crank": [
+          0,
+          6,
+          22
+        ],
+        "gamePlayerMass": 0,
+        "surrogatePlayerMass": 3.2
+      }
+    }
+  },
+  "peakRssBytes": 91111424
+}

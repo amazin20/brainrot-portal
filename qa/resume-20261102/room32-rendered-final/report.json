@@ -1,0 +1,6892 @@
+{
+  "kind": "room32-rendered-canonical-route-v3",
+  "startedAt": "2026-11-01T23:13:23.806Z",
+  "pass": false,
+  "routeCapturePass": true,
+  "receivedSourceBytesPass": false,
+  "verifiedSourceBytes": false,
+  "verifiedRouteEvidencePass": false,
+  "rawNoAbortNetworkPass": false,
+  "strictHistoricalNetworkAuditAccepted": false,
+  "humanVisualAccepted": false,
+  "all51Accepted": false,
+  "published": false,
+  "scope": "One native ordinary-input canonical route and four original WebGL PNGs. Model/physics ownership is checked each step; complete material/attribute descriptors at milestones and boundaries; original buffer SHA-256 before and after. Complete received source bytes use one durable CDP session and exact request IDs, without request interception. Raw aborted transfers remain recorded and keep rawNoAbortNetworkPass/pass false even when their exact complete original GLB bytes and decoded model binding are proved. This does not replace the historical strict network lifecycle audit.",
+  "config": {
+    "dist": "/workspace/scratch/877185031e6d/brainrot-portal/dist",
+    "out": "/workspace/scratch/877185031e6d/brainrot-portal/qa/resume-20261102/room32-rendered-final",
+    "chrome": "/tmp/brainrot-browsers/chrome-linux64/chrome",
+    "maxWallMs": 180000,
+    "memoryLimitBytes": 6442450944
+  },
+  "limits": {
+    "maxPhysicsSteps": 12000,
+    "maxVisualFrames": 6000,
+    "maxPngBytes": 25165824,
+    "maxSinglePngBytes": 6291456
+  },
+  "sourceManifestSha256": "c0b8646b454509603af591a7ef78685e278af6924be5a6a1e4431c468c614fb7",
+  "distManifestSha256": "5221073def7ef3c827bb85c2ae4a5dea5e268ea16d968cc4febed030b874c3e2",
+  "controllerSha256": "81e2e31410abea63d9fea14e2aa2c6ac3232fe7a923bacf572c542095bb3a426",
+  "probeSha256": "75ae73413f6f6bc6b82723d634847b80a3cbffdff01f7b4cb1dc09942daa4172",
+  "chromeSha256": "1bcad71ad1bff85955db13c6d8dd9f32374934d5a5cb079b526c46fb51f9bd97",
+  "requests": [
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/?edition=foundation&level=32&debug=1",
+      "method": "GET",
+      "path": "index.html",
+      "bytes": 14498,
+      "sha256": "55ac878d58bffa219db25e2dc932a4e4c8fb24866fd46fac216309df4971db41"
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/index-1m6rJrS8.js",
+      "method": "GET",
+      "path": "assets/index-1m6rJrS8.js",
+      "bytes": 2449627,
+      "sha256": "e3cba6a1c3135a752d7519b2fa775dfb7685de55aa495b1b52b418fbc83bb95a"
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/index-C001kXKc.css",
+      "method": "GET",
+      "path": "assets/index-C001kXKc.css",
+      "bytes": 58602,
+      "sha256": "3c06e42c51dcb03884cb6b5f344f1c7f730276d1081f476a1dbade6db084335f"
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/art/portal-laboratory-menu.webp",
+      "method": "GET",
+      "path": "art/portal-laboratory-menu.webp",
+      "bytes": 158200,
+      "sha256": "f6a544096a6418a0f65ba8c609415d0393a1081d18537ecac5eb4c345b13b4be"
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/draco/draco_wasm_wrapper.js",
+      "method": "GET",
+      "path": "draco/draco_wasm_wrapper.js",
+      "bytes": 58763,
+      "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8"
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/draco/draco_decoder.wasm",
+      "method": "GET",
+      "path": "draco/draco_decoder.wasm",
+      "bytes": 285747,
+      "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2"
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/manifest.json",
+      "method": "GET",
+      "path": "models/runtime/manifest.json",
+      "bytes": 2421,
+      "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed"
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+      "method": "GET",
+      "path": "models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+      "method": "GET",
+      "path": "models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+      "method": "GET",
+      "path": "models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+      "method": "GET",
+      "path": "models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-23-floor-tile.glb?v=0950bc6ef31b",
+      "method": "GET",
+      "path": "models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c"
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-24-wall-panel.glb?v=15aaca48f6e4",
+      "method": "GET",
+      "path": "models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d"
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/LabV8Journey-DgEsLyft.js",
+      "method": "GET",
+      "path": "assets/LabV8Journey-DgEsLyft.js",
+      "bytes": 19856,
+      "sha256": "208e12f0d4203ea22cd3cb1e7ddee9a3ac3bdb02660d81c91f6f6e0216d305cb"
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/LabPostJourneyA-DzmyhaWj.js",
+      "method": "GET",
+      "path": "assets/LabPostJourneyA-DzmyhaWj.js",
+      "bytes": 12170,
+      "sha256": "331e6d2579bb80fb657f3dad17f125ff8b93264aca2c6f3b06a5a34bfda44cb6"
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/LabSiphonObservatoryJourney-BardtPPw.js",
+      "method": "GET",
+      "path": "assets/LabSiphonObservatoryJourney-BardtPPw.js",
+      "bytes": 2649,
+      "sha256": "643860570b1f4402aabe34956e4226a331fd9032ed55d3bcda2870047ecdae25"
+    }
+  ],
+  "responses": [
+    {
+      "requestId": "4724.3",
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/index-C001kXKc.css",
+      "path": "assets/index-C001kXKc.css",
+      "bytes": 58602,
+      "sha256": "3c06e42c51dcb03884cb6b5f344f1c7f730276d1081f476a1dbade6db084335f",
+      "status": 200,
+      "terminal": {
+        "kind": "loadingFinished",
+        "requestId": "4724.3",
+        "timestamp": 4088.65473,
+        "encodedDataLength": 58792
+      },
+      "bodySource": "Same durable CDP session Network.getResponseBody"
+    },
+    {
+      "requestId": "C0EF000A9041942AB606294DC9DBA398",
+      "url": "http://127.0.0.1:43585/campaign-v67/?edition=foundation&level=32&debug=1",
+      "path": "index.html",
+      "bytes": 14498,
+      "sha256": "55ac878d58bffa219db25e2dc932a4e4c8fb24866fd46fac216309df4971db41",
+      "status": 200,
+      "terminal": {
+        "kind": "loadingFinished",
+        "requestId": "C0EF000A9041942AB606294DC9DBA398",
+        "timestamp": 4088.644099,
+        "encodedDataLength": 14689
+      },
+      "bodySource": "Same durable CDP session Network.getResponseBody"
+    },
+    {
+      "requestId": "4724.6",
+      "url": "http://127.0.0.1:43585/campaign-v67/art/portal-laboratory-menu.webp",
+      "path": "art/portal-laboratory-menu.webp",
+      "bytes": 158200,
+      "sha256": "f6a544096a6418a0f65ba8c609415d0393a1081d18537ecac5eb4c345b13b4be",
+      "status": 200,
+      "terminal": {
+        "kind": "loadingFinished",
+        "requestId": "4724.6",
+        "timestamp": 4088.69816,
+        "encodedDataLength": 158378
+      },
+      "bodySource": "Same durable CDP session Network.getResponseBody"
+    },
+    {
+      "requestId": "4724.2",
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/index-1m6rJrS8.js",
+      "path": "assets/index-1m6rJrS8.js",
+      "bytes": 2449627,
+      "sha256": "e3cba6a1c3135a752d7519b2fa775dfb7685de55aa495b1b52b418fbc83bb95a",
+      "status": 200,
+      "terminal": {
+        "kind": "loadingFinished",
+        "requestId": "4724.2",
+        "timestamp": 4088.689314,
+        "encodedDataLength": 2449826
+      },
+      "bodySource": "Same durable CDP session Network.getResponseBody"
+    },
+    {
+      "requestId": "4724.9",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/manifest.json",
+      "path": "models/runtime/manifest.json",
+      "bytes": 2421,
+      "sha256": "8806346ed3ac0fb096aa26321d5620c16a6a2a55f2523023fb21f6c4749fe2ed",
+      "status": 200,
+      "terminal": {
+        "kind": "loadingFinished",
+        "requestId": "4724.9",
+        "timestamp": 4089.318752,
+        "encodedDataLength": 2603
+      },
+      "bodySource": "Same durable CDP session Network.getResponseBody"
+    },
+    {
+      "requestId": "4724.7",
+      "url": "http://127.0.0.1:43585/campaign-v67/draco/draco_wasm_wrapper.js",
+      "path": "draco/draco_wasm_wrapper.js",
+      "bytes": 58763,
+      "sha256": "e8049906ef3f8f75d3456c22a3f31bfdfe5b5b5bd09ccdec613b9e9a49d554d8",
+      "status": 200,
+      "terminal": {
+        "kind": "loadingFinished",
+        "requestId": "4724.7",
+        "timestamp": 4089.317667,
+        "encodedDataLength": 58960
+      },
+      "bodySource": "Same durable CDP session Network.getResponseBody"
+    },
+    {
+      "requestId": "4724.8",
+      "url": "http://127.0.0.1:43585/campaign-v67/draco/draco_decoder.wasm",
+      "path": "draco/draco_decoder.wasm",
+      "bytes": 285747,
+      "sha256": "c55a594e8ffd18426d36b27fea9618af3df5e173640a3e56d46f09d76f0574f2",
+      "status": 200,
+      "terminal": {
+        "kind": "loadingFailed",
+        "requestId": "4724.8",
+        "timestamp": 4089.327292,
+        "type": "Fetch",
+        "errorText": "net::ERR_ABORTED",
+        "canceled": true
+      },
+      "bodySource": "Same durable CDP session Network.getResponseBody"
+    },
+    {
+      "requestId": "4724.10",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+      "path": "models/runtime/model-01-player.glb",
+      "bytes": 549756,
+      "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91",
+      "status": 200,
+      "terminal": {
+        "kind": "loadingFailed",
+        "requestId": "4724.10",
+        "timestamp": 4089.369863,
+        "type": "Fetch",
+        "errorText": "net::ERR_ABORTED",
+        "canceled": true
+      },
+      "bodySource": "Same durable CDP session Network.getResponseBody"
+    },
+    {
+      "requestId": "4724.13",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+      "path": "models/runtime/model-22-terminal.glb",
+      "bytes": 377108,
+      "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26",
+      "status": 200,
+      "terminal": {
+        "kind": "loadingFailed",
+        "requestId": "4724.13",
+        "timestamp": 4089.375647,
+        "type": "Fetch",
+        "errorText": "net::ERR_ABORTED",
+        "canceled": true
+      },
+      "bodySource": "Same durable CDP session Network.getResponseBody"
+    },
+    {
+      "requestId": "4724.12",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+      "path": "models/runtime/model-11-portal-gun.glb",
+      "bytes": 393116,
+      "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7",
+      "status": 200,
+      "terminal": {
+        "kind": "loadingFinished",
+        "requestId": "4724.12",
+        "timestamp": 4089.341063,
+        "encodedDataLength": 393301
+      },
+      "bodySource": "Same durable CDP session Network.getResponseBody"
+    },
+    {
+      "requestId": "4724.11",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+      "path": "models/runtime/model-02-cargo.glb",
+      "bytes": 510376,
+      "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697",
+      "status": 200,
+      "terminal": {
+        "kind": "loadingFinished",
+        "requestId": "4724.11",
+        "timestamp": 4089.349833,
+        "encodedDataLength": 510561
+      },
+      "bodySource": "Same durable CDP session Network.getResponseBody"
+    },
+    {
+      "requestId": "4724.14",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-23-floor-tile.glb?v=0950bc6ef31b",
+      "path": "models/runtime/model-23-floor-tile.glb",
+      "bytes": 103600,
+      "sha256": "0950bc6ef31bb28939087bad53695f21cde0b9fe5740394df202a0b242f77b0c",
+      "status": 200,
+      "terminal": {
+        "kind": "loadingFinished",
+        "requestId": "4724.14",
+        "timestamp": 4089.361929,
+        "encodedDataLength": 103785
+      },
+      "bodySource": "Same durable CDP session Network.getResponseBody"
+    },
+    {
+      "requestId": "4724.18",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-24-wall-panel.glb?v=15aaca48f6e4",
+      "path": "models/runtime/model-24-wall-panel.glb",
+      "bytes": 62448,
+      "sha256": "15aaca48f6e436d5e89abf7548c0fe43580bba8faff4619e476d3a6d306b004d",
+      "status": 200,
+      "terminal": {
+        "kind": "loadingFinished",
+        "requestId": "4724.18",
+        "timestamp": 4089.373025,
+        "encodedDataLength": 62632
+      },
+      "bodySource": "Same durable CDP session Network.getResponseBody"
+    },
+    {
+      "requestId": "4724.37",
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/LabV8Journey-DgEsLyft.js",
+      "path": "assets/LabV8Journey-DgEsLyft.js",
+      "bytes": 19856,
+      "sha256": "208e12f0d4203ea22cd3cb1e7ddee9a3ac3bdb02660d81c91f6f6e0216d305cb",
+      "status": 200,
+      "terminal": {
+        "kind": "loadingFinished",
+        "requestId": "4724.37",
+        "timestamp": 4106.531241,
+        "encodedDataLength": 20053
+      },
+      "bodySource": "Same durable CDP session Network.getResponseBody"
+    },
+    {
+      "requestId": "4724.39",
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/LabSiphonObservatoryJourney-BardtPPw.js",
+      "path": "assets/LabSiphonObservatoryJourney-BardtPPw.js",
+      "bytes": 2649,
+      "sha256": "643860570b1f4402aabe34956e4226a331fd9032ed55d3bcda2870047ecdae25",
+      "status": 200,
+      "terminal": {
+        "kind": "loadingFinished",
+        "requestId": "4724.39",
+        "timestamp": 4106.630919,
+        "encodedDataLength": 2845
+      },
+      "bodySource": "Same durable CDP session Network.getResponseBody"
+    },
+    {
+      "requestId": "4724.38",
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/LabPostJourneyA-DzmyhaWj.js",
+      "path": "assets/LabPostJourneyA-DzmyhaWj.js",
+      "bytes": 12170,
+      "sha256": "331e6d2579bb80fb657f3dad17f125ff8b93264aca2c6f3b06a5a34bfda44cb6",
+      "status": 200,
+      "terminal": {
+        "kind": "loadingFinished",
+        "requestId": "4724.38",
+        "timestamp": 4106.631008,
+        "encodedDataLength": 12367
+      },
+      "bodySource": "Same durable CDP session Network.getResponseBody"
+    }
+  ],
+  "networkTrace": [
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "C0EF000A9041942AB606294DC9DBA398",
+      "url": "http://127.0.0.1:43585/campaign-v67/?edition=foundation&level=32&debug=1",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4088.638185
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "C0EF000A9041942AB606294DC9DBA398",
+      "url": "http://127.0.0.1:43585/campaign-v67/?edition=foundation&level=32&debug=1",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4088.644386
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.2",
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/index-1m6rJrS8.js",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4088.649765
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.3",
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/index-C001kXKc.css",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4088.650013
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.3",
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/index-C001kXKc.css",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4088.655173
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.3",
+      "timestamp": 4088.65473,
+      "encodedDataLength": 58792
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "C0EF000A9041942AB606294DC9DBA398",
+      "timestamp": 4088.644099,
+      "encodedDataLength": 14689
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.6",
+      "url": "http://127.0.0.1:43585/campaign-v67/art/portal-laboratory-menu.webp",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4088.692953
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.6",
+      "url": "http://127.0.0.1:43585/campaign-v67/art/portal-laboratory-menu.webp",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4088.729981
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.6",
+      "timestamp": 4088.69816,
+      "encodedDataLength": 158378
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.2",
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/index-1m6rJrS8.js",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4088.730727
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.2",
+      "timestamp": 4088.689314,
+      "encodedDataLength": 2449826
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.7",
+      "url": "http://127.0.0.1:43585/campaign-v67/draco/draco_wasm_wrapper.js",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.310374
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.8",
+      "url": "http://127.0.0.1:43585/campaign-v67/draco/draco_decoder.wasm",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.313458
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.9",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/manifest.json",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.313666
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.7",
+      "url": "http://127.0.0.1:43585/campaign-v67/draco/draco_wasm_wrapper.js",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.322691
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.8",
+      "url": "http://127.0.0.1:43585/campaign-v67/draco/draco_decoder.wasm",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.323285
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.9",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/manifest.json",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.323421
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.9",
+      "timestamp": 4089.318752,
+      "encodedDataLength": 2603
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.7",
+      "timestamp": 4089.317667,
+      "encodedDataLength": 58960
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.10",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.325193
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.11",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.325356
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.12",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.325425
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.13",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.325475
+    },
+    {
+      "kind": "loadingFailed",
+      "requestId": "4724.8",
+      "timestamp": 4089.327292,
+      "type": "Fetch",
+      "errorText": "net::ERR_ABORTED",
+      "canceled": true
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.10",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.346621
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.11",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.346842
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.12",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.346949
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.13",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.347079
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "92AED4CA1C52A8878EB114CDABA4AC24",
+      "url": "blob:http://127.0.0.1:43585/e25f60e4-7128-4663-bcc5-a72735827535",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.368544
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.14",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-23-floor-tile.glb?v=0950bc6ef31b",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.352714
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.15",
+      "url": "blob:http://127.0.0.1:43585/980cd0bd-c813-47b3-8eb2-5f6fcca83a60",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.366763
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.16",
+      "url": "blob:http://127.0.0.1:43585/07ac1539-ff02-44b3-99e4-e6d49e374f68",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.366957
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.17",
+      "url": "blob:http://127.0.0.1:43585/6295d971-178d-4749-a3db-6478cb922d20",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.367072
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "DEB86F5C2EF35BB47F8C3A074A962D71",
+      "url": "blob:http://127.0.0.1:43585/e25f60e4-7128-4663-bcc5-a72735827535",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.375393
+    },
+    {
+      "kind": "loadingFailed",
+      "requestId": "4724.10",
+      "timestamp": 4089.369863,
+      "type": "Fetch",
+      "errorText": "net::ERR_ABORTED",
+      "canceled": true
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.18",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-24-wall-panel.glb?v=15aaca48f6e4",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.370639
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.19",
+      "url": "blob:http://127.0.0.1:43585/ab2a8a03-11f0-4c93-a6d6-1cce762f8443",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.373899
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.20",
+      "url": "blob:http://127.0.0.1:43585/a9d9c09f-07af-4171-b702-eea1e429f285",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.374102
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.21",
+      "url": "blob:http://127.0.0.1:43585/13a5cb3c-aa0d-486c-88d7-0372f5e7b91a",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.374278
+    },
+    {
+      "kind": "loadingFailed",
+      "requestId": "4724.13",
+      "timestamp": 4089.375647,
+      "type": "Fetch",
+      "errorText": "net::ERR_ABORTED",
+      "canceled": true
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.12",
+      "timestamp": 4089.341063,
+      "encodedDataLength": 393301
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.14",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-23-floor-tile.glb?v=0950bc6ef31b",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.378771
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.15",
+      "url": "blob:http://127.0.0.1:43585/980cd0bd-c813-47b3-8eb2-5f6fcca83a60",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.378977
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.16",
+      "url": "blob:http://127.0.0.1:43585/07ac1539-ff02-44b3-99e4-e6d49e374f68",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.379163
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.17",
+      "url": "blob:http://127.0.0.1:43585/6295d971-178d-4749-a3db-6478cb922d20",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.379314
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.18",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-24-wall-panel.glb?v=15aaca48f6e4",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.380039
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.19",
+      "url": "blob:http://127.0.0.1:43585/ab2a8a03-11f0-4c93-a6d6-1cce762f8443",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.380217
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.20",
+      "url": "blob:http://127.0.0.1:43585/a9d9c09f-07af-4171-b702-eea1e429f285",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.380544
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.21",
+      "url": "blob:http://127.0.0.1:43585/13a5cb3c-aa0d-486c-88d7-0372f5e7b91a",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.380727
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.11",
+      "timestamp": 4089.349833,
+      "encodedDataLength": 510561
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.15",
+      "timestamp": 4089.367718,
+      "encodedDataLength": 0
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.16",
+      "timestamp": 4089.367623,
+      "encodedDataLength": 0
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.17",
+      "timestamp": 4089.368065,
+      "encodedDataLength": 0
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.19",
+      "timestamp": 4089.374972,
+      "encodedDataLength": 0
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.20",
+      "timestamp": 4089.374758,
+      "encodedDataLength": 0
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.21",
+      "timestamp": 4089.374888,
+      "encodedDataLength": 0
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.14",
+      "timestamp": 4089.361929,
+      "encodedDataLength": 103785
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.18",
+      "timestamp": 4089.373025,
+      "encodedDataLength": 62632
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.24",
+      "url": "blob:http://127.0.0.1:43585/309d37df-d2d8-49dc-a39d-526cf30df7aa",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.718965
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.25",
+      "url": "blob:http://127.0.0.1:43585/542f77f2-36d4-42e8-bea5-c73458255d2d",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.719194
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.26",
+      "url": "blob:http://127.0.0.1:43585/20ca4ee5-5697-47c2-97d2-2fb373b22c57",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.719396
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.27",
+      "url": "blob:http://127.0.0.1:43585/5c0c217d-171d-46e8-b24e-d8696a445574",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.726671
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.28",
+      "url": "blob:http://127.0.0.1:43585/7b9bc436-2efe-4abf-84c0-23b9914a277d",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.726982
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.29",
+      "url": "blob:http://127.0.0.1:43585/0c5f71dd-bfbd-442c-9b1d-617a152d794e",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.727059
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.24",
+      "url": "blob:http://127.0.0.1:43585/309d37df-d2d8-49dc-a39d-526cf30df7aa",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.727442
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.25",
+      "url": "blob:http://127.0.0.1:43585/542f77f2-36d4-42e8-bea5-c73458255d2d",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.727593
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.26",
+      "url": "blob:http://127.0.0.1:43585/20ca4ee5-5697-47c2-97d2-2fb373b22c57",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.894829
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.24",
+      "timestamp": 4089.719816,
+      "encodedDataLength": 0
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.25",
+      "timestamp": 4089.719943,
+      "encodedDataLength": 0
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.27",
+      "url": "blob:http://127.0.0.1:43585/5c0c217d-171d-46e8-b24e-d8696a445574",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.89529
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.28",
+      "url": "blob:http://127.0.0.1:43585/7b9bc436-2efe-4abf-84c0-23b9914a277d",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.895482
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.29",
+      "url": "blob:http://127.0.0.1:43585/0c5f71dd-bfbd-442c-9b1d-617a152d794e",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.895553
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.26",
+      "timestamp": 4089.720508,
+      "encodedDataLength": 0
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.27",
+      "timestamp": 4089.727934,
+      "encodedDataLength": 0
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.28",
+      "timestamp": 4089.728166,
+      "encodedDataLength": 0
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.29",
+      "timestamp": 4089.728252,
+      "encodedDataLength": 0
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.30",
+      "url": "blob:http://127.0.0.1:43585/7acfdcb0-172a-4f48-82bd-62aba3c7bd3f",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.92341
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.31",
+      "url": "blob:http://127.0.0.1:43585/50576c46-ac6b-451b-8235-73ca4cd531da",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.923616
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.32",
+      "url": "blob:http://127.0.0.1:43585/36063e40-a3c5-48af-ac30-a6a65a4f8887",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.923894
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.33",
+      "url": "blob:http://127.0.0.1:43585/ca81a2a4-fec0-4851-8a69-63de20dd8e0b",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.933372
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.34",
+      "url": "blob:http://127.0.0.1:43585/ef28127d-1109-4541-b5b7-f718ac9847ad",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.933632
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.35",
+      "url": "blob:http://127.0.0.1:43585/3c0f9e20-a265-4d8c-a54a-3f8f5f0966dc",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4089.933873
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.30",
+      "url": "blob:http://127.0.0.1:43585/7acfdcb0-172a-4f48-82bd-62aba3c7bd3f",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.937381
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.31",
+      "url": "blob:http://127.0.0.1:43585/50576c46-ac6b-451b-8235-73ca4cd531da",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.937604
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.32",
+      "url": "blob:http://127.0.0.1:43585/36063e40-a3c5-48af-ac30-a6a65a4f8887",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.937909
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.33",
+      "url": "blob:http://127.0.0.1:43585/ca81a2a4-fec0-4851-8a69-63de20dd8e0b",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.938056
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.34",
+      "url": "blob:http://127.0.0.1:43585/ef28127d-1109-4541-b5b7-f718ac9847ad",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.938138
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.35",
+      "url": "blob:http://127.0.0.1:43585/3c0f9e20-a265-4d8c-a54a-3f8f5f0966dc",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4089.93822
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.30",
+      "timestamp": 4089.928952,
+      "encodedDataLength": 0
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.31",
+      "timestamp": 4089.929109,
+      "encodedDataLength": 0
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.32",
+      "timestamp": 4089.92922,
+      "encodedDataLength": 0
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.33",
+      "timestamp": 4089.933805,
+      "encodedDataLength": 0
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.34",
+      "timestamp": 4089.934067,
+      "encodedDataLength": 0
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.35",
+      "timestamp": 4089.934181,
+      "encodedDataLength": 0
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.37",
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/LabV8Journey-DgEsLyft.js",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4106.525904
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.37",
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/LabV8Journey-DgEsLyft.js",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4106.533619
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.37",
+      "timestamp": 4106.531241,
+      "encodedDataLength": 20053
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.38",
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/LabPostJourneyA-DzmyhaWj.js",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4106.625098
+    },
+    {
+      "kind": "requestWillBeSent",
+      "requestId": "4724.39",
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/LabSiphonObservatoryJourney-BardtPPw.js",
+      "method": "GET",
+      "redirected": false,
+      "timestamp": 4106.626459
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.39",
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/LabSiphonObservatoryJourney-BardtPPw.js",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4106.637398
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.39",
+      "timestamp": 4106.630919,
+      "encodedDataLength": 2845
+    },
+    {
+      "kind": "responseReceived",
+      "requestId": "4724.38",
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/LabPostJourneyA-DzmyhaWj.js",
+      "status": 200,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "timestamp": 4106.637702
+    },
+    {
+      "kind": "loadingFinished",
+      "requestId": "4724.38",
+      "timestamp": 4106.631008,
+      "encodedDataLength": 12367
+    }
+  ],
+  "responseMetadata": [
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/?edition=foundation&level=32&debug=1",
+      "path": "index.html",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/index-C001kXKc.css",
+      "path": "assets/index-C001kXKc.css",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/art/portal-laboratory-menu.webp",
+      "path": "art/portal-laboratory-menu.webp",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/index-1m6rJrS8.js",
+      "path": "assets/index-1m6rJrS8.js",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/draco/draco_wasm_wrapper.js",
+      "path": "draco/draco_wasm_wrapper.js",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/draco/draco_decoder.wasm",
+      "path": "draco/draco_decoder.wasm",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/manifest.json",
+      "path": "models/runtime/manifest.json",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+      "path": "models/runtime/model-01-player.glb",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+      "path": "models/runtime/model-02-cargo.glb",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+      "path": "models/runtime/model-11-portal-gun.glb",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+      "path": "models/runtime/model-22-terminal.glb",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-23-floor-tile.glb?v=0950bc6ef31b",
+      "path": "models/runtime/model-23-floor-tile.glb",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-24-wall-panel.glb?v=15aaca48f6e4",
+      "path": "models/runtime/model-24-wall-panel.glb",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/LabV8Journey-DgEsLyft.js",
+      "path": "assets/LabV8Journey-DgEsLyft.js",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/LabSiphonObservatoryJourney-BardtPPw.js",
+      "path": "assets/LabSiphonObservatoryJourney-BardtPPw.js",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:43585/campaign-v67/assets/LabPostJourneyA-DzmyhaWj.js",
+      "path": "assets/LabPostJourneyA-DzmyhaWj.js",
+      "status": 200,
+      "fromServiceWorker": false
+    }
+  ],
+  "sourceBodyErrors": [],
+  "byteCompleteAbortedGLBs": [],
+  "networkErrors": [
+    {
+      "kind": "requestfailed",
+      "url": "http://127.0.0.1:43585/campaign-v67/draco/draco_decoder.wasm",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "kind": "requestfailed",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "kind": "requestfailed",
+      "url": "http://127.0.0.1:43585/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "images": [
+    {
+      "filename": "room-32-01-freight-delivered.png",
+      "key": "01-freight-delivered",
+      "name": "The original companion takes a freight aperture too low for its observer",
+      "state": {
+        "id": "post-thin-shadow",
+        "index": 31,
+        "state": "playing",
+        "step": 1478,
+        "time": 12.316666666666608,
+        "elapsed": 12316.666666666848,
+        "visualTime": 12.316666666666858,
+        "player": [
+          -7.127539285436797,
+          0,
+          -1.151044591213968
+        ],
+        "playerVelocity": [
+          -1.4390160550836077e-20,
+          0,
+          -1.7042246320105163e-20
+        ],
+        "cargo": [
+          -20.440930271578896,
+          0.5296734044135608,
+          -0.9963747173186266
+        ],
+        "cargoBodyPosition": [
+          -20.440930271578896,
+          0.5296734044135608,
+          -0.9963747173186266
+        ],
+        "cargoQuaternion": [
+          -0.6565432266265364,
+          0.6582134712817472,
+          -0.2601512368123759,
+          -0.2608205355777037
+        ],
+        "cargoVelocity": [
+          0.18368740611998047,
+          1.0850111629218946,
+          0.1381485850718128
+        ],
+        "held": false,
+        "teleports": 0,
+        "cargoTransports": 1,
+        "companionBehavior": "settling",
+        "frictionObservations": {
+          "normal": 1478,
+          "wandering": 0,
+          "clearanceShuffle": 0
+        },
+        "behaviorCalls": 1478,
+        "yaw": 3.560016705236586,
+        "pitch": -0.06333791180077339,
+        "camera": {
+          "p": [
+            -11.042551340247805,
+            1.731421113759606,
+            -6.509532384109473
+          ],
+          "q": [
+            0.007522593888801793,
+            0.9707707023336741,
+            0.030694096963273805,
+            -0.23791915955504364
+          ],
+          "fov": 62.000000006161606,
+          "aspect": 1.7777777777777777,
+          "near": 0.1,
+          "far": 380,
+          "obstructed": false
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "quality": {
+          "pixelRatio": 1.35,
+          "portalResolution": 896,
+          "shadowSize": 1024,
+          "shadows": true
+        },
+        "modelRoles": {
+          "original-main": 4,
+          "original-device": 1,
+          "original-companion": 1,
+          "loaded-asset-11": 1,
+          "loaded-asset-1": 1,
+          "loaded-asset-2": 1,
+          "loaded-asset-22": 1,
+          "loaded-asset-23": 1,
+          "loaded-asset-24": 1
+        },
+        "modelMembership": [
+          {
+            "rid": 0,
+            "roles": [
+              "original-main"
+            ],
+            "positionVertices": 69777
+          },
+          {
+            "rid": 1,
+            "roles": [
+              "original-main",
+              "original-device"
+            ],
+            "positionVertices": 26886
+          },
+          {
+            "rid": 2,
+            "roles": [
+              "original-main"
+            ],
+            "positionVertices": 66
+          },
+          {
+            "rid": 3,
+            "roles": [
+              "original-main"
+            ],
+            "positionVertices": 24
+          },
+          {
+            "rid": 4,
+            "roles": [
+              "original-companion"
+            ],
+            "positionVertices": 49736
+          },
+          {
+            "rid": 5,
+            "roles": [
+              "loaded-asset-11"
+            ],
+            "positionVertices": 26886
+          },
+          {
+            "rid": 6,
+            "roles": [
+              "loaded-asset-1"
+            ],
+            "positionVertices": 69777
+          },
+          {
+            "rid": 7,
+            "roles": [
+              "loaded-asset-2"
+            ],
+            "positionVertices": 49736
+          },
+          {
+            "rid": 8,
+            "roles": [
+              "loaded-asset-22"
+            ],
+            "positionVertices": 24951
+          },
+          {
+            "rid": 9,
+            "roles": [
+              "loaded-asset-23"
+            ],
+            "positionVertices": 7321
+          },
+          {
+            "rid": 10,
+            "roles": [
+              "loaded-asset-24"
+            ],
+            "positionVertices": 4771
+          }
+        ],
+        "physicalCargo": {
+          "bodyId": 161,
+          "shapeId": 322,
+          "mass": 3.2,
+          "half": [
+            0.39,
+            0.39,
+            0.39
+          ],
+          "shapeOffset": [
+            0,
+            0,
+            0
+          ],
+          "shapeOrientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "friction": 1,
+          "restitution": 1
+        },
+        "decodedAssets": [
+          {
+            "id": 11,
+            "rootUuid": "5dfa0895-34dc-48c9-8de4-a765123b6671",
+            "meshRids": [
+              5
+            ],
+            "positionVertices": 26886
+          },
+          {
+            "id": 1,
+            "rootUuid": "cdd0a1e2-41d0-41e4-af0d-025b7ad51099",
+            "meshRids": [
+              6
+            ],
+            "positionVertices": 69777
+          },
+          {
+            "id": 2,
+            "rootUuid": "525a87f7-c4d9-4549-8d1c-43a37dcd8c2e",
+            "meshRids": [
+              7
+            ],
+            "positionVertices": 49736
+          },
+          {
+            "id": 22,
+            "rootUuid": "91afdf30-1b54-40c8-8ec3-756081cce789",
+            "meshRids": [
+              8
+            ],
+            "positionVertices": 24951
+          },
+          {
+            "id": 23,
+            "rootUuid": "eda22bac-1410-494b-9e38-c131c7f96081",
+            "meshRids": [
+              9
+            ],
+            "positionVertices": 7321
+          },
+          {
+            "id": 24,
+            "rootUuid": "4f4aa5e2-68b1-4f3b-9397-ec40e3078451",
+            "meshRids": [
+              10
+            ],
+            "positionVertices": 4771
+          }
+        ],
+        "mechanism": {
+          "raw": [
+            false,
+            false
+          ],
+          "shadow": [
+            false,
+            false
+          ],
+          "valid": false,
+          "latched": false,
+          "diaphragm": 0,
+          "inspectionCover": 0
+        },
+        "resetCalls": {
+          "resetRun": 0,
+          "respawn": 0,
+          "resetCargo": 0,
+          "levelReset": 0
+        },
+        "counts": {
+          "physics": 1478,
+          "visual": 739,
+          "interact": 2,
+          "pickups": 1,
+          "releases": 1,
+          "portalRequests": 2
+        }
+      },
+      "bytes": 365525,
+      "sha256": "e05e159fbb46277eeb301628299d9d39d3d433f0ccc09a0df92e2c328ef2718c",
+      "png": {
+        "width": 1280,
+        "height": 720,
+        "depth": 8,
+        "color": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0,
+        "chunks": 92,
+        "decodedBytes": 3687120,
+        "visiblePixels": 921600,
+        "moreThanOnePixelColor": true,
+        "channelMin": 0,
+        "channelMax": 240,
+        "scope": "PNG decode/CRC/nonuniformity only; no aesthetic or visibility acceptance"
+      }
+    },
+    {
+      "filename": "room-32-02-shadow-diaphragm.png",
+      "key": "02-shadow-diaphragm",
+      "name": "A real cargo shadow separates the two height circuits",
+      "state": {
+        "id": "post-thin-shadow",
+        "index": 31,
+        "state": "playing",
+        "step": 2240,
+        "time": 18.66666666666625,
+        "elapsed": 18666.666666666813,
+        "visualTime": 18.666666666666888,
+        "player": [
+          18.16798853870481,
+          0,
+          12.087920458037045
+        ],
+        "playerVelocity": [
+          1.7121857593477257e-12,
+          0,
+          8.961096832379998e-13
+        ],
+        "cargo": [
+          -20.317635307322565,
+          0.6207586625034579,
+          -1.0000222719656782
+        ],
+        "cargoBodyPosition": [
+          -20.317635307322565,
+          0.6207586625034579,
+          -1.0000222719656782
+        ],
+        "cargoQuaternion": [
+          -0.5827869955852025,
+          0.7286065137486453,
+          -0.2346358468984447,
+          -0.2728330721339844
+        ],
+        "cargoVelocity": [
+          0.0004023609316266311,
+          0.0006566189301430714,
+          0.0009687155079823795
+        ],
+        "held": false,
+        "teleports": 0,
+        "cargoTransports": 1,
+        "companionBehavior": "getting_up",
+        "frictionObservations": {
+          "normal": 2240,
+          "wandering": 0,
+          "clearanceShuffle": 0
+        },
+        "behaviorCalls": 2240,
+        "yaw": 2.5289164804633413,
+        "pitch": 0.24655529802914883,
+        "camera": {
+          "p": [
+            20.64747643481393,
+            0.6700001721591357,
+            6.125925511566356
+          ],
+          "q": [
+            0.027768930219154966,
+            0.9575431641201247,
+            -0.09868351106625604,
+            0.2694467294381948
+          ],
+          "fov": 62.00001980477385,
+          "aspect": 1.7777777777777777,
+          "near": 0.1,
+          "far": 380,
+          "obstructed": false
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "quality": {
+          "pixelRatio": 1.35,
+          "portalResolution": 896,
+          "shadowSize": 1024,
+          "shadows": true
+        },
+        "modelRoles": {
+          "original-main": 4,
+          "original-device": 1,
+          "original-companion": 1,
+          "loaded-asset-11": 1,
+          "loaded-asset-1": 1,
+          "loaded-asset-2": 1,
+          "loaded-asset-22": 1,
+          "loaded-asset-23": 1,
+          "loaded-asset-24": 1
+        },
+        "modelMembership": [
+          {
+            "rid": 0,
+            "roles": [
+              "original-main"
+            ],
+            "positionVertices": 69777
+          },
+          {
+            "rid": 1,
+            "roles": [
+              "original-main",
+              "original-device"
+            ],
+            "positionVertices": 26886
+          },
+          {
+            "rid": 2,
+            "roles": [
+              "original-main"
+            ],
+            "positionVertices": 66
+          },
+          {
+            "rid": 3,
+            "roles": [
+              "original-main"
+            ],
+            "positionVertices": 24
+          },
+          {
+            "rid": 4,
+            "roles": [
+              "original-companion"
+            ],
+            "positionVertices": 49736
+          },
+          {
+            "rid": 5,
+            "roles": [
+              "loaded-asset-11"
+            ],
+            "positionVertices": 26886
+          },
+          {
+            "rid": 6,
+            "roles": [
+              "loaded-asset-1"
+            ],
+            "positionVertices": 69777
+          },
+          {
+            "rid": 7,
+            "roles": [
+              "loaded-asset-2"
+            ],
+            "positionVertices": 49736
+          },
+          {
+            "rid": 8,
+            "roles": [
+              "loaded-asset-22"
+            ],
+            "positionVertices": 24951
+          },
+          {
+            "rid": 9,
+            "roles": [
+              "loaded-asset-23"
+            ],
+            "positionVertices": 7321
+          },
+          {
+            "rid": 10,
+            "roles": [
+              "loaded-asset-24"
+            ],
+            "positionVertices": 4771
+          }
+        ],
+        "physicalCargo": {
+          "bodyId": 161,
+          "shapeId": 322,
+          "mass": 3.2,
+          "half": [
+            0.39,
+            0.39,
+            0.39
+          ],
+          "shapeOffset": [
+            0,
+            0,
+            0
+          ],
+          "shapeOrientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "friction": 1,
+          "restitution": 1
+        },
+        "decodedAssets": [
+          {
+            "id": 11,
+            "rootUuid": "5dfa0895-34dc-48c9-8de4-a765123b6671",
+            "meshRids": [
+              5
+            ],
+            "positionVertices": 26886
+          },
+          {
+            "id": 1,
+            "rootUuid": "cdd0a1e2-41d0-41e4-af0d-025b7ad51099",
+            "meshRids": [
+              6
+            ],
+            "positionVertices": 69777
+          },
+          {
+            "id": 2,
+            "rootUuid": "525a87f7-c4d9-4549-8d1c-43a37dcd8c2e",
+            "meshRids": [
+              7
+            ],
+            "positionVertices": 49736
+          },
+          {
+            "id": 22,
+            "rootUuid": "91afdf30-1b54-40c8-8ec3-756081cce789",
+            "meshRids": [
+              8
+            ],
+            "positionVertices": 24951
+          },
+          {
+            "id": 23,
+            "rootUuid": "eda22bac-1410-494b-9e38-c131c7f96081",
+            "meshRids": [
+              9
+            ],
+            "positionVertices": 7321
+          },
+          {
+            "id": 24,
+            "rootUuid": "4f4aa5e2-68b1-4f3b-9397-ec40e3078451",
+            "meshRids": [
+              10
+            ],
+            "positionVertices": 4771
+          }
+        ],
+        "mechanism": {
+          "raw": [
+            true,
+            true
+          ],
+          "shadow": [
+            true,
+            false
+          ],
+          "valid": true,
+          "latched": false,
+          "diaphragm": 0.9212649347331383,
+          "inspectionCover": 0
+        },
+        "resetCalls": {
+          "resetRun": 0,
+          "respawn": 0,
+          "resetCargo": 0,
+          "levelReset": 0
+        },
+        "counts": {
+          "physics": 2240,
+          "visual": 1120,
+          "interact": 2,
+          "pickups": 1,
+          "releases": 1,
+          "portalRequests": 3
+        }
+      },
+      "bytes": 402180,
+      "sha256": "8cd13c819aa52a8ca8b2383d8e511a1af9fbd6e4ac0c331fd40fb5f6607f239a",
+      "png": {
+        "width": 1280,
+        "height": 720,
+        "depth": 8,
+        "color": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0,
+        "chunks": 101,
+        "decodedBytes": 3687120,
+        "visiblePixels": 921600,
+        "moreThanOnePixelColor": true,
+        "channelMin": 0,
+        "channelMax": 227,
+        "scope": "PNG decode/CRC/nonuniformity only; no aesthetic or visibility acceptance"
+      }
+    },
+    {
+      "filename": "room-32-03-far-side-ratchet.png",
+      "key": "03-far-side-ratchet",
+      "name": "A downstream physical ratchet retains the diaphragm before cargo retrieval",
+      "state": {
+        "id": "post-thin-shadow",
+        "index": 31,
+        "state": "playing",
+        "step": 3036,
+        "time": 25.299999999999205,
+        "elapsed": 25299.99999999918,
+        "visualTime": 25.299999999999844,
+        "player": [
+          5.449953575436866,
+          0,
+          -12.994880863825808
+        ],
+        "playerVelocity": [
+          4.177818199025255,
+          0,
+          -0.45353682564188796
+        ],
+        "cargo": [
+          -19.849747492987884,
+          0.3899981574813954,
+          -1.007230596987799
+        ],
+        "cargoBodyPosition": [
+          -19.849747492987884,
+          0.3899981574813954,
+          -1.007230596987799
+        ],
+        "cargoQuaternion": [
+          3.455322581326188e-8,
+          0.9017949864155559,
+          -2.052916104731944e-8,
+          -0.43216409207124784
+        ],
+        "cargoVelocity": [
+          0,
+          0,
+          0
+        ],
+        "held": false,
+        "teleports": 0,
+        "cargoTransports": 1,
+        "companionBehavior": "settling",
+        "frictionObservations": {
+          "normal": 3036,
+          "wandering": 0,
+          "clearanceShuffle": 0
+        },
+        "behaviorCalls": 3036,
+        "yaw": 2.5289164804633413,
+        "pitch": 0.24655529802914883,
+        "camera": {
+          "p": [
+            7.851796891465193,
+            0.6700000923286604,
+            -18.948467840329847
+          ],
+          "q": [
+            0.027768929451193542,
+            0.9575431650523901,
+            -0.09868350939317404,
+            0.2694467268170707
+          ],
+          "fov": 62.93040382633623,
+          "aspect": 1.7777777777777777,
+          "near": 0.1,
+          "far": 380,
+          "obstructed": false
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "quality": {
+          "pixelRatio": 1.35,
+          "portalResolution": 896,
+          "shadowSize": 1024,
+          "shadows": true
+        },
+        "modelRoles": {
+          "original-main": 4,
+          "original-device": 1,
+          "original-companion": 1,
+          "loaded-asset-11": 1,
+          "loaded-asset-1": 1,
+          "loaded-asset-2": 1,
+          "loaded-asset-22": 1,
+          "loaded-asset-23": 1,
+          "loaded-asset-24": 1
+        },
+        "modelMembership": [
+          {
+            "rid": 0,
+            "roles": [
+              "original-main"
+            ],
+            "positionVertices": 69777
+          },
+          {
+            "rid": 1,
+            "roles": [
+              "original-main",
+              "original-device"
+            ],
+            "positionVertices": 26886
+          },
+          {
+            "rid": 2,
+            "roles": [
+              "original-main"
+            ],
+            "positionVertices": 66
+          },
+          {
+            "rid": 3,
+            "roles": [
+              "original-main"
+            ],
+            "positionVertices": 24
+          },
+          {
+            "rid": 4,
+            "roles": [
+              "original-companion"
+            ],
+            "positionVertices": 49736
+          },
+          {
+            "rid": 5,
+            "roles": [
+              "loaded-asset-11"
+            ],
+            "positionVertices": 26886
+          },
+          {
+            "rid": 6,
+            "roles": [
+              "loaded-asset-1"
+            ],
+            "positionVertices": 69777
+          },
+          {
+            "rid": 7,
+            "roles": [
+              "loaded-asset-2"
+            ],
+            "positionVertices": 49736
+          },
+          {
+            "rid": 8,
+            "roles": [
+              "loaded-asset-22"
+            ],
+            "positionVertices": 24951
+          },
+          {
+            "rid": 9,
+            "roles": [
+              "loaded-asset-23"
+            ],
+            "positionVertices": 7321
+          },
+          {
+            "rid": 10,
+            "roles": [
+              "loaded-asset-24"
+            ],
+            "positionVertices": 4771
+          }
+        ],
+        "physicalCargo": {
+          "bodyId": 161,
+          "shapeId": 322,
+          "mass": 3.2,
+          "half": [
+            0.39,
+            0.39,
+            0.39
+          ],
+          "shapeOffset": [
+            0,
+            0,
+            0
+          ],
+          "shapeOrientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "friction": 1,
+          "restitution": 1
+        },
+        "decodedAssets": [
+          {
+            "id": 11,
+            "rootUuid": "5dfa0895-34dc-48c9-8de4-a765123b6671",
+            "meshRids": [
+              5
+            ],
+            "positionVertices": 26886
+          },
+          {
+            "id": 1,
+            "rootUuid": "cdd0a1e2-41d0-41e4-af0d-025b7ad51099",
+            "meshRids": [
+              6
+            ],
+            "positionVertices": 69777
+          },
+          {
+            "id": 2,
+            "rootUuid": "525a87f7-c4d9-4549-8d1c-43a37dcd8c2e",
+            "meshRids": [
+              7
+            ],
+            "positionVertices": 49736
+          },
+          {
+            "id": 22,
+            "rootUuid": "91afdf30-1b54-40c8-8ec3-756081cce789",
+            "meshRids": [
+              8
+            ],
+            "positionVertices": 24951
+          },
+          {
+            "id": 23,
+            "rootUuid": "eda22bac-1410-494b-9e38-c131c7f96081",
+            "meshRids": [
+              9
+            ],
+            "positionVertices": 7321
+          },
+          {
+            "id": 24,
+            "rootUuid": "4f4aa5e2-68b1-4f3b-9397-ec40e3078451",
+            "meshRids": [
+              10
+            ],
+            "positionVertices": 4771
+          }
+        ],
+        "mechanism": {
+          "raw": [
+            true,
+            true
+          ],
+          "shadow": [
+            true,
+            false
+          ],
+          "valid": true,
+          "latched": true,
+          "diaphragm": 0.9999999999999987,
+          "inspectionCover": 0
+        },
+        "resetCalls": {
+          "resetRun": 0,
+          "respawn": 0,
+          "resetCargo": 0,
+          "levelReset": 0
+        },
+        "counts": {
+          "physics": 3036,
+          "visual": 1518,
+          "interact": 3,
+          "pickups": 1,
+          "releases": 1,
+          "portalRequests": 3
+        }
+      },
+      "bytes": 279878,
+      "sha256": "e3b6cb56d659e15f07e70dd64469571cbe952c55ae4df2c95ae9f8a5403691ce",
+      "png": {
+        "width": 1280,
+        "height": 720,
+        "depth": 8,
+        "color": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0,
+        "chunks": 72,
+        "decodedBytes": 3687120,
+        "visiblePixels": 921600,
+        "moreThanOnePixelColor": true,
+        "channelMin": 0,
+        "channelMax": 229,
+        "scope": "PNG decode/CRC/nonuniformity only; no aesthetic or visibility acceptance"
+      }
+    },
+    {
+      "filename": "room-32-04-final-won.png",
+      "key": "04-final-won",
+      "name": "both at exit",
+      "state": {
+        "id": "post-thin-shadow",
+        "index": 31,
+        "state": "won",
+        "step": 4970,
+        "time": 41.41666666666496,
+        "elapsed": 41416.666666667275,
+        "visualTime": 41.4166666666656,
+        "player": [
+          0.01561166132745204,
+          0,
+          -17.00341129764739
+        ],
+        "playerVelocity": [
+          0,
+          0,
+          0
+        ],
+        "cargo": [
+          -0.0015698468351278908,
+          1.0511433702389645,
+          -17.723287084546595
+        ],
+        "cargoBodyPosition": [
+          -0.0015698468351278908,
+          1.0511433702389645,
+          -17.723287084546595
+        ],
+        "cargoQuaternion": [
+          0,
+          0.9999923578988333,
+          0,
+          -0.003909494076185
+        ],
+        "cargoVelocity": [
+          0.00023025837356974182,
+          -0.46383452433427025,
+          -4.800148532695929
+        ],
+        "held": true,
+        "teleports": 0,
+        "cargoTransports": 1,
+        "companionBehavior": "held",
+        "frictionObservations": {
+          "normal": 4562,
+          "wandering": 408,
+          "clearanceShuffle": 0
+        },
+        "behaviorCalls": 4970,
+        "yaw": 2.5289164804633413,
+        "pitch": 0.24655529802914883,
+        "camera": {
+          "p": [
+            2.495888818619236,
+            0.6700000074186865,
+            -22.864548837435716
+          ],
+          "q": [
+            0.027768928634367866,
+            0.9575431660439743,
+            -0.09868350761363628,
+            0.2694467240291682
+          ],
+          "fov": 62.31798441949758,
+          "aspect": 1.7777777777777777,
+          "near": 0.1,
+          "far": 380,
+          "obstructed": false
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "quality": {
+          "pixelRatio": 1.35,
+          "portalResolution": 896,
+          "shadowSize": 1024,
+          "shadows": true
+        },
+        "modelRoles": {
+          "original-main": 4,
+          "original-device": 1,
+          "original-companion": 1,
+          "loaded-asset-11": 1,
+          "loaded-asset-1": 1,
+          "loaded-asset-2": 1,
+          "loaded-asset-22": 1,
+          "loaded-asset-23": 1,
+          "loaded-asset-24": 1
+        },
+        "modelMembership": [
+          {
+            "rid": 0,
+            "roles": [
+              "original-main"
+            ],
+            "positionVertices": 69777
+          },
+          {
+            "rid": 1,
+            "roles": [
+              "original-main",
+              "original-device"
+            ],
+            "positionVertices": 26886
+          },
+          {
+            "rid": 2,
+            "roles": [
+              "original-main"
+            ],
+            "positionVertices": 66
+          },
+          {
+            "rid": 3,
+            "roles": [
+              "original-main"
+            ],
+            "positionVertices": 24
+          },
+          {
+            "rid": 4,
+            "roles": [
+              "original-companion"
+            ],
+            "positionVertices": 49736
+          },
+          {
+            "rid": 5,
+            "roles": [
+              "loaded-asset-11"
+            ],
+            "positionVertices": 26886
+          },
+          {
+            "rid": 6,
+            "roles": [
+              "loaded-asset-1"
+            ],
+            "positionVertices": 69777
+          },
+          {
+            "rid": 7,
+            "roles": [
+              "loaded-asset-2"
+            ],
+            "positionVertices": 49736
+          },
+          {
+            "rid": 8,
+            "roles": [
+              "loaded-asset-22"
+            ],
+            "positionVertices": 24951
+          },
+          {
+            "rid": 9,
+            "roles": [
+              "loaded-asset-23"
+            ],
+            "positionVertices": 7321
+          },
+          {
+            "rid": 10,
+            "roles": [
+              "loaded-asset-24"
+            ],
+            "positionVertices": 4771
+          }
+        ],
+        "physicalCargo": {
+          "bodyId": 161,
+          "shapeId": 322,
+          "mass": 3.2,
+          "half": [
+            0.39,
+            0.39,
+            0.39
+          ],
+          "shapeOffset": [
+            0,
+            0,
+            0
+          ],
+          "shapeOrientation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "friction": 1,
+          "restitution": 1
+        },
+        "decodedAssets": [
+          {
+            "id": 11,
+            "rootUuid": "5dfa0895-34dc-48c9-8de4-a765123b6671",
+            "meshRids": [
+              5
+            ],
+            "positionVertices": 26886
+          },
+          {
+            "id": 1,
+            "rootUuid": "cdd0a1e2-41d0-41e4-af0d-025b7ad51099",
+            "meshRids": [
+              6
+            ],
+            "positionVertices": 69777
+          },
+          {
+            "id": 2,
+            "rootUuid": "525a87f7-c4d9-4549-8d1c-43a37dcd8c2e",
+            "meshRids": [
+              7
+            ],
+            "positionVertices": 49736
+          },
+          {
+            "id": 22,
+            "rootUuid": "91afdf30-1b54-40c8-8ec3-756081cce789",
+            "meshRids": [
+              8
+            ],
+            "positionVertices": 24951
+          },
+          {
+            "id": 23,
+            "rootUuid": "eda22bac-1410-494b-9e38-c131c7f96081",
+            "meshRids": [
+              9
+            ],
+            "positionVertices": 7321
+          },
+          {
+            "id": 24,
+            "rootUuid": "4f4aa5e2-68b1-4f3b-9397-ec40e3078451",
+            "meshRids": [
+              10
+            ],
+            "positionVertices": 4771
+          }
+        ],
+        "mechanism": {
+          "raw": [
+            true,
+            true
+          ],
+          "shadow": [
+            false,
+            false
+          ],
+          "valid": false,
+          "latched": true,
+          "diaphragm": 0.9999999999999987,
+          "inspectionCover": 0.9999999999999987
+        },
+        "resetCalls": {
+          "resetRun": 0,
+          "respawn": 0,
+          "resetCargo": 0,
+          "levelReset": 0
+        },
+        "counts": {
+          "physics": 4970,
+          "visual": 2485,
+          "interact": 4,
+          "pickups": 2,
+          "releases": 1,
+          "portalRequests": 3
+        }
+      },
+      "bytes": 272231,
+      "sha256": "0f3737f08e31f4a394a7dd35813befa1c9619622753d312ddce52d898de0d876",
+      "png": {
+        "width": 1280,
+        "height": 720,
+        "depth": 8,
+        "color": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0,
+        "chunks": 70,
+        "decodedBytes": 3687120,
+        "visiblePixels": 921600,
+        "moreThanOnePixelColor": true,
+        "channelMin": 0,
+        "channelMax": 215,
+        "scope": "PNG decode/CRC/nonuniformity only; no aesthetic or visibility acceptance"
+      }
+    }
+  ],
+  "errors": [
+    "AssertionError [ERR_ASSERTION]: Only an original shipped GLB may have a byte-complete aborted outcome\n    at runRoom32RenderedRoute (file:///workspace/scratch/877185031e6d/brainrot-portal/tools/qa-room32-rendered-route.mjs:204:97)\n    at async file:///workspace/scratch/877185031e6d/brainrot-portal/tools/qa-room32-rendered-route.mjs:234:19"
+  ],
+  "resource": {
+    "memoryLimitBytes": 6442450944,
+    "maxWallMs": 180000,
+    "peakCgroupBytes": 2307891200,
+    "peakControllerRssBytes": 218800128,
+    "aborted": false,
+    "deadline": false
+  },
+  "closures": [
+    {
+      "pid": 4623,
+      "reason": "route-finally",
+      "exitCode": 0,
+      "signalCode": null,
+      "closed": true
+    }
+  ],
+  "url": "http://127.0.0.1:43585/campaign-v67/?edition=foundation&level=32&debug=1",
+  "browser": {
+    "pid": 4623,
+    "spawnfile": "/tmp/brainrot-browsers/chrome-linux64/chrome"
+  },
+  "durableResponseBuffer": {
+    "maxTotalBufferSize": 134217728,
+    "maxResourceBufferSize": 67108864,
+    "enableDurableMessages": true
+  },
+  "fixture": {
+    "key": "brainrot-campaign-v67:brainrot-portal.preferences.v24",
+    "raw": "{\"quality\":\"balanced\",\"volume\":0,\"lookSensitivity\":1,\"muted\":true,\"tutorial\":false,\"completed\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],\"hints\":{},\"resumeLevel\":31,\"campaignSequenceRevision\":\"fifty-rooms-then-castle-v1\",\"campaignRevision\":\"creative-campaign-v48\",\"roomRevisions\":{\"16\":\"cable-supported-architecture-v1\",\"22\":\"counterweight-dynamic-v1\",\"32\":\"siphon-observatory-v1\",\"42\":\"spatial-progression43-v1\",\"43\":\"spatial-progression44-v1\",\"44\":\"spatial-progression45-v1\",\"45\":\"spatial-progression46-v1\",\"46\":\"spatial-progression47-v1\",\"47\":\"spatial-progression48-v1\",\"48\":\"spatial-progression49-v1\",\"49\":\"spatial-progression50-v1\",\"50\":\"spatial-progression51-v1\"}}",
+    "preferences": {
+      "quality": "balanced",
+      "volume": 0,
+      "lookSensitivity": 1,
+      "muted": true,
+      "tutorial": false,
+      "completed": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "hints": {},
+      "resumeLevel": 31,
+      "campaignSequenceRevision": "fifty-rooms-then-castle-v1",
+      "campaignRevision": "creative-campaign-v48",
+      "roomRevisions": {
+        "16": "cable-supported-architecture-v1",
+        "22": "counterweight-dynamic-v1",
+        "32": "siphon-observatory-v1",
+        "42": "spatial-progression43-v1",
+        "43": "spatial-progression44-v1",
+        "44": "spatial-progression45-v1",
+        "45": "spatial-progression46-v1",
+        "46": "spatial-progression47-v1",
+        "47": "spatial-progression48-v1",
+        "48": "spatial-progression49-v1",
+        "49": "spatial-progression50-v1",
+        "50": "spatial-progression51-v1"
+      }
+    },
+    "completed": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30
+    ],
+    "targetIndex": 31,
+    "targetCompleted": false,
+    "constructorWrites": 0,
+    "scope": "QA setup supplies the previously completed campaign prefix in the candidate own storage before construction; the current target is not completed. This is not a fresh guest full-campaign playthrough."
+  },
+  "before": {
+    "id": "post-thin-shadow",
+    "index": 31,
+    "state": "playing",
+    "step": 0,
+    "time": 0,
+    "elapsed": 0,
+    "visualTime": 0,
+    "player": [
+      -6,
+      0,
+      20
+    ],
+    "playerVelocity": [
+      0,
+      0,
+      0
+    ],
+    "cargo": [
+      -4.5,
+      0.6,
+      21.2
+    ],
+    "cargoBodyPosition": [
+      -4.5,
+      0.6,
+      21.2
+    ],
+    "cargoQuaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "cargoVelocity": [
+      0,
+      0,
+      0
+    ],
+    "held": false,
+    "teleports": 0,
+    "cargoTransports": 0,
+    "companionBehavior": "settling",
+    "frictionObservations": {
+      "normal": 0,
+      "wandering": 0,
+      "clearanceShuffle": 0
+    },
+    "behaviorCalls": 0,
+    "yaw": -1.2,
+    "pitch": -0.1,
+    "camera": {
+      "p": [
+        -11.39692319356681,
+        1.9543696402306598,
+        23.56662238010898
+      ],
+      "q": [
+        -0.04201823087185589,
+        -0.5383488422642164,
+        -0.02688929502427856,
+        0.8412442915825786
+      ],
+      "fov": 62,
+      "aspect": 1.7777777777777777,
+      "near": 0.1,
+      "far": 380,
+      "obstructed": false
+    },
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "quality": {
+      "pixelRatio": 1.35,
+      "portalResolution": 896,
+      "shadowSize": 1024,
+      "shadows": true
+    },
+    "modelRoles": {
+      "original-main": 4,
+      "original-device": 1,
+      "original-companion": 1,
+      "loaded-asset-11": 1,
+      "loaded-asset-1": 1,
+      "loaded-asset-2": 1,
+      "loaded-asset-22": 1,
+      "loaded-asset-23": 1,
+      "loaded-asset-24": 1
+    },
+    "modelMembership": [
+      {
+        "rid": 0,
+        "roles": [
+          "original-main"
+        ],
+        "positionVertices": 69777
+      },
+      {
+        "rid": 1,
+        "roles": [
+          "original-main",
+          "original-device"
+        ],
+        "positionVertices": 26886
+      },
+      {
+        "rid": 2,
+        "roles": [
+          "original-main"
+        ],
+        "positionVertices": 66
+      },
+      {
+        "rid": 3,
+        "roles": [
+          "original-main"
+        ],
+        "positionVertices": 24
+      },
+      {
+        "rid": 4,
+        "roles": [
+          "original-companion"
+        ],
+        "positionVertices": 49736
+      },
+      {
+        "rid": 5,
+        "roles": [
+          "loaded-asset-11"
+        ],
+        "positionVertices": 26886
+      },
+      {
+        "rid": 6,
+        "roles": [
+          "loaded-asset-1"
+        ],
+        "positionVertices": 69777
+      },
+      {
+        "rid": 7,
+        "roles": [
+          "loaded-asset-2"
+        ],
+        "positionVertices": 49736
+      },
+      {
+        "rid": 8,
+        "roles": [
+          "loaded-asset-22"
+        ],
+        "positionVertices": 24951
+      },
+      {
+        "rid": 9,
+        "roles": [
+          "loaded-asset-23"
+        ],
+        "positionVertices": 7321
+      },
+      {
+        "rid": 10,
+        "roles": [
+          "loaded-asset-24"
+        ],
+        "positionVertices": 4771
+      }
+    ],
+    "physicalCargo": {
+      "bodyId": 161,
+      "shapeId": 322,
+      "mass": 3.2,
+      "half": [
+        0.39,
+        0.39,
+        0.39
+      ],
+      "shapeOffset": [
+        0,
+        0,
+        0
+      ],
+      "shapeOrientation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "friction": 1,
+      "restitution": 1
+    },
+    "decodedAssets": [
+      {
+        "id": 11,
+        "rootUuid": "5dfa0895-34dc-48c9-8de4-a765123b6671",
+        "meshRids": [
+          5
+        ],
+        "positionVertices": 26886
+      },
+      {
+        "id": 1,
+        "rootUuid": "cdd0a1e2-41d0-41e4-af0d-025b7ad51099",
+        "meshRids": [
+          6
+        ],
+        "positionVertices": 69777
+      },
+      {
+        "id": 2,
+        "rootUuid": "525a87f7-c4d9-4549-8d1c-43a37dcd8c2e",
+        "meshRids": [
+          7
+        ],
+        "positionVertices": 49736
+      },
+      {
+        "id": 22,
+        "rootUuid": "91afdf30-1b54-40c8-8ec3-756081cce789",
+        "meshRids": [
+          8
+        ],
+        "positionVertices": 24951
+      },
+      {
+        "id": 23,
+        "rootUuid": "eda22bac-1410-494b-9e38-c131c7f96081",
+        "meshRids": [
+          9
+        ],
+        "positionVertices": 7321
+      },
+      {
+        "id": 24,
+        "rootUuid": "4f4aa5e2-68b1-4f3b-9397-ec40e3078451",
+        "meshRids": [
+          10
+        ],
+        "positionVertices": 4771
+      }
+    ],
+    "mechanism": {
+      "raw": [
+        false,
+        false
+      ],
+      "shadow": [
+        false,
+        false
+      ],
+      "valid": false,
+      "latched": false,
+      "diaphragm": 0,
+      "inspectionCover": 0
+    },
+    "resetCalls": {
+      "resetRun": 0,
+      "respawn": 0,
+      "resetCargo": 0,
+      "levelReset": 0
+    },
+    "counts": {
+      "physics": 0,
+      "visual": 0,
+      "interact": 0,
+      "pickups": 0,
+      "releases": 0,
+      "portalRequests": 0
+    }
+  },
+  "originalBuffers": [
+    {
+      "rid": 0,
+      "attribute": "position",
+      "bytes": 837324,
+      "sha256": "44e1f22b5715f19f06d31abaf6b2ba2a1f4ff222fb2a5ba5fd105c86f6faddf7"
+    },
+    {
+      "rid": 0,
+      "attribute": "normal",
+      "bytes": 837324,
+      "sha256": "4457868091cdf55e23f671647e15915a220d942026873051e673c549bb2efb0f"
+    },
+    {
+      "rid": 0,
+      "attribute": "uv",
+      "bytes": 558216,
+      "sha256": "a06b54d1f34e5953bbf624d16792eb89be4067a57514d69d43befe0b138c3998"
+    },
+    {
+      "rid": 0,
+      "attribute": "skinIndex",
+      "bytes": 558216,
+      "sha256": "41e5505d7739be1f591758c876883fe932f036e94bbed3cd4a5696a4c35b530c"
+    },
+    {
+      "rid": 0,
+      "attribute": "skinWeight",
+      "bytes": 1116432,
+      "sha256": "8a408f20ab389e8aa134076531d1d663d1ce7c265d8dbdb6955133ccc796d124"
+    },
+    {
+      "rid": 0,
+      "attribute": "$index",
+      "bytes": 960000,
+      "sha256": "d034c40cfa2c2b4ddb65e543c481ee7cbc0552e69835b7b6973e1a03fbc6754d"
+    },
+    {
+      "rid": 1,
+      "attribute": "position",
+      "bytes": 322632,
+      "sha256": "9492bca06c521962d82638e7c138540e73cd3ee92c3bd8753883a7bfd8cd7452"
+    },
+    {
+      "rid": 1,
+      "attribute": "normal",
+      "bytes": 322632,
+      "sha256": "93900d74d9c8a6bd07174553be738eb20d2669b930207fabcfacd34a24351352"
+    },
+    {
+      "rid": 1,
+      "attribute": "uv",
+      "bytes": 215088,
+      "sha256": "dedbbbf1ebd276f9bce994fe941a2f44dd3c5ee8c51c4d8eb8782d766c350482"
+    },
+    {
+      "rid": 1,
+      "attribute": "$index",
+      "bytes": 302328,
+      "sha256": "3ae063b26aff7dd0345c9ac6e2d7cfb9e9717f464a652b5166d02e7f8f0818cd"
+    },
+    {
+      "rid": 2,
+      "attribute": "position",
+      "bytes": 792,
+      "sha256": "4b18b24045ade9506875d187a371e32ec878c85897deb20e9e1c33e139041f39"
+    },
+    {
+      "rid": 2,
+      "attribute": "normal",
+      "bytes": 792,
+      "sha256": "1f970800db552c8c624c5b58a31b9707927e7f6c6922faf7095ca81df6bf8cdc"
+    },
+    {
+      "rid": 2,
+      "attribute": "uv",
+      "bytes": 528,
+      "sha256": "40079a66f54424cff11ebb8218c344660a549924085a22b9917303985cc07a20"
+    },
+    {
+      "rid": 2,
+      "attribute": "$index",
+      "bytes": 384,
+      "sha256": "f8e01e6d1cea157c144251361980273ce16fd4b0e3fd408c4ee6f0e53b0437fe"
+    },
+    {
+      "rid": 3,
+      "attribute": "position",
+      "bytes": 288,
+      "sha256": "6a3f15b8b0d33e2413f79560a804db32b0d189d63f57f28e7c19538d0ceb38f8"
+    },
+    {
+      "rid": 3,
+      "attribute": "normal",
+      "bytes": 288,
+      "sha256": "cf38d80691f04d52b9686807b830aec77584c7ecdc0ceed56144923548dd5593"
+    },
+    {
+      "rid": 3,
+      "attribute": "uv",
+      "bytes": 192,
+      "sha256": "9acbda3fe508de1f96b8f061ef5888cfba15a3e6ae752467e73665e4dfe3182a"
+    },
+    {
+      "rid": 3,
+      "attribute": "$index",
+      "bytes": 72,
+      "sha256": "7d2c65fffb490f18b89d5d949a36ac6fe37f052789bdc3ad49759abb3ecd0898"
+    },
+    {
+      "rid": 4,
+      "attribute": "position",
+      "bytes": 596832,
+      "sha256": "4659717af688dd3e6e683349e1a3381d7590f489959d8eca8024d278fd386618"
+    },
+    {
+      "rid": 4,
+      "attribute": "normal",
+      "bytes": 596832,
+      "sha256": "b504024bfaf3da033b64adb68b4658623faeff02ce23441d9803ddc363046c85"
+    },
+    {
+      "rid": 4,
+      "attribute": "uv",
+      "bytes": 397888,
+      "sha256": "95f7a68d08869c30c7bfb91c6aaa78141d7bc04431991f12f3fee1199ae7bff2"
+    },
+    {
+      "rid": 4,
+      "attribute": "skinIndex",
+      "bytes": 397888,
+      "sha256": "833bd6432db781b996b50e4a72ee7ed76105bde2b70d7ac7849f3499f9edab81"
+    },
+    {
+      "rid": 4,
+      "attribute": "skinWeight",
+      "bytes": 795776,
+      "sha256": "75006a8dc33351cdef52e1855ab020a6b0fea568ddcd2108d55611d70ccf02b6"
+    },
+    {
+      "rid": 4,
+      "attribute": "$index",
+      "bytes": 660000,
+      "sha256": "2161a24267e97b22af946b4ec59e519daa63a17e05a014287f1d865970118b89"
+    },
+    {
+      "rid": 5,
+      "attribute": "position",
+      "bytes": 322632,
+      "sha256": "9492bca06c521962d82638e7c138540e73cd3ee92c3bd8753883a7bfd8cd7452"
+    },
+    {
+      "rid": 5,
+      "attribute": "normal",
+      "bytes": 322632,
+      "sha256": "93900d74d9c8a6bd07174553be738eb20d2669b930207fabcfacd34a24351352"
+    },
+    {
+      "rid": 5,
+      "attribute": "uv",
+      "bytes": 215088,
+      "sha256": "dedbbbf1ebd276f9bce994fe941a2f44dd3c5ee8c51c4d8eb8782d766c350482"
+    },
+    {
+      "rid": 5,
+      "attribute": "$index",
+      "bytes": 302328,
+      "sha256": "3ae063b26aff7dd0345c9ac6e2d7cfb9e9717f464a652b5166d02e7f8f0818cd"
+    },
+    {
+      "rid": 6,
+      "attribute": "position",
+      "bytes": 837324,
+      "sha256": "44e1f22b5715f19f06d31abaf6b2ba2a1f4ff222fb2a5ba5fd105c86f6faddf7"
+    },
+    {
+      "rid": 6,
+      "attribute": "normal",
+      "bytes": 837324,
+      "sha256": "4457868091cdf55e23f671647e15915a220d942026873051e673c549bb2efb0f"
+    },
+    {
+      "rid": 6,
+      "attribute": "uv",
+      "bytes": 558216,
+      "sha256": "a06b54d1f34e5953bbf624d16792eb89be4067a57514d69d43befe0b138c3998"
+    },
+    {
+      "rid": 6,
+      "attribute": "$index",
+      "bytes": 960000,
+      "sha256": "d034c40cfa2c2b4ddb65e543c481ee7cbc0552e69835b7b6973e1a03fbc6754d"
+    },
+    {
+      "rid": 7,
+      "attribute": "position",
+      "bytes": 596832,
+      "sha256": "4659717af688dd3e6e683349e1a3381d7590f489959d8eca8024d278fd386618"
+    },
+    {
+      "rid": 7,
+      "attribute": "normal",
+      "bytes": 596832,
+      "sha256": "b504024bfaf3da033b64adb68b4658623faeff02ce23441d9803ddc363046c85"
+    },
+    {
+      "rid": 7,
+      "attribute": "uv",
+      "bytes": 397888,
+      "sha256": "95f7a68d08869c30c7bfb91c6aaa78141d7bc04431991f12f3fee1199ae7bff2"
+    },
+    {
+      "rid": 7,
+      "attribute": "$index",
+      "bytes": 660000,
+      "sha256": "2161a24267e97b22af946b4ec59e519daa63a17e05a014287f1d865970118b89"
+    },
+    {
+      "rid": 8,
+      "attribute": "position",
+      "bytes": 299412,
+      "sha256": "0267f3af7a805aae4eecc10afbe7edd12ecef2064f7f392320d6e7b1cc4598b9"
+    },
+    {
+      "rid": 8,
+      "attribute": "normal",
+      "bytes": 299412,
+      "sha256": "a41b605d81adc53f2df8d037d5b6424f08110f6b555bf2889342899493f169e6"
+    },
+    {
+      "rid": 8,
+      "attribute": "uv",
+      "bytes": 199608,
+      "sha256": "457e665c47e54ba4703c6d86bfa31e30a2e65c78379001efcaac798c6b22b0d3"
+    },
+    {
+      "rid": 8,
+      "attribute": "$index",
+      "bytes": 269016,
+      "sha256": "ce0b3df6894fae0d5487809bb4f7c88a4a352a820facde614d7d4aa281250154"
+    },
+    {
+      "rid": 9,
+      "attribute": "position",
+      "bytes": 87852,
+      "sha256": "7bee5e2e6ed925e9d73b03ba46f6024a8d2f6dcdabfed2c9661d4a0380bc4479"
+    },
+    {
+      "rid": 9,
+      "attribute": "normal",
+      "bytes": 87852,
+      "sha256": "c1243f9c63eee1caf8202a260aa63cf2a119a9482117e6459c6ece7669ebdca3"
+    },
+    {
+      "rid": 9,
+      "attribute": "uv",
+      "bytes": 58568,
+      "sha256": "07818e39e415adf38718ad9807c06ab077f3130a76f258dace5b06eb21eb9477"
+    },
+    {
+      "rid": 9,
+      "attribute": "$index",
+      "bytes": 96000,
+      "sha256": "4f86a4f6d7fbb9a02f06227b071295f33351a5309894ed1ffd7931d392a70149"
+    },
+    {
+      "rid": 10,
+      "attribute": "position",
+      "bytes": 57252,
+      "sha256": "20ba10f898db18807306f0468cf2c4ebe79f56d3d5e9b8ddf8ca9913269b59a0"
+    },
+    {
+      "rid": 10,
+      "attribute": "normal",
+      "bytes": 57252,
+      "sha256": "8c9748140dddb8dfe6065daed517f47df19fcc5bfe626d8a710ca44d7c63534e"
+    },
+    {
+      "rid": 10,
+      "attribute": "uv",
+      "bytes": 38168,
+      "sha256": "c3f848f2ac080c70010474eb079c5dc0dd00260ff7af8f81ee43b625d18605cc"
+    },
+    {
+      "rid": 10,
+      "attribute": "$index",
+      "bytes": 76800,
+      "sha256": "4f459563cdd064935d26a61e6015e3065a8a429ca0a5870af4be894819791a26"
+    }
+  ],
+  "route": {
+    "journey": {
+      "level": 32,
+      "id": "post-thin-shadow",
+      "pass": true,
+      "milestones": [
+        {
+          "name": "The original companion takes a freight aperture too low for its observer",
+          "player": [
+            -7.127539285436797,
+            0,
+            -1.151044591213968
+          ],
+          "cargo": [
+            -20.440930271578896,
+            0.5296734044135608,
+            -0.9963747173186266
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "A real cargo shadow separates the two height circuits",
+          "player": [
+            18.16798853870481,
+            0,
+            12.087920458037045
+          ],
+          "cargo": [
+            -20.317635307322565,
+            0.6207586625034579,
+            -1.0000222719656782
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "A downstream physical ratchet retains the diaphragm before cargo retrieval",
+          "player": [
+            5.449953575436866,
+            0,
+            -12.994880863825808
+          ],
+          "cargo": [
+            -19.849747492987884,
+            0.3899981574813954,
+            -1.007230596987799
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "The light circuit is borrowed again after the original cargo returns",
+          "player": [
+            0.01561166132745204,
+            0,
+            -17.00341129764739
+          ],
+          "cargo": [
+            -0.0015698468351278908,
+            1.0511433702389645,
+            -17.723287084546595
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            0.01561166132745204,
+            0,
+            -17.00341129764739
+          ],
+          "cargo": [
+            -0.0015698468351278908,
+            1.0511433702389645,
+            -17.723287084546595
+          ],
+          "teleports": 0
+        }
+      ],
+      "respawns": 0,
+      "resets": 0,
+      "frames": 2485,
+      "teleports": 0
+    },
+    "initial": {
+      "id": "post-thin-shadow",
+      "index": 31,
+      "state": "playing",
+      "step": 0,
+      "time": 0,
+      "elapsed": 0,
+      "visualTime": 0,
+      "player": [
+        -6,
+        0,
+        20
+      ],
+      "playerVelocity": [
+        0,
+        0,
+        0
+      ],
+      "cargo": [
+        -4.5,
+        0.6,
+        21.2
+      ],
+      "cargoBodyPosition": [
+        -4.5,
+        0.6,
+        21.2
+      ],
+      "cargoQuaternion": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "cargoVelocity": [
+        0,
+        0,
+        0
+      ],
+      "held": false,
+      "teleports": 0,
+      "cargoTransports": 0,
+      "companionBehavior": "settling",
+      "frictionObservations": {
+        "normal": 0,
+        "wandering": 0,
+        "clearanceShuffle": 0
+      },
+      "behaviorCalls": 0,
+      "yaw": -1.2,
+      "pitch": -0.1,
+      "camera": {
+        "p": [
+          -11.39692319356681,
+          1.9543696402306598,
+          23.56662238010898
+        ],
+        "q": [
+          -0.04201823087185589,
+          -0.5383488422642164,
+          -0.02688929502427856,
+          0.8412442915825786
+        ],
+        "fov": 62,
+        "aspect": 1.7777777777777777,
+        "near": 0.1,
+        "far": 380,
+        "obstructed": false
+      },
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "quality": {
+        "pixelRatio": 1.35,
+        "portalResolution": 896,
+        "shadowSize": 1024,
+        "shadows": true
+      },
+      "modelRoles": {
+        "original-main": 4,
+        "original-device": 1,
+        "original-companion": 1,
+        "loaded-asset-11": 1,
+        "loaded-asset-1": 1,
+        "loaded-asset-2": 1,
+        "loaded-asset-22": 1,
+        "loaded-asset-23": 1,
+        "loaded-asset-24": 1
+      },
+      "modelMembership": [
+        {
+          "rid": 0,
+          "roles": [
+            "original-main"
+          ],
+          "positionVertices": 69777
+        },
+        {
+          "rid": 1,
+          "roles": [
+            "original-main",
+            "original-device"
+          ],
+          "positionVertices": 26886
+        },
+        {
+          "rid": 2,
+          "roles": [
+            "original-main"
+          ],
+          "positionVertices": 66
+        },
+        {
+          "rid": 3,
+          "roles": [
+            "original-main"
+          ],
+          "positionVertices": 24
+        },
+        {
+          "rid": 4,
+          "roles": [
+            "original-companion"
+          ],
+          "positionVertices": 49736
+        },
+        {
+          "rid": 5,
+          "roles": [
+            "loaded-asset-11"
+          ],
+          "positionVertices": 26886
+        },
+        {
+          "rid": 6,
+          "roles": [
+            "loaded-asset-1"
+          ],
+          "positionVertices": 69777
+        },
+        {
+          "rid": 7,
+          "roles": [
+            "loaded-asset-2"
+          ],
+          "positionVertices": 49736
+        },
+        {
+          "rid": 8,
+          "roles": [
+            "loaded-asset-22"
+          ],
+          "positionVertices": 24951
+        },
+        {
+          "rid": 9,
+          "roles": [
+            "loaded-asset-23"
+          ],
+          "positionVertices": 7321
+        },
+        {
+          "rid": 10,
+          "roles": [
+            "loaded-asset-24"
+          ],
+          "positionVertices": 4771
+        }
+      ],
+      "physicalCargo": {
+        "bodyId": 161,
+        "shapeId": 322,
+        "mass": 3.2,
+        "half": [
+          0.39,
+          0.39,
+          0.39
+        ],
+        "shapeOffset": [
+          0,
+          0,
+          0
+        ],
+        "shapeOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "friction": 1,
+        "restitution": 1
+      },
+      "decodedAssets": [
+        {
+          "id": 11,
+          "rootUuid": "5dfa0895-34dc-48c9-8de4-a765123b6671",
+          "meshRids": [
+            5
+          ],
+          "positionVertices": 26886
+        },
+        {
+          "id": 1,
+          "rootUuid": "cdd0a1e2-41d0-41e4-af0d-025b7ad51099",
+          "meshRids": [
+            6
+          ],
+          "positionVertices": 69777
+        },
+        {
+          "id": 2,
+          "rootUuid": "525a87f7-c4d9-4549-8d1c-43a37dcd8c2e",
+          "meshRids": [
+            7
+          ],
+          "positionVertices": 49736
+        },
+        {
+          "id": 22,
+          "rootUuid": "91afdf30-1b54-40c8-8ec3-756081cce789",
+          "meshRids": [
+            8
+          ],
+          "positionVertices": 24951
+        },
+        {
+          "id": 23,
+          "rootUuid": "eda22bac-1410-494b-9e38-c131c7f96081",
+          "meshRids": [
+            9
+          ],
+          "positionVertices": 7321
+        },
+        {
+          "id": 24,
+          "rootUuid": "4f4aa5e2-68b1-4f3b-9397-ec40e3078451",
+          "meshRids": [
+            10
+          ],
+          "positionVertices": 4771
+        }
+      ],
+      "mechanism": {
+        "raw": [
+          false,
+          false
+        ],
+        "shadow": [
+          false,
+          false
+        ],
+        "valid": false,
+        "latched": false,
+        "diaphragm": 0,
+        "inspectionCover": 0
+      },
+      "resetCalls": {
+        "resetRun": 0,
+        "respawn": 0,
+        "resetCargo": 0,
+        "levelReset": 0
+      },
+      "counts": {
+        "physics": 0,
+        "visual": 0,
+        "interact": 0,
+        "pickups": 0,
+        "releases": 0,
+        "portalRequests": 0
+      }
+    },
+    "final": {
+      "id": "post-thin-shadow",
+      "index": 31,
+      "state": "won",
+      "step": 4970,
+      "time": 41.41666666666496,
+      "elapsed": 41416.666666667275,
+      "visualTime": 41.4166666666656,
+      "player": [
+        0.01561166132745204,
+        0,
+        -17.00341129764739
+      ],
+      "playerVelocity": [
+        0,
+        0,
+        0
+      ],
+      "cargo": [
+        -0.0015698468351278908,
+        1.0511433702389645,
+        -17.723287084546595
+      ],
+      "cargoBodyPosition": [
+        -0.0015698468351278908,
+        1.0511433702389645,
+        -17.723287084546595
+      ],
+      "cargoQuaternion": [
+        0,
+        0.9999923578988333,
+        0,
+        -0.003909494076185
+      ],
+      "cargoVelocity": [
+        0.00023025837356974182,
+        -0.46383452433427025,
+        -4.800148532695929
+      ],
+      "held": true,
+      "teleports": 0,
+      "cargoTransports": 1,
+      "companionBehavior": "held",
+      "frictionObservations": {
+        "normal": 4562,
+        "wandering": 408,
+        "clearanceShuffle": 0
+      },
+      "behaviorCalls": 4970,
+      "yaw": 2.5289164804633413,
+      "pitch": 0.24655529802914883,
+      "camera": {
+        "p": [
+          2.495888818619236,
+          0.6700000074186865,
+          -22.864548837435716
+        ],
+        "q": [
+          0.027768928634367866,
+          0.9575431660439743,
+          -0.09868350761363628,
+          0.2694467240291682
+        ],
+        "fov": 62.31798441949758,
+        "aspect": 1.7777777777777777,
+        "near": 0.1,
+        "far": 380,
+        "obstructed": false
+      },
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "quality": {
+        "pixelRatio": 1.35,
+        "portalResolution": 896,
+        "shadowSize": 1024,
+        "shadows": true
+      },
+      "modelRoles": {
+        "original-main": 4,
+        "original-device": 1,
+        "original-companion": 1,
+        "loaded-asset-11": 1,
+        "loaded-asset-1": 1,
+        "loaded-asset-2": 1,
+        "loaded-asset-22": 1,
+        "loaded-asset-23": 1,
+        "loaded-asset-24": 1
+      },
+      "modelMembership": [
+        {
+          "rid": 0,
+          "roles": [
+            "original-main"
+          ],
+          "positionVertices": 69777
+        },
+        {
+          "rid": 1,
+          "roles": [
+            "original-main",
+            "original-device"
+          ],
+          "positionVertices": 26886
+        },
+        {
+          "rid": 2,
+          "roles": [
+            "original-main"
+          ],
+          "positionVertices": 66
+        },
+        {
+          "rid": 3,
+          "roles": [
+            "original-main"
+          ],
+          "positionVertices": 24
+        },
+        {
+          "rid": 4,
+          "roles": [
+            "original-companion"
+          ],
+          "positionVertices": 49736
+        },
+        {
+          "rid": 5,
+          "roles": [
+            "loaded-asset-11"
+          ],
+          "positionVertices": 26886
+        },
+        {
+          "rid": 6,
+          "roles": [
+            "loaded-asset-1"
+          ],
+          "positionVertices": 69777
+        },
+        {
+          "rid": 7,
+          "roles": [
+            "loaded-asset-2"
+          ],
+          "positionVertices": 49736
+        },
+        {
+          "rid": 8,
+          "roles": [
+            "loaded-asset-22"
+          ],
+          "positionVertices": 24951
+        },
+        {
+          "rid": 9,
+          "roles": [
+            "loaded-asset-23"
+          ],
+          "positionVertices": 7321
+        },
+        {
+          "rid": 10,
+          "roles": [
+            "loaded-asset-24"
+          ],
+          "positionVertices": 4771
+        }
+      ],
+      "physicalCargo": {
+        "bodyId": 161,
+        "shapeId": 322,
+        "mass": 3.2,
+        "half": [
+          0.39,
+          0.39,
+          0.39
+        ],
+        "shapeOffset": [
+          0,
+          0,
+          0
+        ],
+        "shapeOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "friction": 1,
+        "restitution": 1
+      },
+      "decodedAssets": [
+        {
+          "id": 11,
+          "rootUuid": "5dfa0895-34dc-48c9-8de4-a765123b6671",
+          "meshRids": [
+            5
+          ],
+          "positionVertices": 26886
+        },
+        {
+          "id": 1,
+          "rootUuid": "cdd0a1e2-41d0-41e4-af0d-025b7ad51099",
+          "meshRids": [
+            6
+          ],
+          "positionVertices": 69777
+        },
+        {
+          "id": 2,
+          "rootUuid": "525a87f7-c4d9-4549-8d1c-43a37dcd8c2e",
+          "meshRids": [
+            7
+          ],
+          "positionVertices": 49736
+        },
+        {
+          "id": 22,
+          "rootUuid": "91afdf30-1b54-40c8-8ec3-756081cce789",
+          "meshRids": [
+            8
+          ],
+          "positionVertices": 24951
+        },
+        {
+          "id": 23,
+          "rootUuid": "eda22bac-1410-494b-9e38-c131c7f96081",
+          "meshRids": [
+            9
+          ],
+          "positionVertices": 7321
+        },
+        {
+          "id": 24,
+          "rootUuid": "4f4aa5e2-68b1-4f3b-9397-ec40e3078451",
+          "meshRids": [
+            10
+          ],
+          "positionVertices": 4771
+        }
+      ],
+      "mechanism": {
+        "raw": [
+          true,
+          true
+        ],
+        "shadow": [
+          false,
+          false
+        ],
+        "valid": false,
+        "latched": true,
+        "diaphragm": 0.9999999999999987,
+        "inspectionCover": 0.9999999999999987
+      },
+      "resetCalls": {
+        "resetRun": 0,
+        "respawn": 0,
+        "resetCargo": 0,
+        "levelReset": 0
+      },
+      "counts": {
+        "physics": 4970,
+        "visual": 2485,
+        "interact": 4,
+        "pickups": 2,
+        "releases": 1,
+        "portalRequests": 3
+      }
+    },
+    "milestones": [
+      {
+        "name": "The original companion takes a freight aperture too low for its observer",
+        "state": {
+          "id": "post-thin-shadow",
+          "index": 31,
+          "state": "playing",
+          "step": 1478,
+          "time": 12.316666666666608,
+          "elapsed": 12316.666666666848,
+          "visualTime": 12.316666666666858,
+          "player": [
+            -7.127539285436797,
+            0,
+            -1.151044591213968
+          ],
+          "playerVelocity": [
+            -1.4390160550836077e-20,
+            0,
+            -1.7042246320105163e-20
+          ],
+          "cargo": [
+            -20.440930271578896,
+            0.5296734044135608,
+            -0.9963747173186266
+          ],
+          "cargoBodyPosition": [
+            -20.440930271578896,
+            0.5296734044135608,
+            -0.9963747173186266
+          ],
+          "cargoQuaternion": [
+            -0.6565432266265364,
+            0.6582134712817472,
+            -0.2601512368123759,
+            -0.2608205355777037
+          ],
+          "cargoVelocity": [
+            0.18368740611998047,
+            1.0850111629218946,
+            0.1381485850718128
+          ],
+          "held": false,
+          "teleports": 0,
+          "cargoTransports": 1,
+          "companionBehavior": "settling",
+          "frictionObservations": {
+            "normal": 1478,
+            "wandering": 0,
+            "clearanceShuffle": 0
+          },
+          "behaviorCalls": 1478,
+          "yaw": 3.560016705236586,
+          "pitch": -0.06333791180077339,
+          "camera": {
+            "p": [
+              -11.042551340247805,
+              1.731421113759606,
+              -6.509532384109473
+            ],
+            "q": [
+              0.007522593888801793,
+              0.9707707023336741,
+              0.030694096963273805,
+              -0.23791915955504364
+            ],
+            "fov": 62.000000006161606,
+            "aspect": 1.7777777777777777,
+            "near": 0.1,
+            "far": 380,
+            "obstructed": false
+          },
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "quality": {
+            "pixelRatio": 1.35,
+            "portalResolution": 896,
+            "shadowSize": 1024,
+            "shadows": true
+          },
+          "modelRoles": {
+            "original-main": 4,
+            "original-device": 1,
+            "original-companion": 1,
+            "loaded-asset-11": 1,
+            "loaded-asset-1": 1,
+            "loaded-asset-2": 1,
+            "loaded-asset-22": 1,
+            "loaded-asset-23": 1,
+            "loaded-asset-24": 1
+          },
+          "modelMembership": [
+            {
+              "rid": 0,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 1,
+              "roles": [
+                "original-main",
+                "original-device"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 2,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 66
+            },
+            {
+              "rid": 3,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 24
+            },
+            {
+              "rid": 4,
+              "roles": [
+                "original-companion"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 5,
+              "roles": [
+                "loaded-asset-11"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 6,
+              "roles": [
+                "loaded-asset-1"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 7,
+              "roles": [
+                "loaded-asset-2"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 8,
+              "roles": [
+                "loaded-asset-22"
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "rid": 9,
+              "roles": [
+                "loaded-asset-23"
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "rid": 10,
+              "roles": [
+                "loaded-asset-24"
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "physicalCargo": {
+            "bodyId": 161,
+            "shapeId": 322,
+            "mass": 3.2,
+            "half": [
+              0.39,
+              0.39,
+              0.39
+            ],
+            "shapeOffset": [
+              0,
+              0,
+              0
+            ],
+            "shapeOrientation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "friction": 1,
+            "restitution": 1
+          },
+          "decodedAssets": [
+            {
+              "id": 11,
+              "rootUuid": "5dfa0895-34dc-48c9-8de4-a765123b6671",
+              "meshRids": [
+                5
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "id": 1,
+              "rootUuid": "cdd0a1e2-41d0-41e4-af0d-025b7ad51099",
+              "meshRids": [
+                6
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "id": 2,
+              "rootUuid": "525a87f7-c4d9-4549-8d1c-43a37dcd8c2e",
+              "meshRids": [
+                7
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "id": 22,
+              "rootUuid": "91afdf30-1b54-40c8-8ec3-756081cce789",
+              "meshRids": [
+                8
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "id": 23,
+              "rootUuid": "eda22bac-1410-494b-9e38-c131c7f96081",
+              "meshRids": [
+                9
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "id": 24,
+              "rootUuid": "4f4aa5e2-68b1-4f3b-9397-ec40e3078451",
+              "meshRids": [
+                10
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "mechanism": {
+            "raw": [
+              false,
+              false
+            ],
+            "shadow": [
+              false,
+              false
+            ],
+            "valid": false,
+            "latched": false,
+            "diaphragm": 0,
+            "inspectionCover": 0
+          },
+          "resetCalls": {
+            "resetRun": 0,
+            "respawn": 0,
+            "resetCargo": 0,
+            "levelReset": 0
+          },
+          "counts": {
+            "physics": 1478,
+            "visual": 739,
+            "interact": 2,
+            "pickups": 1,
+            "releases": 1,
+            "portalRequests": 2
+          }
+        }
+      },
+      {
+        "name": "A real cargo shadow separates the two height circuits",
+        "state": {
+          "id": "post-thin-shadow",
+          "index": 31,
+          "state": "playing",
+          "step": 2240,
+          "time": 18.66666666666625,
+          "elapsed": 18666.666666666813,
+          "visualTime": 18.666666666666888,
+          "player": [
+            18.16798853870481,
+            0,
+            12.087920458037045
+          ],
+          "playerVelocity": [
+            1.7121857593477257e-12,
+            0,
+            8.961096832379998e-13
+          ],
+          "cargo": [
+            -20.317635307322565,
+            0.6207586625034579,
+            -1.0000222719656782
+          ],
+          "cargoBodyPosition": [
+            -20.317635307322565,
+            0.6207586625034579,
+            -1.0000222719656782
+          ],
+          "cargoQuaternion": [
+            -0.5827869955852025,
+            0.7286065137486453,
+            -0.2346358468984447,
+            -0.2728330721339844
+          ],
+          "cargoVelocity": [
+            0.0004023609316266311,
+            0.0006566189301430714,
+            0.0009687155079823795
+          ],
+          "held": false,
+          "teleports": 0,
+          "cargoTransports": 1,
+          "companionBehavior": "getting_up",
+          "frictionObservations": {
+            "normal": 2240,
+            "wandering": 0,
+            "clearanceShuffle": 0
+          },
+          "behaviorCalls": 2240,
+          "yaw": 2.5289164804633413,
+          "pitch": 0.24655529802914883,
+          "camera": {
+            "p": [
+              20.64747643481393,
+              0.6700001721591357,
+              6.125925511566356
+            ],
+            "q": [
+              0.027768930219154966,
+              0.9575431641201247,
+              -0.09868351106625604,
+              0.2694467294381948
+            ],
+            "fov": 62.00001980477385,
+            "aspect": 1.7777777777777777,
+            "near": 0.1,
+            "far": 380,
+            "obstructed": false
+          },
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "quality": {
+            "pixelRatio": 1.35,
+            "portalResolution": 896,
+            "shadowSize": 1024,
+            "shadows": true
+          },
+          "modelRoles": {
+            "original-main": 4,
+            "original-device": 1,
+            "original-companion": 1,
+            "loaded-asset-11": 1,
+            "loaded-asset-1": 1,
+            "loaded-asset-2": 1,
+            "loaded-asset-22": 1,
+            "loaded-asset-23": 1,
+            "loaded-asset-24": 1
+          },
+          "modelMembership": [
+            {
+              "rid": 0,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 1,
+              "roles": [
+                "original-main",
+                "original-device"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 2,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 66
+            },
+            {
+              "rid": 3,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 24
+            },
+            {
+              "rid": 4,
+              "roles": [
+                "original-companion"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 5,
+              "roles": [
+                "loaded-asset-11"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 6,
+              "roles": [
+                "loaded-asset-1"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 7,
+              "roles": [
+                "loaded-asset-2"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 8,
+              "roles": [
+                "loaded-asset-22"
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "rid": 9,
+              "roles": [
+                "loaded-asset-23"
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "rid": 10,
+              "roles": [
+                "loaded-asset-24"
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "physicalCargo": {
+            "bodyId": 161,
+            "shapeId": 322,
+            "mass": 3.2,
+            "half": [
+              0.39,
+              0.39,
+              0.39
+            ],
+            "shapeOffset": [
+              0,
+              0,
+              0
+            ],
+            "shapeOrientation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "friction": 1,
+            "restitution": 1
+          },
+          "decodedAssets": [
+            {
+              "id": 11,
+              "rootUuid": "5dfa0895-34dc-48c9-8de4-a765123b6671",
+              "meshRids": [
+                5
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "id": 1,
+              "rootUuid": "cdd0a1e2-41d0-41e4-af0d-025b7ad51099",
+              "meshRids": [
+                6
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "id": 2,
+              "rootUuid": "525a87f7-c4d9-4549-8d1c-43a37dcd8c2e",
+              "meshRids": [
+                7
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "id": 22,
+              "rootUuid": "91afdf30-1b54-40c8-8ec3-756081cce789",
+              "meshRids": [
+                8
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "id": 23,
+              "rootUuid": "eda22bac-1410-494b-9e38-c131c7f96081",
+              "meshRids": [
+                9
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "id": 24,
+              "rootUuid": "4f4aa5e2-68b1-4f3b-9397-ec40e3078451",
+              "meshRids": [
+                10
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "mechanism": {
+            "raw": [
+              true,
+              true
+            ],
+            "shadow": [
+              true,
+              false
+            ],
+            "valid": true,
+            "latched": false,
+            "diaphragm": 0.9212649347331383,
+            "inspectionCover": 0
+          },
+          "resetCalls": {
+            "resetRun": 0,
+            "respawn": 0,
+            "resetCargo": 0,
+            "levelReset": 0
+          },
+          "counts": {
+            "physics": 2240,
+            "visual": 1120,
+            "interact": 2,
+            "pickups": 1,
+            "releases": 1,
+            "portalRequests": 3
+          }
+        }
+      },
+      {
+        "name": "A downstream physical ratchet retains the diaphragm before cargo retrieval",
+        "state": {
+          "id": "post-thin-shadow",
+          "index": 31,
+          "state": "playing",
+          "step": 3036,
+          "time": 25.299999999999205,
+          "elapsed": 25299.99999999918,
+          "visualTime": 25.299999999999844,
+          "player": [
+            5.449953575436866,
+            0,
+            -12.994880863825808
+          ],
+          "playerVelocity": [
+            4.177818199025255,
+            0,
+            -0.45353682564188796
+          ],
+          "cargo": [
+            -19.849747492987884,
+            0.3899981574813954,
+            -1.007230596987799
+          ],
+          "cargoBodyPosition": [
+            -19.849747492987884,
+            0.3899981574813954,
+            -1.007230596987799
+          ],
+          "cargoQuaternion": [
+            3.455322581326188e-8,
+            0.9017949864155559,
+            -2.052916104731944e-8,
+            -0.43216409207124784
+          ],
+          "cargoVelocity": [
+            0,
+            0,
+            0
+          ],
+          "held": false,
+          "teleports": 0,
+          "cargoTransports": 1,
+          "companionBehavior": "settling",
+          "frictionObservations": {
+            "normal": 3036,
+            "wandering": 0,
+            "clearanceShuffle": 0
+          },
+          "behaviorCalls": 3036,
+          "yaw": 2.5289164804633413,
+          "pitch": 0.24655529802914883,
+          "camera": {
+            "p": [
+              7.851796891465193,
+              0.6700000923286604,
+              -18.948467840329847
+            ],
+            "q": [
+              0.027768929451193542,
+              0.9575431650523901,
+              -0.09868350939317404,
+              0.2694467268170707
+            ],
+            "fov": 62.93040382633623,
+            "aspect": 1.7777777777777777,
+            "near": 0.1,
+            "far": 380,
+            "obstructed": false
+          },
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "quality": {
+            "pixelRatio": 1.35,
+            "portalResolution": 896,
+            "shadowSize": 1024,
+            "shadows": true
+          },
+          "modelRoles": {
+            "original-main": 4,
+            "original-device": 1,
+            "original-companion": 1,
+            "loaded-asset-11": 1,
+            "loaded-asset-1": 1,
+            "loaded-asset-2": 1,
+            "loaded-asset-22": 1,
+            "loaded-asset-23": 1,
+            "loaded-asset-24": 1
+          },
+          "modelMembership": [
+            {
+              "rid": 0,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 1,
+              "roles": [
+                "original-main",
+                "original-device"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 2,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 66
+            },
+            {
+              "rid": 3,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 24
+            },
+            {
+              "rid": 4,
+              "roles": [
+                "original-companion"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 5,
+              "roles": [
+                "loaded-asset-11"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 6,
+              "roles": [
+                "loaded-asset-1"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 7,
+              "roles": [
+                "loaded-asset-2"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 8,
+              "roles": [
+                "loaded-asset-22"
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "rid": 9,
+              "roles": [
+                "loaded-asset-23"
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "rid": 10,
+              "roles": [
+                "loaded-asset-24"
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "physicalCargo": {
+            "bodyId": 161,
+            "shapeId": 322,
+            "mass": 3.2,
+            "half": [
+              0.39,
+              0.39,
+              0.39
+            ],
+            "shapeOffset": [
+              0,
+              0,
+              0
+            ],
+            "shapeOrientation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "friction": 1,
+            "restitution": 1
+          },
+          "decodedAssets": [
+            {
+              "id": 11,
+              "rootUuid": "5dfa0895-34dc-48c9-8de4-a765123b6671",
+              "meshRids": [
+                5
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "id": 1,
+              "rootUuid": "cdd0a1e2-41d0-41e4-af0d-025b7ad51099",
+              "meshRids": [
+                6
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "id": 2,
+              "rootUuid": "525a87f7-c4d9-4549-8d1c-43a37dcd8c2e",
+              "meshRids": [
+                7
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "id": 22,
+              "rootUuid": "91afdf30-1b54-40c8-8ec3-756081cce789",
+              "meshRids": [
+                8
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "id": 23,
+              "rootUuid": "eda22bac-1410-494b-9e38-c131c7f96081",
+              "meshRids": [
+                9
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "id": 24,
+              "rootUuid": "4f4aa5e2-68b1-4f3b-9397-ec40e3078451",
+              "meshRids": [
+                10
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "mechanism": {
+            "raw": [
+              true,
+              true
+            ],
+            "shadow": [
+              true,
+              false
+            ],
+            "valid": true,
+            "latched": true,
+            "diaphragm": 0.9999999999999987,
+            "inspectionCover": 0
+          },
+          "resetCalls": {
+            "resetRun": 0,
+            "respawn": 0,
+            "resetCargo": 0,
+            "levelReset": 0
+          },
+          "counts": {
+            "physics": 3036,
+            "visual": 1518,
+            "interact": 3,
+            "pickups": 1,
+            "releases": 1,
+            "portalRequests": 3
+          }
+        }
+      },
+      {
+        "name": "The light circuit is borrowed again after the original cargo returns",
+        "state": {
+          "id": "post-thin-shadow",
+          "index": 31,
+          "state": "won",
+          "step": 4970,
+          "time": 41.41666666666496,
+          "elapsed": 41416.666666667275,
+          "visualTime": 41.4166666666656,
+          "player": [
+            0.01561166132745204,
+            0,
+            -17.00341129764739
+          ],
+          "playerVelocity": [
+            0,
+            0,
+            0
+          ],
+          "cargo": [
+            -0.0015698468351278908,
+            1.0511433702389645,
+            -17.723287084546595
+          ],
+          "cargoBodyPosition": [
+            -0.0015698468351278908,
+            1.0511433702389645,
+            -17.723287084546595
+          ],
+          "cargoQuaternion": [
+            0,
+            0.9999923578988333,
+            0,
+            -0.003909494076185
+          ],
+          "cargoVelocity": [
+            0.00023025837356974182,
+            -0.46383452433427025,
+            -4.800148532695929
+          ],
+          "held": true,
+          "teleports": 0,
+          "cargoTransports": 1,
+          "companionBehavior": "held",
+          "frictionObservations": {
+            "normal": 4562,
+            "wandering": 408,
+            "clearanceShuffle": 0
+          },
+          "behaviorCalls": 4970,
+          "yaw": 2.5289164804633413,
+          "pitch": 0.24655529802914883,
+          "camera": {
+            "p": [
+              2.495888818619236,
+              0.6700000074186865,
+              -22.864548837435716
+            ],
+            "q": [
+              0.027768928634367866,
+              0.9575431660439743,
+              -0.09868350761363628,
+              0.2694467240291682
+            ],
+            "fov": 62.31798441949758,
+            "aspect": 1.7777777777777777,
+            "near": 0.1,
+            "far": 380,
+            "obstructed": false
+          },
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "quality": {
+            "pixelRatio": 1.35,
+            "portalResolution": 896,
+            "shadowSize": 1024,
+            "shadows": true
+          },
+          "modelRoles": {
+            "original-main": 4,
+            "original-device": 1,
+            "original-companion": 1,
+            "loaded-asset-11": 1,
+            "loaded-asset-1": 1,
+            "loaded-asset-2": 1,
+            "loaded-asset-22": 1,
+            "loaded-asset-23": 1,
+            "loaded-asset-24": 1
+          },
+          "modelMembership": [
+            {
+              "rid": 0,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 1,
+              "roles": [
+                "original-main",
+                "original-device"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 2,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 66
+            },
+            {
+              "rid": 3,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 24
+            },
+            {
+              "rid": 4,
+              "roles": [
+                "original-companion"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 5,
+              "roles": [
+                "loaded-asset-11"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 6,
+              "roles": [
+                "loaded-asset-1"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 7,
+              "roles": [
+                "loaded-asset-2"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 8,
+              "roles": [
+                "loaded-asset-22"
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "rid": 9,
+              "roles": [
+                "loaded-asset-23"
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "rid": 10,
+              "roles": [
+                "loaded-asset-24"
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "physicalCargo": {
+            "bodyId": 161,
+            "shapeId": 322,
+            "mass": 3.2,
+            "half": [
+              0.39,
+              0.39,
+              0.39
+            ],
+            "shapeOffset": [
+              0,
+              0,
+              0
+            ],
+            "shapeOrientation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "friction": 1,
+            "restitution": 1
+          },
+          "decodedAssets": [
+            {
+              "id": 11,
+              "rootUuid": "5dfa0895-34dc-48c9-8de4-a765123b6671",
+              "meshRids": [
+                5
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "id": 1,
+              "rootUuid": "cdd0a1e2-41d0-41e4-af0d-025b7ad51099",
+              "meshRids": [
+                6
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "id": 2,
+              "rootUuid": "525a87f7-c4d9-4549-8d1c-43a37dcd8c2e",
+              "meshRids": [
+                7
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "id": 22,
+              "rootUuid": "91afdf30-1b54-40c8-8ec3-756081cce789",
+              "meshRids": [
+                8
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "id": 23,
+              "rootUuid": "eda22bac-1410-494b-9e38-c131c7f96081",
+              "meshRids": [
+                9
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "id": 24,
+              "rootUuid": "4f4aa5e2-68b1-4f3b-9397-ec40e3078451",
+              "meshRids": [
+                10
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "mechanism": {
+            "raw": [
+              true,
+              true
+            ],
+            "shadow": [
+              false,
+              false
+            ],
+            "valid": false,
+            "latched": true,
+            "diaphragm": 0.9999999999999987,
+            "inspectionCover": 0.9999999999999987
+          },
+          "resetCalls": {
+            "resetRun": 0,
+            "respawn": 0,
+            "resetCargo": 0,
+            "levelReset": 0
+          },
+          "counts": {
+            "physics": 4970,
+            "visual": 2485,
+            "interact": 4,
+            "pickups": 2,
+            "releases": 1,
+            "portalRequests": 3
+          }
+        }
+      },
+      {
+        "name": "both at exit",
+        "state": {
+          "id": "post-thin-shadow",
+          "index": 31,
+          "state": "won",
+          "step": 4970,
+          "time": 41.41666666666496,
+          "elapsed": 41416.666666667275,
+          "visualTime": 41.4166666666656,
+          "player": [
+            0.01561166132745204,
+            0,
+            -17.00341129764739
+          ],
+          "playerVelocity": [
+            0,
+            0,
+            0
+          ],
+          "cargo": [
+            -0.0015698468351278908,
+            1.0511433702389645,
+            -17.723287084546595
+          ],
+          "cargoBodyPosition": [
+            -0.0015698468351278908,
+            1.0511433702389645,
+            -17.723287084546595
+          ],
+          "cargoQuaternion": [
+            0,
+            0.9999923578988333,
+            0,
+            -0.003909494076185
+          ],
+          "cargoVelocity": [
+            0.00023025837356974182,
+            -0.46383452433427025,
+            -4.800148532695929
+          ],
+          "held": true,
+          "teleports": 0,
+          "cargoTransports": 1,
+          "companionBehavior": "held",
+          "frictionObservations": {
+            "normal": 4562,
+            "wandering": 408,
+            "clearanceShuffle": 0
+          },
+          "behaviorCalls": 4970,
+          "yaw": 2.5289164804633413,
+          "pitch": 0.24655529802914883,
+          "camera": {
+            "p": [
+              2.495888818619236,
+              0.6700000074186865,
+              -22.864548837435716
+            ],
+            "q": [
+              0.027768928634367866,
+              0.9575431660439743,
+              -0.09868350761363628,
+              0.2694467240291682
+            ],
+            "fov": 62.31798441949758,
+            "aspect": 1.7777777777777777,
+            "near": 0.1,
+            "far": 380,
+            "obstructed": false
+          },
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "quality": {
+            "pixelRatio": 1.35,
+            "portalResolution": 896,
+            "shadowSize": 1024,
+            "shadows": true
+          },
+          "modelRoles": {
+            "original-main": 4,
+            "original-device": 1,
+            "original-companion": 1,
+            "loaded-asset-11": 1,
+            "loaded-asset-1": 1,
+            "loaded-asset-2": 1,
+            "loaded-asset-22": 1,
+            "loaded-asset-23": 1,
+            "loaded-asset-24": 1
+          },
+          "modelMembership": [
+            {
+              "rid": 0,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 1,
+              "roles": [
+                "original-main",
+                "original-device"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 2,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 66
+            },
+            {
+              "rid": 3,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 24
+            },
+            {
+              "rid": 4,
+              "roles": [
+                "original-companion"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 5,
+              "roles": [
+                "loaded-asset-11"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 6,
+              "roles": [
+                "loaded-asset-1"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 7,
+              "roles": [
+                "loaded-asset-2"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 8,
+              "roles": [
+                "loaded-asset-22"
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "rid": 9,
+              "roles": [
+                "loaded-asset-23"
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "rid": 10,
+              "roles": [
+                "loaded-asset-24"
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "physicalCargo": {
+            "bodyId": 161,
+            "shapeId": 322,
+            "mass": 3.2,
+            "half": [
+              0.39,
+              0.39,
+              0.39
+            ],
+            "shapeOffset": [
+              0,
+              0,
+              0
+            ],
+            "shapeOrientation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "friction": 1,
+            "restitution": 1
+          },
+          "decodedAssets": [
+            {
+              "id": 11,
+              "rootUuid": "5dfa0895-34dc-48c9-8de4-a765123b6671",
+              "meshRids": [
+                5
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "id": 1,
+              "rootUuid": "cdd0a1e2-41d0-41e4-af0d-025b7ad51099",
+              "meshRids": [
+                6
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "id": 2,
+              "rootUuid": "525a87f7-c4d9-4549-8d1c-43a37dcd8c2e",
+              "meshRids": [
+                7
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "id": 22,
+              "rootUuid": "91afdf30-1b54-40c8-8ec3-756081cce789",
+              "meshRids": [
+                8
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "id": 23,
+              "rootUuid": "eda22bac-1410-494b-9e38-c131c7f96081",
+              "meshRids": [
+                9
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "id": 24,
+              "rootUuid": "4f4aa5e2-68b1-4f3b-9397-ec40e3078451",
+              "meshRids": [
+                10
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "mechanism": {
+            "raw": [
+              true,
+              true
+            ],
+            "shadow": [
+              false,
+              false
+            ],
+            "valid": false,
+            "latched": true,
+            "diaphragm": 0.9999999999999987,
+            "inspectionCover": 0.9999999999999987
+          },
+          "resetCalls": {
+            "resetRun": 0,
+            "respawn": 0,
+            "resetCargo": 0,
+            "levelReset": 0
+          },
+          "counts": {
+            "physics": 4970,
+            "visual": 2485,
+            "interact": 4,
+            "pickups": 2,
+            "releases": 1,
+            "portalRequests": 3
+          }
+        }
+      }
+    ],
+    "counts": {
+      "physics": 4970,
+      "visual": 2485,
+      "interact": 4,
+      "pickups": 2,
+      "releases": 1,
+      "portalRequests": 3
+    },
+    "resetCalls": {
+      "resetRun": 0,
+      "respawn": 0,
+      "resetCargo": 0,
+      "levelReset": 0
+    },
+    "scope": "Causal original-companion friction checks each physics step; model/physics ownership every step and complete immutable material/attribute descriptors at boundaries/milestones; typed-buffer SHA before/after. Unchanged shipped canonical route; actual updatePlaying120Hz/updateVisuals60Hz; native rendering at existing milestones/final only. Simulated fast QA, no device FPS/GPU timing/full-video or whole-room aesthetic acceptance."
+  },
+  "after": {
+    "id": "post-thin-shadow",
+    "index": 31,
+    "state": "won",
+    "step": 4970,
+    "time": 41.41666666666496,
+    "elapsed": 41416.666666667275,
+    "visualTime": 41.4166666666656,
+    "player": [
+      0.01561166132745204,
+      0,
+      -17.00341129764739
+    ],
+    "playerVelocity": [
+      0,
+      0,
+      0
+    ],
+    "cargo": [
+      -0.0015698468351278908,
+      1.0511433702389645,
+      -17.723287084546595
+    ],
+    "cargoBodyPosition": [
+      -0.0015698468351278908,
+      1.0511433702389645,
+      -17.723287084546595
+    ],
+    "cargoQuaternion": [
+      0,
+      0.9999923578988333,
+      0,
+      -0.003909494076185
+    ],
+    "cargoVelocity": [
+      0.00023025837356974182,
+      -0.46383452433427025,
+      -4.800148532695929
+    ],
+    "held": true,
+    "teleports": 0,
+    "cargoTransports": 1,
+    "companionBehavior": "held",
+    "frictionObservations": {
+      "normal": 4562,
+      "wandering": 408,
+      "clearanceShuffle": 0
+    },
+    "behaviorCalls": 4970,
+    "yaw": 2.5289164804633413,
+    "pitch": 0.24655529802914883,
+    "camera": {
+      "p": [
+        2.495888818619236,
+        0.6700000074186865,
+        -22.864548837435716
+      ],
+      "q": [
+        0.027768928634367866,
+        0.9575431660439743,
+        -0.09868350761363628,
+        0.2694467240291682
+      ],
+      "fov": 62.31798441949758,
+      "aspect": 1.7777777777777777,
+      "near": 0.1,
+      "far": 380,
+      "obstructed": false
+    },
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "quality": {
+      "pixelRatio": 1.35,
+      "portalResolution": 896,
+      "shadowSize": 1024,
+      "shadows": true
+    },
+    "modelRoles": {
+      "original-main": 4,
+      "original-device": 1,
+      "original-companion": 1,
+      "loaded-asset-11": 1,
+      "loaded-asset-1": 1,
+      "loaded-asset-2": 1,
+      "loaded-asset-22": 1,
+      "loaded-asset-23": 1,
+      "loaded-asset-24": 1
+    },
+    "modelMembership": [
+      {
+        "rid": 0,
+        "roles": [
+          "original-main"
+        ],
+        "positionVertices": 69777
+      },
+      {
+        "rid": 1,
+        "roles": [
+          "original-main",
+          "original-device"
+        ],
+        "positionVertices": 26886
+      },
+      {
+        "rid": 2,
+        "roles": [
+          "original-main"
+        ],
+        "positionVertices": 66
+      },
+      {
+        "rid": 3,
+        "roles": [
+          "original-main"
+        ],
+        "positionVertices": 24
+      },
+      {
+        "rid": 4,
+        "roles": [
+          "original-companion"
+        ],
+        "positionVertices": 49736
+      },
+      {
+        "rid": 5,
+        "roles": [
+          "loaded-asset-11"
+        ],
+        "positionVertices": 26886
+      },
+      {
+        "rid": 6,
+        "roles": [
+          "loaded-asset-1"
+        ],
+        "positionVertices": 69777
+      },
+      {
+        "rid": 7,
+        "roles": [
+          "loaded-asset-2"
+        ],
+        "positionVertices": 49736
+      },
+      {
+        "rid": 8,
+        "roles": [
+          "loaded-asset-22"
+        ],
+        "positionVertices": 24951
+      },
+      {
+        "rid": 9,
+        "roles": [
+          "loaded-asset-23"
+        ],
+        "positionVertices": 7321
+      },
+      {
+        "rid": 10,
+        "roles": [
+          "loaded-asset-24"
+        ],
+        "positionVertices": 4771
+      }
+    ],
+    "physicalCargo": {
+      "bodyId": 161,
+      "shapeId": 322,
+      "mass": 3.2,
+      "half": [
+        0.39,
+        0.39,
+        0.39
+      ],
+      "shapeOffset": [
+        0,
+        0,
+        0
+      ],
+      "shapeOrientation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "friction": 1,
+      "restitution": 1
+    },
+    "decodedAssets": [
+      {
+        "id": 11,
+        "rootUuid": "5dfa0895-34dc-48c9-8de4-a765123b6671",
+        "meshRids": [
+          5
+        ],
+        "positionVertices": 26886
+      },
+      {
+        "id": 1,
+        "rootUuid": "cdd0a1e2-41d0-41e4-af0d-025b7ad51099",
+        "meshRids": [
+          6
+        ],
+        "positionVertices": 69777
+      },
+      {
+        "id": 2,
+        "rootUuid": "525a87f7-c4d9-4549-8d1c-43a37dcd8c2e",
+        "meshRids": [
+          7
+        ],
+        "positionVertices": 49736
+      },
+      {
+        "id": 22,
+        "rootUuid": "91afdf30-1b54-40c8-8ec3-756081cce789",
+        "meshRids": [
+          8
+        ],
+        "positionVertices": 24951
+      },
+      {
+        "id": 23,
+        "rootUuid": "eda22bac-1410-494b-9e38-c131c7f96081",
+        "meshRids": [
+          9
+        ],
+        "positionVertices": 7321
+      },
+      {
+        "id": 24,
+        "rootUuid": "4f4aa5e2-68b1-4f3b-9397-ec40e3078451",
+        "meshRids": [
+          10
+        ],
+        "positionVertices": 4771
+      }
+    ],
+    "mechanism": {
+      "raw": [
+        true,
+        true
+      ],
+      "shadow": [
+        false,
+        false
+      ],
+      "valid": false,
+      "latched": true,
+      "diaphragm": 0.9999999999999987,
+      "inspectionCover": 0.9999999999999987
+    },
+    "resetCalls": {
+      "resetRun": 0,
+      "respawn": 0,
+      "resetCargo": 0,
+      "levelReset": 0
+    },
+    "counts": {
+      "physics": 4970,
+      "visual": 2485,
+      "interact": 4,
+      "pickups": 2,
+      "releases": 1,
+      "portalRequests": 3
+    }
+  },
+  "originalModelBuffersUnchanged": true,
+  "partialRoute": {
+    "milestones": [
+      {
+        "name": "The original companion takes a freight aperture too low for its observer",
+        "state": {
+          "id": "post-thin-shadow",
+          "index": 31,
+          "state": "playing",
+          "step": 1478,
+          "time": 12.316666666666608,
+          "elapsed": 12316.666666666848,
+          "visualTime": 12.316666666666858,
+          "player": [
+            -7.127539285436797,
+            0,
+            -1.151044591213968
+          ],
+          "playerVelocity": [
+            -1.4390160550836077e-20,
+            0,
+            -1.7042246320105163e-20
+          ],
+          "cargo": [
+            -20.440930271578896,
+            0.5296734044135608,
+            -0.9963747173186266
+          ],
+          "cargoBodyPosition": [
+            -20.440930271578896,
+            0.5296734044135608,
+            -0.9963747173186266
+          ],
+          "cargoQuaternion": [
+            -0.6565432266265364,
+            0.6582134712817472,
+            -0.2601512368123759,
+            -0.2608205355777037
+          ],
+          "cargoVelocity": [
+            0.18368740611998047,
+            1.0850111629218946,
+            0.1381485850718128
+          ],
+          "held": false,
+          "teleports": 0,
+          "cargoTransports": 1,
+          "companionBehavior": "settling",
+          "frictionObservations": {
+            "normal": 1478,
+            "wandering": 0,
+            "clearanceShuffle": 0
+          },
+          "behaviorCalls": 1478,
+          "yaw": 3.560016705236586,
+          "pitch": -0.06333791180077339,
+          "camera": {
+            "p": [
+              -11.042551340247805,
+              1.731421113759606,
+              -6.509532384109473
+            ],
+            "q": [
+              0.007522593888801793,
+              0.9707707023336741,
+              0.030694096963273805,
+              -0.23791915955504364
+            ],
+            "fov": 62.000000006161606,
+            "aspect": 1.7777777777777777,
+            "near": 0.1,
+            "far": 380,
+            "obstructed": false
+          },
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "quality": {
+            "pixelRatio": 1.35,
+            "portalResolution": 896,
+            "shadowSize": 1024,
+            "shadows": true
+          },
+          "modelRoles": {
+            "original-main": 4,
+            "original-device": 1,
+            "original-companion": 1,
+            "loaded-asset-11": 1,
+            "loaded-asset-1": 1,
+            "loaded-asset-2": 1,
+            "loaded-asset-22": 1,
+            "loaded-asset-23": 1,
+            "loaded-asset-24": 1
+          },
+          "modelMembership": [
+            {
+              "rid": 0,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 1,
+              "roles": [
+                "original-main",
+                "original-device"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 2,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 66
+            },
+            {
+              "rid": 3,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 24
+            },
+            {
+              "rid": 4,
+              "roles": [
+                "original-companion"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 5,
+              "roles": [
+                "loaded-asset-11"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 6,
+              "roles": [
+                "loaded-asset-1"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 7,
+              "roles": [
+                "loaded-asset-2"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 8,
+              "roles": [
+                "loaded-asset-22"
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "rid": 9,
+              "roles": [
+                "loaded-asset-23"
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "rid": 10,
+              "roles": [
+                "loaded-asset-24"
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "physicalCargo": {
+            "bodyId": 161,
+            "shapeId": 322,
+            "mass": 3.2,
+            "half": [
+              0.39,
+              0.39,
+              0.39
+            ],
+            "shapeOffset": [
+              0,
+              0,
+              0
+            ],
+            "shapeOrientation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "friction": 1,
+            "restitution": 1
+          },
+          "decodedAssets": [
+            {
+              "id": 11,
+              "rootUuid": "5dfa0895-34dc-48c9-8de4-a765123b6671",
+              "meshRids": [
+                5
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "id": 1,
+              "rootUuid": "cdd0a1e2-41d0-41e4-af0d-025b7ad51099",
+              "meshRids": [
+                6
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "id": 2,
+              "rootUuid": "525a87f7-c4d9-4549-8d1c-43a37dcd8c2e",
+              "meshRids": [
+                7
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "id": 22,
+              "rootUuid": "91afdf30-1b54-40c8-8ec3-756081cce789",
+              "meshRids": [
+                8
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "id": 23,
+              "rootUuid": "eda22bac-1410-494b-9e38-c131c7f96081",
+              "meshRids": [
+                9
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "id": 24,
+              "rootUuid": "4f4aa5e2-68b1-4f3b-9397-ec40e3078451",
+              "meshRids": [
+                10
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "mechanism": {
+            "raw": [
+              false,
+              false
+            ],
+            "shadow": [
+              false,
+              false
+            ],
+            "valid": false,
+            "latched": false,
+            "diaphragm": 0,
+            "inspectionCover": 0
+          },
+          "resetCalls": {
+            "resetRun": 0,
+            "respawn": 0,
+            "resetCargo": 0,
+            "levelReset": 0
+          },
+          "counts": {
+            "physics": 1478,
+            "visual": 739,
+            "interact": 2,
+            "pickups": 1,
+            "releases": 1,
+            "portalRequests": 2
+          }
+        }
+      },
+      {
+        "name": "A real cargo shadow separates the two height circuits",
+        "state": {
+          "id": "post-thin-shadow",
+          "index": 31,
+          "state": "playing",
+          "step": 2240,
+          "time": 18.66666666666625,
+          "elapsed": 18666.666666666813,
+          "visualTime": 18.666666666666888,
+          "player": [
+            18.16798853870481,
+            0,
+            12.087920458037045
+          ],
+          "playerVelocity": [
+            1.7121857593477257e-12,
+            0,
+            8.961096832379998e-13
+          ],
+          "cargo": [
+            -20.317635307322565,
+            0.6207586625034579,
+            -1.0000222719656782
+          ],
+          "cargoBodyPosition": [
+            -20.317635307322565,
+            0.6207586625034579,
+            -1.0000222719656782
+          ],
+          "cargoQuaternion": [
+            -0.5827869955852025,
+            0.7286065137486453,
+            -0.2346358468984447,
+            -0.2728330721339844
+          ],
+          "cargoVelocity": [
+            0.0004023609316266311,
+            0.0006566189301430714,
+            0.0009687155079823795
+          ],
+          "held": false,
+          "teleports": 0,
+          "cargoTransports": 1,
+          "companionBehavior": "getting_up",
+          "frictionObservations": {
+            "normal": 2240,
+            "wandering": 0,
+            "clearanceShuffle": 0
+          },
+          "behaviorCalls": 2240,
+          "yaw": 2.5289164804633413,
+          "pitch": 0.24655529802914883,
+          "camera": {
+            "p": [
+              20.64747643481393,
+              0.6700001721591357,
+              6.125925511566356
+            ],
+            "q": [
+              0.027768930219154966,
+              0.9575431641201247,
+              -0.09868351106625604,
+              0.2694467294381948
+            ],
+            "fov": 62.00001980477385,
+            "aspect": 1.7777777777777777,
+            "near": 0.1,
+            "far": 380,
+            "obstructed": false
+          },
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "quality": {
+            "pixelRatio": 1.35,
+            "portalResolution": 896,
+            "shadowSize": 1024,
+            "shadows": true
+          },
+          "modelRoles": {
+            "original-main": 4,
+            "original-device": 1,
+            "original-companion": 1,
+            "loaded-asset-11": 1,
+            "loaded-asset-1": 1,
+            "loaded-asset-2": 1,
+            "loaded-asset-22": 1,
+            "loaded-asset-23": 1,
+            "loaded-asset-24": 1
+          },
+          "modelMembership": [
+            {
+              "rid": 0,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 1,
+              "roles": [
+                "original-main",
+                "original-device"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 2,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 66
+            },
+            {
+              "rid": 3,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 24
+            },
+            {
+              "rid": 4,
+              "roles": [
+                "original-companion"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 5,
+              "roles": [
+                "loaded-asset-11"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 6,
+              "roles": [
+                "loaded-asset-1"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 7,
+              "roles": [
+                "loaded-asset-2"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 8,
+              "roles": [
+                "loaded-asset-22"
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "rid": 9,
+              "roles": [
+                "loaded-asset-23"
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "rid": 10,
+              "roles": [
+                "loaded-asset-24"
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "physicalCargo": {
+            "bodyId": 161,
+            "shapeId": 322,
+            "mass": 3.2,
+            "half": [
+              0.39,
+              0.39,
+              0.39
+            ],
+            "shapeOffset": [
+              0,
+              0,
+              0
+            ],
+            "shapeOrientation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "friction": 1,
+            "restitution": 1
+          },
+          "decodedAssets": [
+            {
+              "id": 11,
+              "rootUuid": "5dfa0895-34dc-48c9-8de4-a765123b6671",
+              "meshRids": [
+                5
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "id": 1,
+              "rootUuid": "cdd0a1e2-41d0-41e4-af0d-025b7ad51099",
+              "meshRids": [
+                6
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "id": 2,
+              "rootUuid": "525a87f7-c4d9-4549-8d1c-43a37dcd8c2e",
+              "meshRids": [
+                7
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "id": 22,
+              "rootUuid": "91afdf30-1b54-40c8-8ec3-756081cce789",
+              "meshRids": [
+                8
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "id": 23,
+              "rootUuid": "eda22bac-1410-494b-9e38-c131c7f96081",
+              "meshRids": [
+                9
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "id": 24,
+              "rootUuid": "4f4aa5e2-68b1-4f3b-9397-ec40e3078451",
+              "meshRids": [
+                10
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "mechanism": {
+            "raw": [
+              true,
+              true
+            ],
+            "shadow": [
+              true,
+              false
+            ],
+            "valid": true,
+            "latched": false,
+            "diaphragm": 0.9212649347331383,
+            "inspectionCover": 0
+          },
+          "resetCalls": {
+            "resetRun": 0,
+            "respawn": 0,
+            "resetCargo": 0,
+            "levelReset": 0
+          },
+          "counts": {
+            "physics": 2240,
+            "visual": 1120,
+            "interact": 2,
+            "pickups": 1,
+            "releases": 1,
+            "portalRequests": 3
+          }
+        }
+      },
+      {
+        "name": "A downstream physical ratchet retains the diaphragm before cargo retrieval",
+        "state": {
+          "id": "post-thin-shadow",
+          "index": 31,
+          "state": "playing",
+          "step": 3036,
+          "time": 25.299999999999205,
+          "elapsed": 25299.99999999918,
+          "visualTime": 25.299999999999844,
+          "player": [
+            5.449953575436866,
+            0,
+            -12.994880863825808
+          ],
+          "playerVelocity": [
+            4.177818199025255,
+            0,
+            -0.45353682564188796
+          ],
+          "cargo": [
+            -19.849747492987884,
+            0.3899981574813954,
+            -1.007230596987799
+          ],
+          "cargoBodyPosition": [
+            -19.849747492987884,
+            0.3899981574813954,
+            -1.007230596987799
+          ],
+          "cargoQuaternion": [
+            3.455322581326188e-8,
+            0.9017949864155559,
+            -2.052916104731944e-8,
+            -0.43216409207124784
+          ],
+          "cargoVelocity": [
+            0,
+            0,
+            0
+          ],
+          "held": false,
+          "teleports": 0,
+          "cargoTransports": 1,
+          "companionBehavior": "settling",
+          "frictionObservations": {
+            "normal": 3036,
+            "wandering": 0,
+            "clearanceShuffle": 0
+          },
+          "behaviorCalls": 3036,
+          "yaw": 2.5289164804633413,
+          "pitch": 0.24655529802914883,
+          "camera": {
+            "p": [
+              7.851796891465193,
+              0.6700000923286604,
+              -18.948467840329847
+            ],
+            "q": [
+              0.027768929451193542,
+              0.9575431650523901,
+              -0.09868350939317404,
+              0.2694467268170707
+            ],
+            "fov": 62.93040382633623,
+            "aspect": 1.7777777777777777,
+            "near": 0.1,
+            "far": 380,
+            "obstructed": false
+          },
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "quality": {
+            "pixelRatio": 1.35,
+            "portalResolution": 896,
+            "shadowSize": 1024,
+            "shadows": true
+          },
+          "modelRoles": {
+            "original-main": 4,
+            "original-device": 1,
+            "original-companion": 1,
+            "loaded-asset-11": 1,
+            "loaded-asset-1": 1,
+            "loaded-asset-2": 1,
+            "loaded-asset-22": 1,
+            "loaded-asset-23": 1,
+            "loaded-asset-24": 1
+          },
+          "modelMembership": [
+            {
+              "rid": 0,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 1,
+              "roles": [
+                "original-main",
+                "original-device"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 2,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 66
+            },
+            {
+              "rid": 3,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 24
+            },
+            {
+              "rid": 4,
+              "roles": [
+                "original-companion"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 5,
+              "roles": [
+                "loaded-asset-11"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 6,
+              "roles": [
+                "loaded-asset-1"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 7,
+              "roles": [
+                "loaded-asset-2"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 8,
+              "roles": [
+                "loaded-asset-22"
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "rid": 9,
+              "roles": [
+                "loaded-asset-23"
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "rid": 10,
+              "roles": [
+                "loaded-asset-24"
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "physicalCargo": {
+            "bodyId": 161,
+            "shapeId": 322,
+            "mass": 3.2,
+            "half": [
+              0.39,
+              0.39,
+              0.39
+            ],
+            "shapeOffset": [
+              0,
+              0,
+              0
+            ],
+            "shapeOrientation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "friction": 1,
+            "restitution": 1
+          },
+          "decodedAssets": [
+            {
+              "id": 11,
+              "rootUuid": "5dfa0895-34dc-48c9-8de4-a765123b6671",
+              "meshRids": [
+                5
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "id": 1,
+              "rootUuid": "cdd0a1e2-41d0-41e4-af0d-025b7ad51099",
+              "meshRids": [
+                6
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "id": 2,
+              "rootUuid": "525a87f7-c4d9-4549-8d1c-43a37dcd8c2e",
+              "meshRids": [
+                7
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "id": 22,
+              "rootUuid": "91afdf30-1b54-40c8-8ec3-756081cce789",
+              "meshRids": [
+                8
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "id": 23,
+              "rootUuid": "eda22bac-1410-494b-9e38-c131c7f96081",
+              "meshRids": [
+                9
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "id": 24,
+              "rootUuid": "4f4aa5e2-68b1-4f3b-9397-ec40e3078451",
+              "meshRids": [
+                10
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "mechanism": {
+            "raw": [
+              true,
+              true
+            ],
+            "shadow": [
+              true,
+              false
+            ],
+            "valid": true,
+            "latched": true,
+            "diaphragm": 0.9999999999999987,
+            "inspectionCover": 0
+          },
+          "resetCalls": {
+            "resetRun": 0,
+            "respawn": 0,
+            "resetCargo": 0,
+            "levelReset": 0
+          },
+          "counts": {
+            "physics": 3036,
+            "visual": 1518,
+            "interact": 3,
+            "pickups": 1,
+            "releases": 1,
+            "portalRequests": 3
+          }
+        }
+      },
+      {
+        "name": "The light circuit is borrowed again after the original cargo returns",
+        "state": {
+          "id": "post-thin-shadow",
+          "index": 31,
+          "state": "won",
+          "step": 4970,
+          "time": 41.41666666666496,
+          "elapsed": 41416.666666667275,
+          "visualTime": 41.4166666666656,
+          "player": [
+            0.01561166132745204,
+            0,
+            -17.00341129764739
+          ],
+          "playerVelocity": [
+            0,
+            0,
+            0
+          ],
+          "cargo": [
+            -0.0015698468351278908,
+            1.0511433702389645,
+            -17.723287084546595
+          ],
+          "cargoBodyPosition": [
+            -0.0015698468351278908,
+            1.0511433702389645,
+            -17.723287084546595
+          ],
+          "cargoQuaternion": [
+            0,
+            0.9999923578988333,
+            0,
+            -0.003909494076185
+          ],
+          "cargoVelocity": [
+            0.00023025837356974182,
+            -0.46383452433427025,
+            -4.800148532695929
+          ],
+          "held": true,
+          "teleports": 0,
+          "cargoTransports": 1,
+          "companionBehavior": "held",
+          "frictionObservations": {
+            "normal": 4562,
+            "wandering": 408,
+            "clearanceShuffle": 0
+          },
+          "behaviorCalls": 4970,
+          "yaw": 2.5289164804633413,
+          "pitch": 0.24655529802914883,
+          "camera": {
+            "p": [
+              2.495888818619236,
+              0.6700000074186865,
+              -22.864548837435716
+            ],
+            "q": [
+              0.027768928634367866,
+              0.9575431660439743,
+              -0.09868350761363628,
+              0.2694467240291682
+            ],
+            "fov": 62.31798441949758,
+            "aspect": 1.7777777777777777,
+            "near": 0.1,
+            "far": 380,
+            "obstructed": false
+          },
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "quality": {
+            "pixelRatio": 1.35,
+            "portalResolution": 896,
+            "shadowSize": 1024,
+            "shadows": true
+          },
+          "modelRoles": {
+            "original-main": 4,
+            "original-device": 1,
+            "original-companion": 1,
+            "loaded-asset-11": 1,
+            "loaded-asset-1": 1,
+            "loaded-asset-2": 1,
+            "loaded-asset-22": 1,
+            "loaded-asset-23": 1,
+            "loaded-asset-24": 1
+          },
+          "modelMembership": [
+            {
+              "rid": 0,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 1,
+              "roles": [
+                "original-main",
+                "original-device"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 2,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 66
+            },
+            {
+              "rid": 3,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 24
+            },
+            {
+              "rid": 4,
+              "roles": [
+                "original-companion"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 5,
+              "roles": [
+                "loaded-asset-11"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 6,
+              "roles": [
+                "loaded-asset-1"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 7,
+              "roles": [
+                "loaded-asset-2"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 8,
+              "roles": [
+                "loaded-asset-22"
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "rid": 9,
+              "roles": [
+                "loaded-asset-23"
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "rid": 10,
+              "roles": [
+                "loaded-asset-24"
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "physicalCargo": {
+            "bodyId": 161,
+            "shapeId": 322,
+            "mass": 3.2,
+            "half": [
+              0.39,
+              0.39,
+              0.39
+            ],
+            "shapeOffset": [
+              0,
+              0,
+              0
+            ],
+            "shapeOrientation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "friction": 1,
+            "restitution": 1
+          },
+          "decodedAssets": [
+            {
+              "id": 11,
+              "rootUuid": "5dfa0895-34dc-48c9-8de4-a765123b6671",
+              "meshRids": [
+                5
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "id": 1,
+              "rootUuid": "cdd0a1e2-41d0-41e4-af0d-025b7ad51099",
+              "meshRids": [
+                6
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "id": 2,
+              "rootUuid": "525a87f7-c4d9-4549-8d1c-43a37dcd8c2e",
+              "meshRids": [
+                7
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "id": 22,
+              "rootUuid": "91afdf30-1b54-40c8-8ec3-756081cce789",
+              "meshRids": [
+                8
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "id": 23,
+              "rootUuid": "eda22bac-1410-494b-9e38-c131c7f96081",
+              "meshRids": [
+                9
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "id": 24,
+              "rootUuid": "4f4aa5e2-68b1-4f3b-9397-ec40e3078451",
+              "meshRids": [
+                10
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "mechanism": {
+            "raw": [
+              true,
+              true
+            ],
+            "shadow": [
+              false,
+              false
+            ],
+            "valid": false,
+            "latched": true,
+            "diaphragm": 0.9999999999999987,
+            "inspectionCover": 0.9999999999999987
+          },
+          "resetCalls": {
+            "resetRun": 0,
+            "respawn": 0,
+            "resetCargo": 0,
+            "levelReset": 0
+          },
+          "counts": {
+            "physics": 4970,
+            "visual": 2485,
+            "interact": 4,
+            "pickups": 2,
+            "releases": 1,
+            "portalRequests": 3
+          }
+        }
+      },
+      {
+        "name": "both at exit",
+        "state": {
+          "id": "post-thin-shadow",
+          "index": 31,
+          "state": "won",
+          "step": 4970,
+          "time": 41.41666666666496,
+          "elapsed": 41416.666666667275,
+          "visualTime": 41.4166666666656,
+          "player": [
+            0.01561166132745204,
+            0,
+            -17.00341129764739
+          ],
+          "playerVelocity": [
+            0,
+            0,
+            0
+          ],
+          "cargo": [
+            -0.0015698468351278908,
+            1.0511433702389645,
+            -17.723287084546595
+          ],
+          "cargoBodyPosition": [
+            -0.0015698468351278908,
+            1.0511433702389645,
+            -17.723287084546595
+          ],
+          "cargoQuaternion": [
+            0,
+            0.9999923578988333,
+            0,
+            -0.003909494076185
+          ],
+          "cargoVelocity": [
+            0.00023025837356974182,
+            -0.46383452433427025,
+            -4.800148532695929
+          ],
+          "held": true,
+          "teleports": 0,
+          "cargoTransports": 1,
+          "companionBehavior": "held",
+          "frictionObservations": {
+            "normal": 4562,
+            "wandering": 408,
+            "clearanceShuffle": 0
+          },
+          "behaviorCalls": 4970,
+          "yaw": 2.5289164804633413,
+          "pitch": 0.24655529802914883,
+          "camera": {
+            "p": [
+              2.495888818619236,
+              0.6700000074186865,
+              -22.864548837435716
+            ],
+            "q": [
+              0.027768928634367866,
+              0.9575431660439743,
+              -0.09868350761363628,
+              0.2694467240291682
+            ],
+            "fov": 62.31798441949758,
+            "aspect": 1.7777777777777777,
+            "near": 0.1,
+            "far": 380,
+            "obstructed": false
+          },
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "quality": {
+            "pixelRatio": 1.35,
+            "portalResolution": 896,
+            "shadowSize": 1024,
+            "shadows": true
+          },
+          "modelRoles": {
+            "original-main": 4,
+            "original-device": 1,
+            "original-companion": 1,
+            "loaded-asset-11": 1,
+            "loaded-asset-1": 1,
+            "loaded-asset-2": 1,
+            "loaded-asset-22": 1,
+            "loaded-asset-23": 1,
+            "loaded-asset-24": 1
+          },
+          "modelMembership": [
+            {
+              "rid": 0,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 1,
+              "roles": [
+                "original-main",
+                "original-device"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 2,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 66
+            },
+            {
+              "rid": 3,
+              "roles": [
+                "original-main"
+              ],
+              "positionVertices": 24
+            },
+            {
+              "rid": 4,
+              "roles": [
+                "original-companion"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 5,
+              "roles": [
+                "loaded-asset-11"
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "rid": 6,
+              "roles": [
+                "loaded-asset-1"
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "rid": 7,
+              "roles": [
+                "loaded-asset-2"
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "rid": 8,
+              "roles": [
+                "loaded-asset-22"
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "rid": 9,
+              "roles": [
+                "loaded-asset-23"
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "rid": 10,
+              "roles": [
+                "loaded-asset-24"
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "physicalCargo": {
+            "bodyId": 161,
+            "shapeId": 322,
+            "mass": 3.2,
+            "half": [
+              0.39,
+              0.39,
+              0.39
+            ],
+            "shapeOffset": [
+              0,
+              0,
+              0
+            ],
+            "shapeOrientation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "friction": 1,
+            "restitution": 1
+          },
+          "decodedAssets": [
+            {
+              "id": 11,
+              "rootUuid": "5dfa0895-34dc-48c9-8de4-a765123b6671",
+              "meshRids": [
+                5
+              ],
+              "positionVertices": 26886
+            },
+            {
+              "id": 1,
+              "rootUuid": "cdd0a1e2-41d0-41e4-af0d-025b7ad51099",
+              "meshRids": [
+                6
+              ],
+              "positionVertices": 69777
+            },
+            {
+              "id": 2,
+              "rootUuid": "525a87f7-c4d9-4549-8d1c-43a37dcd8c2e",
+              "meshRids": [
+                7
+              ],
+              "positionVertices": 49736
+            },
+            {
+              "id": 22,
+              "rootUuid": "91afdf30-1b54-40c8-8ec3-756081cce789",
+              "meshRids": [
+                8
+              ],
+              "positionVertices": 24951
+            },
+            {
+              "id": 23,
+              "rootUuid": "eda22bac-1410-494b-9e38-c131c7f96081",
+              "meshRids": [
+                9
+              ],
+              "positionVertices": 7321
+            },
+            {
+              "id": 24,
+              "rootUuid": "4f4aa5e2-68b1-4f3b-9397-ec40e3078451",
+              "meshRids": [
+                10
+              ],
+              "positionVertices": 4771
+            }
+          ],
+          "mechanism": {
+            "raw": [
+              true,
+              true
+            ],
+            "shadow": [
+              false,
+              false
+            ],
+            "valid": false,
+            "latched": true,
+            "diaphragm": 0.9999999999999987,
+            "inspectionCover": 0.9999999999999987
+          },
+          "resetCalls": {
+            "resetRun": 0,
+            "respawn": 0,
+            "resetCargo": 0,
+            "levelReset": 0
+          },
+          "counts": {
+            "physics": 4970,
+            "visual": 2485,
+            "interact": 4,
+            "pickups": 2,
+            "releases": 1,
+            "portalRequests": 3
+          }
+        }
+      }
+    ],
+    "counts": {
+      "physics": 4970,
+      "visual": 2485,
+      "interact": 4,
+      "pickups": 2,
+      "releases": 1,
+      "portalRequests": 3
+    },
+    "resetCalls": {
+      "resetRun": 0,
+      "respawn": 0,
+      "resetCargo": 0,
+      "levelReset": 0
+    },
+    "partialEvidenceOnly": true,
+    "wonObserved": true
+  },
+  "routeProbeRestoration": {
+    "restored": true,
+    "methods": 9,
+    "inputProviderRestored": true,
+    "captureSlotRestored": true
+  },
+  "routeRafRestoration": {
+    "restored": true,
+    "loopRemainsStopped": true
+  },
+  "inputsUnchanged": true,
+  "finishedAt": "2026-11-01T23:13:56.668Z"
+}

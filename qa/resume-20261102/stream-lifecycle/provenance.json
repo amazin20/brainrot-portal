@@ -1,0 +1,22 @@
+{
+  "kind": "UNCHANGED_RAW_STREAMED_FETCH_DIAGNOSTIC_AND_PORTABLE_REPRODUCER",
+  "originalExecutedScript": "/workspace/scratch/877185031e6d/stream-lifecycle-diagnostic.mjs",
+  "originalExecutedScriptSha256": "350fdf4863a2830240a82877c44725fff1a496f661920229206868906fa63eb9",
+  "originalRawReport": "/workspace/scratch/877185031e6d/stream-lifecycle-diagnostic/report.json",
+  "originalRawReportSha256": "5cde4d830b73abe8ad49e7ce66eb008ad98f784ca19b9c18421c9539ba143ae0",
+  "preservedReportSha256": "5cde4d830b73abe8ad49e7ce66eb008ad98f784ca19b9c18421c9539ba143ae0",
+  "portableScriptSha256": "88ebb0c31f5394e637a4a7bbe0d8ac1552a089b31cd2e2daedbc6919514318e3",
+  "portableScriptChanges": [
+    "Original absolute source paths replaced with repository-relative imports and root lookup",
+    "CHROME_PATH and a fresh CLI output directory replace original fixed paths",
+    "Playwright path may use runtime environment or PLAYWRIGHT_MODULE",
+    "The independently successful post-run CDP-versus-page body equality check is included in the portable reproducer"
+  ],
+  "rawReportUnmodified": true,
+  "additionalReadOnlyVerification": {
+    "successfulCdpBodiesComparedToInPageBytesAndManifest": 8,
+    "allEqual": true
+  },
+  "observedConclusion": "Same original GLBs complete in the page for all cases. arrayBuffer yields loadingFinished; the original streamed reader yields ERR_ABORTED even when no CDP body read occurs. Durable same-session CDP storage preserves the exact complete original bodies but does not change the raw ERR_ABORTED outcomes. No game, decode, or navigation is needed to reproduce this Chromium lifecycle distinction.",
+  "productionFilesChanged": false
+}

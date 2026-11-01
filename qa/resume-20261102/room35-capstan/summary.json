@@ -1,0 +1,102 @@
+{
+  "kind": "ROOM35_CAPSTAN_NATIVE_COMPONENT_CHECKPOINT",
+  "scope": "Isolated assetless component plus real native LabPhysics pipeline. Current room35 remains unchanged. No whole-room implementation or gameplay acceptance.",
+  "sourceSha256": {
+    "src/game/LabRoom35CapstanCell.js": "62ea10f003172b53c4a776784c4421897d86d6f326c7057ada212845f71be925",
+    "src/game/LabRoom35CapstanGeometry.js": "45c9b272b9a28f412e2df8c52769a411fab2fcd0821d694efec7bfd7d5ee93c6",
+    "src/game/LabPhysics.js": "b33a38272299193f701e232b1ab4eeb5d032155330b4d274a14ba9cd466f804b",
+    "src/game/LabPortals.js": "cb06641335ac74ada4562b4dbbb030d09b7786c592b623dde141551c67487651",
+    "scripts/qa-room35-capstan-120hz.mjs": "44e05b82b166e7f3ac63f8cc2c75f9257473ed121a61300750ccb600a43d549a",
+    "tests/lab-room35-capstan.test.js": "f58861b9668d1993ad9b2704137259071dd12804e837710b55b8b5d7dd6639df",
+    "tests/lab-room35-capstan-aperture.test.js": "e004017d613593617718c0abb592e334a8bb2a8bc1fc9f50bba5c438bc82e225",
+    "tests/lab-room35-capstan-native-step.test.js": "10cd315a7a2c30042f962097c76dd116fe239c17a28018a957a1989e7fa8aedb"
+  },
+  "testCommand": "node --max-old-space-size=768 --test --test-isolation=none --test-reporter=tap tests/lab-room35-capstan.test.js tests/lab-room35-capstan-aperture.test.js tests/lab-room35-capstan-native-step.test.js",
+  "tests": {
+    "total": 18,
+    "pass": 18,
+    "fail": 0,
+    "geometry": 4,
+    "legacyMechanics960Hz": 7,
+    "nativeIntegration": 7,
+    "tapSha256": "c75bf48932432b27b6e4ac9a0e0f826fd691deda7cc2d8dec763a9a4a5b75508"
+  },
+  "aperture": {
+    "planarInvoluteLength": 5,
+    "previousPlanarInvoluteLength": 4,
+    "equalLeadExtension": 1,
+    "fullDepthPrism": [
+      0.08,
+      0.85
+    ],
+    "conservativeLongKeeperSeparationMetres": 0.1556365078492128,
+    "conservativeShortKeeperSeparationMetres": 3.0741805699221167,
+    "keeperPhysicalShapeCount": 226,
+    "actualNativePlacementOldLongRejects": true,
+    "actualNativePlacementNewBothPass": true,
+    "originalCargoAndPlayerCannotFitRopePockets": true
+  },
+  "nativeClock": {
+    "componentOnlyNativeStepsWithoutSurrogate": 18200,
+    "allPrepareFinishOwnerWorldCountsEqual": true,
+    "nativeOwnerMethodsAndDefaultsRetained": true,
+    "originalCargoBodyShapeMaterialRetained": true,
+    "streamingTest": "Unchanged native750-solid activation threshold, actual distant original-owner solids removed",
+    "ccdTest": "Actual native swept-cargo correction against an owner-authored thin wall after world integration",
+    "sleepTest": "Disconnected original cargo sleeps;120additional native frames cause no wakeups",
+    "invalidOrderAndWrongDurationRejected": true,
+    "wrongGravityRejectedBeforeConstruction": true
+  },
+  "ordinaryComponent": [
+    {
+      "theta": 0.35,
+      "workAfterDeparture": 0,
+      "observedExpectedBehavior": true,
+      "finalAngle": -0.900000050387127
+    },
+    {
+      "theta": 4.8,
+      "workAfterDeparture": 0,
+      "observedExpectedBehavior": true,
+      "finalAngle": -0.0027669416086583765
+    }
+  ],
+  "unpoweredComponent": [
+    {
+      "protocol": "continuous-readdress",
+      "cycles": 1000,
+      "accepted": 1000,
+      "rejected": 0,
+      "maxAngle": -0.9000000000000001,
+      "maxRawResidualJ": 0.2517730993785676,
+      "noManualWork": true
+    },
+    {
+      "protocol": "cut-and-rethread",
+      "cycles": 1000,
+      "accepted": 7,
+      "rejected": 993,
+      "maxAngle": -0.9000000000000001,
+      "maxRawResidualJ": 0,
+      "noManualWork": true
+    }
+  ],
+  "separateLabelledSurrogateDiagnostic": {
+    "includedOnlyInExistingDiagnostic": true,
+    "steps": 3000,
+    "gamePlayerMass": 0,
+    "fixtureMass": 3.2,
+    "nativeTestsUseNoSurrogate": true
+  },
+  "nativeDiagnosticSha256": "40d0242c74d1acc5181323dd8f5ec99802d3817c78df8cb58f8463fb9d7d93ce",
+  "peakNativeDiagnosticRssBytes": 91111424,
+  "preservedFailure": "native-step-attempt1-abort.json",
+  "limitations": [
+    "Native120Hz raw positive numerical residual remains0.2517730993785676J in continuous-readdress diagnostic; not called an exact-energy pass. Strict existing energy tests still use960Hz.",
+    "Clock guards alone cannot identify the caller. Integration must call the original LabPhysics.step between prepareStep and finishStep; supplied native tests and migrated diagnostic do so.",
+    "Capstan owned geometry is not yet registered into full-game aim/player/CCD/query registries. Native CCD test proves preservation for an owner-authored wall only.",
+    "Native current-pair binding, full-size freight panels, final room architecture, normal player inputs/routes and browser appearance remain open."
+  ],
+  "wholeRoomAccepted": false,
+  "published": false
+}

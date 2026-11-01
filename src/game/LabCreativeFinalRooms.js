@@ -123,7 +123,7 @@ export function buildCreative36(g,index=35){
  k.label('36 / УДАР ПО КАСАТЕЛЬНОЙ',[-29.5,16,12],[1,0,0],17,1.2);
  // Start at the existing promenade's open edge: from the old deep balcony
  // no shoulder orbit could reveal the rotor below the intervening floor.
- const level=finish(k,[-21.2,10,.7],[-23.3,10.6,.7],[19,10,-13],{rotor,bridge,fallPad:fall,outlet,spawnView:{yaw:-1.6,pitch:-.78}},
+ const level=finish(k,[-21.2,10,.7],[-23.3,10.6,.7],[19,10,-13],{rotor,bridge,fallPad:fall,outlet,spawnView:{yaw:-1,pitch:-.55}},
   {'gravity-well':'the actual fall supplies kinetic energy','tangential-outlet':'horizontal cargo jet hits a real rotor away from its spindle'},['off-centre-impact','scout-impact-first']);
  const dispose=level.dispose;level.dispose=function(...args){rotorQuery?.dispose();return dispose?.apply(this,args);};return level;
 }

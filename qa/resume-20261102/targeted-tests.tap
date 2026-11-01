@@ -1,0 +1,274 @@
+TAP version 13
+# Subtest: campaign-v55 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 1 - campaign-v55 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 47.302341
+  type: 'test'
+  ...
+# Subtest: campaign-v56 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 2 - campaign-v56 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 14.805664
+  type: 'test'
+  ...
+# Subtest: campaign-v57 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 3 - campaign-v57 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 9.277407
+  type: 'test'
+  ...
+# Subtest: campaign-v58 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 4 - campaign-v58 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 6.758591
+  type: 'test'
+  ...
+# Subtest: campaign-v59 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 5 - campaign-v59 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 6.154898
+  type: 'test'
+  ...
+# Subtest: campaign-v60 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 6 - campaign-v60 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 6.10299
+  type: 'test'
+  ...
+# Subtest: campaign-v61 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 7 - campaign-v61 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 5.537476
+  type: 'test'
+  ...
+# Subtest: campaign-v62 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 8 - campaign-v62 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 5.955187
+  type: 'test'
+  ...
+# Subtest: campaign-v63 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 9 - campaign-v63 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 6.507742
+  type: 'test'
+  ...
+# Subtest: campaign-v64 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 10 - campaign-v64 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 5.687724
+  type: 'test'
+  ...
+# Subtest: campaign-v65 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 11 - campaign-v65 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 6.025694
+  type: 'test'
+  ...
+# Subtest: campaign-v66 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 12 - campaign-v66 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 6.810655
+  type: 'test'
+  ...
+# Subtest: campaign-v67 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+ok 13 - campaign-v67 QA serves exact frozen bytes and returns 404 instead of a source or HTML fallback
+  ---
+  duration_ms: 7.377897
+  type: 'test'
+  ...
+# Subtest: Observatory 31: original gameplay and all new relief vertices remain within the old wall panels
+ok 14 - Observatory 31: original gameplay and all new relief vertices remain within the old wall panels
+  ---
+  duration_ms: 492.063999
+  type: 'test'
+  ...
+# Subtest: Observatory 32: original gameplay and all new relief vertices remain within the old wall panels
+ok 15 - Observatory 32: original gameplay and all new relief vertices remain within the old wall panels
+  ---
+  duration_ms: 700.190182
+  type: 'test'
+  ...
+# Subtest: Observatory 33: original gameplay and all new relief vertices remain within the old wall panels
+ok 16 - Observatory 33: original gameplay and all new relief vertices remain within the old wall panels
+  ---
+  duration_ms: 382.885529
+  type: 'test'
+  ...
+# Subtest: Observatory 34: original gameplay and all new relief vertices remain within the old wall panels
+ok 17 - Observatory 34: original gameplay and all new relief vertices remain within the old wall panels
+  ---
+  duration_ms: 489.644629
+  type: 'test'
+  ...
+# Subtest: Observatory 35: original gameplay and all new relief vertices remain within the old wall panels
+ok 18 - Observatory 35: original gameplay and all new relief vertices remain within the old wall panels
+  ---
+  duration_ms: 348.274874
+  type: 'test'
+  ...
+# Subtest: Observatory 36: original gameplay and all new relief vertices remain within the old wall panels
+ok 19 - Observatory 36: original gameplay and all new relief vertices remain within the old wall panels
+  ---
+  duration_ms: 349.306246
+  type: 'test'
+  ...
+# Subtest: Observatory 37: original gameplay and all new relief vertices remain within the old wall panels
+ok 20 - Observatory 37: original gameplay and all new relief vertices remain within the old wall panels
+  ---
+  duration_ms: 536.412823
+  type: 'test'
+  ...
+# Subtest: Observatory 38: original gameplay and all new relief vertices remain within the old wall panels
+ok 21 - Observatory 38: original gameplay and all new relief vertices remain within the old wall panels
+  ---
+  duration_ms: 3212.518824
+  type: 'test'
+  ...
+# Subtest: Observatory 39: original gameplay and all new relief vertices remain within the old wall panels
+ok 22 - Observatory 39: original gameplay and all new relief vertices remain within the old wall panels
+  ---
+  duration_ms: 580.406838
+  type: 'test'
+  ...
+# Subtest: Observatory 40: original gameplay and all new relief vertices remain within the old wall panels
+ok 23 - Observatory 40: original gameplay and all new relief vertices remain within the old wall panels
+  ---
+  duration_ms: 262.743426
+  type: 'test'
+  ...
+# Subtest: Original GLB geometry/materials and original portal porcelain retain their identities
+ok 24 - Original GLB geometry/materials and original portal porcelain retain their identities
+  ---
+  duration_ms: 279.696007
+  type: 'test'
+  ...
+# Subtest: Architecture releases its buffers/materials once and restores visibility without a stale render callback
+ok 25 - Architecture releases its buffers/materials once and restores visibility without a stale render callback
+  ---
+  duration_ms: 783.359113
+  type: 'test'
+  ...
+# Subtest: The chapter bounds do not recolour other rooms
+ok 26 - The chapter bounds do not recolour other rooms
+  ---
+  duration_ms: 2194.975514
+  type: 'test'
+  ...
+# Subtest: 35 capstan: the former long lead admits the rope but obstructs the complete native aperture
+ok 27 - 35 capstan: the former long lead admits the rope but obstructs the complete native aperture
+  ---
+  duration_ms: 97.237329
+  type: 'test'
+  ...
+# Subtest: 35 capstan: both extended pockets clear every actual keeper solid over the full native depth prism
+ok 28 - 35 capstan: both extended pockets clear every actual keeper solid over the full native depth prism
+  ---
+  duration_ms: 56.659117
+  type: 'test'
+  ...
+# Subtest: 35 capstan: a real new obstacle still blocks a geometrically clear extended pocket
+ok 29 - 35 capstan: a real new obstacle still blocks a geometrically clear extended pocket
+  ---
+  duration_ms: 42.283326
+  type: 'test'
+  ...
+# Subtest: 35 capstan: equal lead extension preserves curvature and force ratio and recalibrates finite rope rest length
+ok 30 - 35 capstan: equal lead extension preserves curvature and force ratio and recalibrates finite rope rest length
+  ---
+  duration_ms: 637.485758
+  type: 'test'
+  ...
+# Subtest: 35 native component: one original LabPhysics step owns streaming, integration and original cargo identity
+ok 31 - 35 native component: one original LabPhysics step owns streaming, integration and original cargo identity
+  ---
+  duration_ms: 266.192556
+  type: 'test'
+  ...
+# Subtest: 35 native component: the owner still runs its thin-wall CCD after its original world step
+ok 32 - 35 native component: the owner still runs its thin-wall CCD after its original world step
+  ---
+  duration_ms: 47.326342
+  type: 'test'
+  ...
+# Subtest: 35 native component: disconnected resting original cargo sleeps and zero forces do not wake it
+ok 33 - 35 native component: disconnected resting original cargo sleeps and zero forces do not wake it
+  ---
+  duration_ms: 105.234381
+  type: 'test'
+  ...
+# Subtest: 35 native component: preparation cannot double-apply work or accept a missing or duplicated completion
+ok 34 - 35 native component: preparation cannot double-apply work or accept a missing or duplicated completion
+  ---
+  duration_ms: 63.117381
+  type: 'test'
+  ...
+# Subtest: 35 native component: skipped, doubled and wrong-duration world steps are rejected without accepted ledger samples
+ok 35 - 35 native component: skipped, doubled and wrong-duration world steps are rejected without accepted ledger samples
+  ---
+  duration_ms: 139.973809
+  type: 'test'
+  ...
+# Subtest: 35 native component: original material identity and pending-force ownership survive refusal and disposal
+ok 36 - 35 native component: original material identity and pending-force ownership survive refusal and disposal
+  ---
+  duration_ms: 45.125269
+  type: 'test'
+  ...
+# Subtest: 35 native component: nonnative gravity is refused before constructing a misleading energy ledger
+ok 37 - 35 native component: nonnative gravity is refused before constructing a misleading energy ledger
+  ---
+  duration_ms: 0.681229
+  type: 'test'
+  ...
+# Subtest: 35 prototype: current tangencies, helical keeper and involute apertures determine turn and conserve path length
+ok 38 - 35 prototype: current tangencies, helical keeper and involute apertures determine turn and conserve path length
+  ---
+  duration_ms: 282.175965
+  type: 'test'
+  ...
+# Subtest: 35 prototype: every unilateral static slip projection dissipates elastic energy, including slack and both reversals
+ok 39 - 35 prototype: every unilateral static slip projection dissipates elastic energy, including slack and both reversals
+  ---
+  duration_ms: 5.689592
+  type: 'test'
+  ...
+# Subtest: 35 prototype: projected axial viscosity never leaves the static force cone or supplies positive endpoint work
+ok 40 - 35 prototype: projected axial viscosity never leaves the static force cone or supplies positive endpoint work
+  ---
+  duration_ms: 8.618376
+  type: 'test'
+  ...
+# Subtest: 35 prototype: 0.35rad physical cell has bounded actual-control work and zero positive raw residual at explicit1/960 clock
+ok 41 - 35 prototype: 0.35rad physical cell has bounded actual-control work and zero positive raw residual at explicit1/960 clock
+  ---
+  duration_ms: 1216.267675
+  type: 'test'
+  ...
+# Subtest: 35 prototype: 4.8rad physical cell has bounded actual-control work and zero positive raw residual at explicit1/960 clock
+ok 42 - 35 prototype: 4.8rad physical cell has bounded actual-control work and zero positive raw residual at explicit1/960 clock
+  ---
+  duration_ms: 798.29263
+  type: 'test'
+  ...
+# Subtest: 35 prototype: equal-length readdressing redistributes tension dissipatively and has no portal-work source
+ok 43 - 35 prototype: equal-length readdressing redistributes tension dissipatively and has no portal-work source
+  ---
+  duration_ms: 770.976616
+  type: 'test'
+  ...
+# Subtest: 35 prototype: actual rope disconnection permits gravity return and original-body catch without a retained angle
+ok 44 - 35 prototype: actual rope disconnection permits gravity return and original-body catch without a retained angle
+  ---
+  duration_ms: 1042.400413
+  type: 'test'
+  ...
+1..44
+# tests 44
+# suites 0
+# pass 44
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 18546.590058

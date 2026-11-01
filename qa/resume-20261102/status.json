@@ -1,0 +1,86 @@
+{
+  "kind": "CURRENT_DEVELOPMENT_CONTINUATION_STATUS",
+  "userFacingDate": "2026-11-02",
+  "timezone": "Europe/Moscow",
+  "repository": "amazin20/brainrot-portal",
+  "branch": "work/resume-20261102",
+  "baseCommit": "bc9527de398ca8c7bd4654966ea2be6d8cfec8e0",
+  "sourceManifestSha256": "c0b8646b454509603af591a7ef78685e278af6924be5a6a1e4431c468c614fb7",
+  "distManifestSha256": "5221073def7ef3c827bb85c2ae4a5dea5e268ea16d968cc4febed030b874c3e2",
+  "build": {
+    "pass": true,
+    "files": 77,
+    "bytesBeforeZip": 7392028,
+    "runtimeModels": 14,
+    "log": "build.log"
+  },
+  "targetedRegressions": {
+    "pass": 44,
+    "fail": 0,
+    "skip": 0,
+    "tap": "targeted-tests.tap",
+    "sha256": "5f4d1a8b5756416416295c71b669315d4436f4793e4b2e31003171c298b87735",
+    "scope": "13 frozen-server checks,13 unchanged optics checks,18 capstan component checks; not full active suite"
+  },
+  "room36": {
+    "spawnYaw": -1,
+    "spawnPitch": -0.55,
+    "nativeEntryWidePortraitPass": true,
+    "entryFramingReviewed": true,
+    "wholeRoomAppearanceAccepted": false,
+    "routes": {
+      "pass": 2,
+      "fail": 0,
+      "canonicalPhysicsSteps": 9626,
+      "alternatePhysicsSteps": 9808,
+      "bothZeroResets": true,
+      "nativeRendered": false
+    },
+    "evidence": "room36-entry/visual-review.json"
+  },
+  "room32": {
+    "nativeRoutePass": true,
+    "originalBuffersUnchanged": true,
+    "steps": 4970,
+    "visualUpdates": 2485,
+    "nativePngs": 4,
+    "resets": {
+      "resetRun": 0,
+      "respawn": 0,
+      "resetCargo": 0,
+      "levelReset": 0
+    },
+    "verifiedRouteEvidencePass": true,
+    "all16ReceivedAssetsMatch": true,
+    "rawNoAbortNetworkPass": false,
+    "strictOverallPass": false,
+    "rawAbortedPaths": [
+      "draco/draco_decoder.wasm",
+      "models/runtime/model-02-cargo.glb"
+    ],
+    "errors": [],
+    "memoryAbort": false,
+    "deadline": false,
+    "report": "room32-rendered-verified/report.json",
+    "historicalFailuresPreserved": [
+      "room32-rendered-attempt1/report.json",
+      "room32-rendered-final/report.json"
+    ]
+  },
+  "room35": {
+    "apertureBlockerFixed": true,
+    "nativeClockAdapterImplemented": true,
+    "targetedComponentTestsPass": 18,
+    "nativeStepsWithoutSurrogate": 18200,
+    "wholeRoomIntegrated": false,
+    "report": "room35-capstan/summary.json"
+  },
+  "releaseAccepted": false,
+  "all51UniqueAndExcellentAccepted": false,
+  "published": false,
+  "nextConcreteWork": [
+    "Integrate35 native portal pair, query/player/CCD geometry registrations, full-size cargo apertures and real room; then ordinary input visual routes.",
+    "Continue44 loaded-return raised-station proposal;48 native GS contact mechanism.",
+    "Continue51-room visual and bypass review; no all-room or release completion claim."
+  ]
+}

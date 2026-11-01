@@ -1,0 +1,39 @@
+{
+  "kind": "ROOT_INDIVIDUAL_NATIVE_FRAME_REVIEW",
+  "reviewedFourImagesIndividually": true,
+  "finalImagesByteIdenticalToReviewedFirstAttempt": true,
+  "images": [
+    {
+      "filename": "room-32-01-freight-delivered.png",
+      "sha256": "e05e159fbb46277eeb301628299d9d39d3d433f0ccc09a0df92e2c328ef2718c",
+      "state": "playing",
+      "step": 1478
+    },
+    {
+      "filename": "room-32-02-shadow-diaphragm.png",
+      "sha256": "8cd13c819aa52a8ca8b2383d8e511a1af9fbd6e4ac0c331fd40fb5f6607f239a",
+      "state": "playing",
+      "step": 2240
+    },
+    {
+      "filename": "room-32-03-far-side-ratchet.png",
+      "sha256": "e3b6cb56d659e15f07e70dd64469571cbe952c55ae4df2c95ae9f8a5403691ce",
+      "state": "playing",
+      "step": 3036
+    },
+    {
+      "filename": "room-32-04-final-won.png",
+      "sha256": "0f3737f08e31f4a394a7dd35813befa1c9619622753d312ddce52d898de0d876",
+      "state": "won",
+      "step": 4970
+    }
+  ],
+  "findings": {
+    "freight": "Normal player and freight aperture visible; remote companion not visible in this camera frame. Original cargo transport is established by the route observations, not by asserting visual co-visibility.",
+    "shadow": "Manufactured receiver/diaphragm and hero visible; remote companion outside this frame.",
+    "ratchet": "Original hero, portal device, terminal and open passage visible.",
+    "finish": "Original hero and original companion both clearly visible together inside the final marker."
+  },
+  "wholeRoomAppearanceAccepted": false,
+  "scope": "Four original camera milestones, not continuous video or all-camera visual acceptance."
+}

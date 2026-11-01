@@ -1,0 +1,29 @@
+{
+  "kind": "room36-camera-regression-evidence",
+  "sourceFiles": {
+    "src/game/LabCreativeFinalRooms.js": "49929a90a378ae334c095723e7d926244d979bb553974180981fc3501f6e11b0",
+    "tests/helpers/lab-observatory-entry-contract.js": "2b53800a5a8a62ac0589107ca10afa4ce8d6b4bab12373aa24e669e2bb6ed98d",
+    "src/game/LabCamera.js": "688f545019c3368b8d2c877f08341acfac721a418ed1cd012b0213b670306cce",
+    "src/game/LabCreativeFinalJourney.js": "0d8eda2394bc98649b7f92df95cb1c96b632cdc3bd85f68bf17f5786c1a0376e",
+    "src/game/LabV8Journey.js": "8b5573f7f10c027c6b8fd7e7c24138ab72fd9d3ee0798ef3384600aa99a0ce3a",
+    "tests/lab-optics-architecture.test.js": "655d19c18ebfa81d9be23350d44b7240b398ff10e7915be055f9ef038bb58d6c"
+  },
+  "routes": {
+    "pass": 2,
+    "fail": 0,
+    "canonicalPhysicsSteps": 9626,
+    "alternatePhysicsSteps": 9808,
+    "bothZeroResets": true,
+    "nativeRendered": false
+  },
+  "existingOpticsChecks": {
+    "pass": 13,
+    "fail": 0,
+    "skip": 0,
+    "actualCommand": "node --max-old-space-size=1024 tests/lab-optics-architecture.test.js",
+    "rawOutput": "optics13.tap"
+  },
+  "reproduceRoutes": "node --max-old-space-size=1024 qa/resume-20261102/room36-routes/routes.mjs",
+  "harnessRelocation": "Executed source was /tmp/room36-camera/routes.mjs; only absolute module and output paths were replaced with import.meta-relative paths when saving. Route logic and assertions unchanged.",
+  "wholeRoomOrReleaseAccepted": false
+}

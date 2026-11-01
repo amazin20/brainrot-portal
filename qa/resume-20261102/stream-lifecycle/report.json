@@ -1,0 +1,854 @@
+{
+  "scope": "Isolated actual model-byte transfers; no game or production modification. Exact production streamed fetch function versus arrayBuffer and CDP body observation.",
+  "chromeSha256": "1bcad71ad1bff85955db13c6d8dd9f32374934d5a5cb079b526c46fb51f9bd97",
+  "loaderSha256": "dd1613b56bcfff32225109615deb2625be7668b890a8745ae40aee003a9978bb",
+  "models": [
+    {
+      "id": 1,
+      "filename": "model-01-player.glb",
+      "outputBytes": 549756,
+      "outputSHA256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91",
+      "triangles": 80000
+    },
+    {
+      "id": 2,
+      "filename": "model-02-cargo.glb",
+      "outputBytes": 510376,
+      "outputSHA256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697",
+      "triangles": 55000
+    },
+    {
+      "id": 11,
+      "filename": "model-11-portal-gun.glb",
+      "outputBytes": 393116,
+      "outputSHA256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7",
+      "triangles": 25194
+    },
+    {
+      "id": 22,
+      "filename": "model-22-terminal.glb",
+      "outputBytes": 377108,
+      "outputSHA256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26",
+      "triangles": 22418
+    }
+  ],
+  "cases": [
+    {
+      "config": {
+        "mode": "arrayBuffer",
+        "durable": false,
+        "readCdp": true,
+        "gc": false
+      },
+      "events": [
+        {
+          "kind": "request",
+          "requestId": "3586.3",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+          "timestamp": 2256.107235
+        },
+        {
+          "kind": "request",
+          "requestId": "3586.4",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+          "timestamp": 2256.107396
+        },
+        {
+          "kind": "request",
+          "requestId": "3586.5",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+          "timestamp": 2256.107457
+        },
+        {
+          "kind": "request",
+          "requestId": "3586.6",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+          "timestamp": 2256.107502
+        },
+        {
+          "kind": "response",
+          "requestId": "3586.3",
+          "status": 200,
+          "timestamp": 2256.115617,
+          "mimeType": "model/gltf-binary",
+          "fromDiskCache": false,
+          "fromServiceWorker": false
+        },
+        {
+          "kind": "response",
+          "requestId": "3586.5",
+          "status": 200,
+          "timestamp": 2256.116506,
+          "mimeType": "model/gltf-binary",
+          "fromDiskCache": false,
+          "fromServiceWorker": false
+        },
+        {
+          "kind": "response",
+          "requestId": "3586.4",
+          "status": 200,
+          "timestamp": 2256.116951,
+          "mimeType": "model/gltf-binary",
+          "fromDiskCache": false,
+          "fromServiceWorker": false
+        },
+        {
+          "kind": "response",
+          "requestId": "3586.6",
+          "status": 200,
+          "timestamp": 2256.119036,
+          "mimeType": "model/gltf-binary",
+          "fromDiskCache": false,
+          "fromServiceWorker": false
+        },
+        {
+          "kind": "loadingFinished",
+          "requestId": "3586.5",
+          "timestamp": 2256.125158,
+          "encodedDataLength": 393301
+        },
+        {
+          "kind": "loadingFinished",
+          "requestId": "3586.6",
+          "timestamp": 2256.126657,
+          "encodedDataLength": 377293
+        },
+        {
+          "kind": "loadingFinished",
+          "requestId": "3586.3",
+          "timestamp": 2256.131213,
+          "encodedDataLength": 549941
+        },
+        {
+          "kind": "loadingFinished",
+          "requestId": "3586.4",
+          "timestamp": 2256.130621,
+          "encodedDataLength": 510561
+        }
+      ],
+      "cdpBodies": [
+        {
+          "requestId": "3586.5",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+          "bytes": 393116,
+          "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+        },
+        {
+          "requestId": "3586.6",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+          "bytes": 377108,
+          "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+        },
+        {
+          "requestId": "3586.3",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+          "bytes": 549756,
+          "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+        },
+        {
+          "requestId": "3586.4",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+          "bytes": 510376,
+          "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+        }
+      ],
+      "pageResponses": [
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+          "status": 200
+        }
+      ],
+      "pageFailures": [],
+      "actualBodies": [
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+          "bytes": 549756,
+          "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91",
+          "chunks": []
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+          "bytes": 510376,
+          "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697",
+          "chunks": []
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+          "bytes": 393116,
+          "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7",
+          "chunks": []
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+          "bytes": 377108,
+          "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26",
+          "chunks": []
+        }
+      ],
+      "allActualComplete": true
+    },
+    {
+      "config": {
+        "mode": "production-stream",
+        "durable": false,
+        "readCdp": true,
+        "gc": false
+      },
+      "events": [
+        {
+          "kind": "request",
+          "requestId": "3630.2",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+          "timestamp": 2256.794017
+        },
+        {
+          "kind": "request",
+          "requestId": "3630.3",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+          "timestamp": 2256.794356
+        },
+        {
+          "kind": "request",
+          "requestId": "3630.4",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+          "timestamp": 2256.79447
+        },
+        {
+          "kind": "request",
+          "requestId": "3630.5",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+          "timestamp": 2256.794901
+        },
+        {
+          "kind": "response",
+          "requestId": "3630.2",
+          "status": 200,
+          "timestamp": 2256.800296,
+          "mimeType": "model/gltf-binary",
+          "fromDiskCache": false,
+          "fromServiceWorker": false
+        },
+        {
+          "kind": "response",
+          "requestId": "3630.3",
+          "status": 200,
+          "timestamp": 2256.800867,
+          "mimeType": "model/gltf-binary",
+          "fromDiskCache": false,
+          "fromServiceWorker": false
+        },
+        {
+          "kind": "response",
+          "requestId": "3630.4",
+          "status": 200,
+          "timestamp": 2256.802996,
+          "mimeType": "model/gltf-binary",
+          "fromDiskCache": false,
+          "fromServiceWorker": false
+        },
+        {
+          "kind": "response",
+          "requestId": "3630.5",
+          "status": 200,
+          "timestamp": 2256.806045,
+          "mimeType": "model/gltf-binary",
+          "fromDiskCache": false,
+          "fromServiceWorker": false
+        },
+        {
+          "kind": "loadingFailed",
+          "requestId": "3630.4",
+          "timestamp": 2256.809951,
+          "type": "Fetch",
+          "errorText": "net::ERR_ABORTED",
+          "canceled": true
+        },
+        {
+          "kind": "loadingFailed",
+          "requestId": "3630.3",
+          "timestamp": 2256.813109,
+          "type": "Fetch",
+          "errorText": "net::ERR_ABORTED",
+          "canceled": true
+        },
+        {
+          "kind": "loadingFailed",
+          "requestId": "3630.5",
+          "timestamp": 2256.815187,
+          "type": "Fetch",
+          "errorText": "net::ERR_ABORTED",
+          "canceled": true
+        },
+        {
+          "kind": "loadingFailed",
+          "requestId": "3630.2",
+          "timestamp": 2256.816587,
+          "type": "Fetch",
+          "errorText": "net::ERR_ABORTED",
+          "canceled": true
+        }
+      ],
+      "cdpBodies": [
+        {
+          "requestId": "3630.4",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+          "error": "Error: cdpSession.send: Protocol error (Network.getResponseBody): No data found for resource with given identifier"
+        },
+        {
+          "requestId": "3630.3",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+          "error": "Error: cdpSession.send: Protocol error (Network.getResponseBody): No data found for resource with given identifier"
+        },
+        {
+          "requestId": "3630.5",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+          "error": "Error: cdpSession.send: Protocol error (Network.getResponseBody): No data found for resource with given identifier"
+        },
+        {
+          "requestId": "3630.2",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+          "error": "Error: cdpSession.send: Protocol error (Network.getResponseBody): No data found for resource with given identifier"
+        }
+      ],
+      "pageResponses": [
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+          "status": 200
+        }
+      ],
+      "pageFailures": [
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+          "failure": {
+            "errorText": "net::ERR_ABORTED"
+          }
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+          "failure": {
+            "errorText": "net::ERR_ABORTED"
+          }
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+          "failure": {
+            "errorText": "net::ERR_ABORTED"
+          }
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+          "failure": {
+            "errorText": "net::ERR_ABORTED"
+          }
+        }
+      ],
+      "actualBodies": [
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+          "bytes": 549756,
+          "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91",
+          "chunks": [
+            65536,
+            65536,
+            65536,
+            65536,
+            65536,
+            65536,
+            65536,
+            65536,
+            25468
+          ]
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+          "bytes": 510376,
+          "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697",
+          "chunks": [
+            65536,
+            65536,
+            65536,
+            65536,
+            65536,
+            65536,
+            65536,
+            51624
+          ]
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+          "bytes": 393116,
+          "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7",
+          "chunks": [
+            65536,
+            65536,
+            65536,
+            65536,
+            65536,
+            65436
+          ]
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+          "bytes": 377108,
+          "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26",
+          "chunks": [
+            65536,
+            65536,
+            65536,
+            65536,
+            65536,
+            49428
+          ]
+        }
+      ],
+      "allActualComplete": true
+    },
+    {
+      "config": {
+        "mode": "production-stream",
+        "durable": false,
+        "readCdp": false,
+        "gc": true
+      },
+      "events": [
+        {
+          "kind": "request",
+          "requestId": "3678.2",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+          "timestamp": 2257.48108
+        },
+        {
+          "kind": "request",
+          "requestId": "3678.3",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+          "timestamp": 2257.481438
+        },
+        {
+          "kind": "request",
+          "requestId": "3678.4",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+          "timestamp": 2257.481538
+        },
+        {
+          "kind": "request",
+          "requestId": "3678.5",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+          "timestamp": 2257.481627
+        },
+        {
+          "kind": "response",
+          "requestId": "3678.3",
+          "status": 200,
+          "timestamp": 2257.491897,
+          "mimeType": "model/gltf-binary",
+          "fromDiskCache": false,
+          "fromServiceWorker": false
+        },
+        {
+          "kind": "response",
+          "requestId": "3678.2",
+          "status": 200,
+          "timestamp": 2257.492305,
+          "mimeType": "model/gltf-binary",
+          "fromDiskCache": false,
+          "fromServiceWorker": false
+        },
+        {
+          "kind": "response",
+          "requestId": "3678.4",
+          "status": 200,
+          "timestamp": 2257.492416,
+          "mimeType": "model/gltf-binary",
+          "fromDiskCache": false,
+          "fromServiceWorker": false
+        },
+        {
+          "kind": "response",
+          "requestId": "3678.5",
+          "status": 200,
+          "timestamp": 2257.492478,
+          "mimeType": "model/gltf-binary",
+          "fromDiskCache": false,
+          "fromServiceWorker": false
+        },
+        {
+          "kind": "loadingFailed",
+          "requestId": "3678.4",
+          "timestamp": 2257.497264,
+          "type": "Fetch",
+          "errorText": "net::ERR_ABORTED",
+          "canceled": true
+        },
+        {
+          "kind": "loadingFailed",
+          "requestId": "3678.5",
+          "timestamp": 2257.498366,
+          "type": "Fetch",
+          "errorText": "net::ERR_ABORTED",
+          "canceled": true
+        },
+        {
+          "kind": "loadingFailed",
+          "requestId": "3678.3",
+          "timestamp": 2257.498947,
+          "type": "Fetch",
+          "errorText": "net::ERR_ABORTED",
+          "canceled": true
+        },
+        {
+          "kind": "loadingFailed",
+          "requestId": "3678.2",
+          "timestamp": 2257.500132,
+          "type": "Fetch",
+          "errorText": "net::ERR_ABORTED",
+          "canceled": true
+        }
+      ],
+      "cdpBodies": [],
+      "pageResponses": [
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+          "status": 200
+        }
+      ],
+      "pageFailures": [
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+          "failure": {
+            "errorText": "net::ERR_ABORTED"
+          }
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+          "failure": {
+            "errorText": "net::ERR_ABORTED"
+          }
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+          "failure": {
+            "errorText": "net::ERR_ABORTED"
+          }
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+          "failure": {
+            "errorText": "net::ERR_ABORTED"
+          }
+        }
+      ],
+      "actualBodies": [
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+          "bytes": 549756,
+          "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91",
+          "chunks": [
+            327680,
+            222076
+          ]
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+          "bytes": 510376,
+          "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697",
+          "chunks": [
+            327680,
+            182696
+          ]
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+          "bytes": 393116,
+          "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7",
+          "chunks": [
+            262144,
+            130972
+          ]
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+          "bytes": 377108,
+          "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26",
+          "chunks": [
+            262144,
+            114964
+          ]
+        }
+      ],
+      "allActualComplete": true
+    },
+    {
+      "config": {
+        "mode": "production-stream",
+        "durable": true,
+        "readCdp": true,
+        "gc": true
+      },
+      "events": [
+        {
+          "kind": "request",
+          "requestId": "3719.2",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+          "timestamp": 2258.193575
+        },
+        {
+          "kind": "request",
+          "requestId": "3719.3",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+          "timestamp": 2258.193881
+        },
+        {
+          "kind": "request",
+          "requestId": "3719.4",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+          "timestamp": 2258.1948
+        },
+        {
+          "kind": "request",
+          "requestId": "3719.5",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+          "timestamp": 2258.194937
+        },
+        {
+          "kind": "response",
+          "requestId": "3719.2",
+          "status": 200,
+          "timestamp": 2258.200983,
+          "mimeType": "model/gltf-binary",
+          "fromDiskCache": false,
+          "fromServiceWorker": false
+        },
+        {
+          "kind": "response",
+          "requestId": "3719.3",
+          "status": 200,
+          "timestamp": 2258.202092,
+          "mimeType": "model/gltf-binary",
+          "fromDiskCache": false,
+          "fromServiceWorker": false
+        },
+        {
+          "kind": "response",
+          "requestId": "3719.4",
+          "status": 200,
+          "timestamp": 2258.20292,
+          "mimeType": "model/gltf-binary",
+          "fromDiskCache": false,
+          "fromServiceWorker": false
+        },
+        {
+          "kind": "response",
+          "requestId": "3719.5",
+          "status": 200,
+          "timestamp": 2258.203071,
+          "mimeType": "model/gltf-binary",
+          "fromDiskCache": false,
+          "fromServiceWorker": false
+        },
+        {
+          "kind": "loadingFailed",
+          "requestId": "3719.4",
+          "timestamp": 2258.213713,
+          "type": "Fetch",
+          "errorText": "net::ERR_ABORTED",
+          "canceled": true
+        },
+        {
+          "kind": "loadingFailed",
+          "requestId": "3719.5",
+          "timestamp": 2258.215477,
+          "type": "Fetch",
+          "errorText": "net::ERR_ABORTED",
+          "canceled": true
+        },
+        {
+          "kind": "loadingFailed",
+          "requestId": "3719.2",
+          "timestamp": 2258.217281,
+          "type": "Fetch",
+          "errorText": "net::ERR_ABORTED",
+          "canceled": true
+        },
+        {
+          "kind": "loadingFailed",
+          "requestId": "3719.3",
+          "timestamp": 2258.219256,
+          "type": "Fetch",
+          "errorText": "net::ERR_ABORTED",
+          "canceled": true
+        }
+      ],
+      "cdpBodies": [
+        {
+          "requestId": "3719.4",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+          "bytes": 393116,
+          "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7"
+        },
+        {
+          "requestId": "3719.5",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+          "bytes": 377108,
+          "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26"
+        },
+        {
+          "requestId": "3719.2",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+          "bytes": 549756,
+          "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91"
+        },
+        {
+          "requestId": "3719.3",
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+          "bytes": 510376,
+          "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697"
+        }
+      ],
+      "pageResponses": [
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+          "status": 200
+        }
+      ],
+      "pageFailures": [
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+          "failure": {
+            "errorText": "net::ERR_ABORTED"
+          }
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+          "failure": {
+            "errorText": "net::ERR_ABORTED"
+          }
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+          "failure": {
+            "errorText": "net::ERR_ABORTED"
+          }
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+          "failure": {
+            "errorText": "net::ERR_ABORTED"
+          }
+        }
+      ],
+      "actualBodies": [
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-01-player.glb?v=e5b09ff02813",
+          "bytes": 549756,
+          "sha256": "e5b09ff0281377b679d6fdd505fa1ed89550bb662e94e7f593ed67ee50a66a91",
+          "chunks": [
+            65536,
+            65536,
+            65536,
+            65536,
+            65536,
+            65536,
+            65536,
+            91004
+          ]
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-02-cargo.glb?v=65763c87e7f1",
+          "bytes": 510376,
+          "sha256": "65763c87e7f14cc807cffa8fc2adc364e8421dae819271a0c406a6b0d2c8c697",
+          "chunks": [
+            3911,
+            61625,
+            65536,
+            65536,
+            65536,
+            65536,
+            65536,
+            65536,
+            51624
+          ]
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-11-portal-gun.glb?v=d8c76c41efbb",
+          "bytes": 393116,
+          "sha256": "d8c76c41efbbf0a6d70e30ab5a7b70f49fd806e497f67ea06cb28f9f4edca1d7",
+          "chunks": [
+            65536,
+            65536,
+            65536,
+            65536,
+            65536,
+            65436
+          ]
+        },
+        {
+          "url": "http://127.0.0.1:33303/campaign-v67/models/runtime/model-22-terminal.glb?v=9e2f4ff75899",
+          "bytes": 377108,
+          "sha256": "9e2f4ff758996f67596d3935041f632bafdf7e84efd4869341920b64a5919c26",
+          "chunks": [
+            65536,
+            65536,
+            65536,
+            65536,
+            65536,
+            49428
+          ]
+        }
+      ],
+      "allActualComplete": true
+    }
+  ],
+  "pass": true,
+  "browserExit": {
+    "code": 0,
+    "signal": null
+  }
+}

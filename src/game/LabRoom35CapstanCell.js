@@ -8,7 +8,9 @@ const distance=(a,b)=>V.length(V.sub(a,b));
  * full-game route. The game avatar is mass0; an optional separate dynamic
  * contact body is explicitly a test surrogate, never a claimed player load. */
 export function createRoom35CapstanCell({world:existingWorld=null,cargoBody:existingCargo=null,dt=1/120,theta=4.8,manualPower=240,manualForce=405,stiffness=3000,mu=.4,ropeViscosity=2*Math.sqrt(stiffness*3.2)}={}){
+ if(!Number.isFinite(dt)||dt<=0)throw new RangeError('The capstan needs a finite positive fixed step');
  if(existingWorld&&!existingCargo)throw new Error('An existing game world requires its original cargo body');
+ if(existingWorld&&(existingWorld.gravity.x!==0||existingWorld.gravity.y!==-G||existingWorld.gravity.z!==0))throw new Error('The capstan energy ledger requires the native downward19.5 gravity');
  const world=existingWorld??new World({gravity:new Vec3(0,-G,0),allowSleep:true}),ownedBodies=new Set();
  if(!existingWorld){world.solver.iterations=18;world.solver.tolerance=1e-8;Object.assign(world.defaultContactMaterial,{friction:.64,restitution:.08,contactEquationStiffness:1e8,contactEquationRelaxation:4,frictionEquationStiffness:1e8,frictionEquationRelaxation:4});}
  if(existingCargo&&(existingCargo.world!==world||existingCargo.mass!==3.2||!existingCargo.shapes[0]?.halfExtents?.almostEquals(new Vec3(.39,.39,.39))))throw new Error('Retain the actual original3.2kg/.78m cargo shape in its existing world');
@@ -34,7 +36,7 @@ export function createRoom35CapstanCell({world:existingWorld=null,cargoBody:exis
  stop([0,lower.y-.35,lower.z],[4.6,.35,.75]);stop([0,-10.3,0],[35,.3,60]);
  const cargo=existingCargo??own(new Body({mass:3.2,position:new Vec3(-18,6.39,16),shape:new Box(new Vec3(.39,.39,.39)),material:new Material({friction:1,restitution:1}),allowSleep:true,sleepSpeedLimit:.11,sleepTimeLimit:.7,linearDamping:.035,angularDamping:.16,collisionFilterGroup:2,collisionFilterMask:5}));
  const contactMaterial=new ContactMaterial(cargo.material,mat,{friction:.64,restitution:.08,contactEquationStiffness:1e8,contactEquationRelaxation:4,frictionEquationStiffness:1e8,frictionEquationRelaxation:4});world.addContactMaterial(contactMaterial);
- const originalShape=cargo.shapes[0],guide=createRoom35CapstanGuide(),fairlead=[0,20,10],tailExit=[-18,17,16],eyeLocal=new Vec3(0,.71,-8),contactSurrogates=[];
+ const originalShape=cargo.shapes[0],originalMaterial=cargo.material,guide=createRoom35CapstanGuide(),fairlead=[0,20,10],tailExit=[-18,17,16],eyeLocal=new Vec3(0,.71,-8),contactSurrogates=[];
  const keeper=new Body({mass:0,position:C(guide.center),material:mat});
  keeper.addShape(new Cylinder(guide.radius-guide.ropeRadius,guide.radius-guide.ropeRadius,.8,32),new Vec3(0,0,.10),new Quaternion().setFromAxisAngle(new Vec3(1,0,0),Math.PI/2));
  for(const p of guide.solidParts)keeper.addShape(new Box(C(p.half)),C(V.sub(p.center,guide.center)),new Quaternion().setFromAxisAngle(new Vec3(0,0,1),p.angle));
@@ -46,6 +48,7 @@ export function createRoom35CapstanCell({world:existingWorld=null,cargoBody:exis
  own(keeper);
  const control={position:[0,6,22],pressed:false},crank=[0,6,22],controlRange=1.3;
  let nearPortal=guide.portalAt(theta),path=traceRoom35Capstan(guide,nearPortal),slip=0,time=0,steps=0,manualApplications=0;
+ let pendingStep=null,disposed=false,completedWorldStep=world.stepnumber,completedWorldTime=world.time;
  const eye=()=>xyz(bridge.pointToWorldFrame(eyeLocal));
  const lengths=()=>({left:distance(eye(),fairlead)+distance(fairlead,guide.loadPoint)+(path?.length??0),right:distance(xyz(cargo.position),tailExit)});
  const initial=lengths(),rest={left:initial.left+.4,right:distance([-18,6.39,16],tailExit)+.8},maxElasticExtension=.65;
@@ -76,7 +79,14 @@ export function createRoom35CapstanCell({world:existingWorld=null,cargoBody:exis
   return {targetAngle,bridgePotential,maxCargoGravityCredit,minimumNetExternalWork:bridgePotential-maxCargoGravityCredit};
  }
  function angle(){const q=bridge.quaternion;return Math.atan2(2*(q.w*q.x+q.y*q.z),1-2*(q.x*q.x+q.y*q.y));}
+ function checkBinding(){
+  if(disposed)throw new Error('The capstan cell is disposed');
+  if(cargo.world!==world||!world.bodies.includes(cargo)||cargo.shapes[0]!==originalShape||cargo.material!==originalMaterial
+   ||cargo.mass!==3.2||!originalShape.halfExtents.almostEquals(new Vec3(.39,.39,.39)))throw new Error('The capstan lost its original cargo body, shape or material');
+ }
+ function requireIdle(){checkBinding();if(pendingStep)throw new Error('Finish the prepared capstan step before another operation');}
  function setPortal(next){
+  requireIdle();
   const oldEnergy=ropeEnergy(),oldPath=path,newPath=traceRoom35Capstan(guide,next);
   if(!newPath){nearPortal=next;path=null;ledger.disconnectHeat+=oldEnergy;tensions={leftTension:0,rightTension:0,elasticEnergy:0,ratio:1};return false;}
   path=newPath;const l=lengths();
@@ -89,7 +99,13 @@ export function createRoom35CapstanCell({world:existingWorld=null,cargoBody:exis
   const change=ropeEnergy(l)-oldEnergy;
   ledger.portalGeometryWork+=change;ledger.maxPortalGeometryWork=Math.max(ledger.maxPortalGeometryWork,Math.abs(change));nearPortal=next;return true;
  }
- function step(count=1){for(let n=0;n<count;n++){
+ /** Apply this component's forces once, immediately before the owner's one
+  * fixed LabPhysics.step. Do not register Cannon pre/post callbacks: those
+  * would measure before the owner's CCD, speed limits and sleep bookkeeping. */
+ function prepareStep(stepDt=dt){
+  requireIdle();
+  if(stepDt!==dt)throw new RangeError('The capstan preparation must use its configured fixed step');
+  if(world.stepnumber!==completedWorldStep||world.time!==completedWorldTime)throw new Error('The native world advanced without a prepared capstan step');
   const beforeEye=eye(),beforeCargo=xyz(cargo.position),beforeAngle=angle(),l=lengths();
   let bridgeRope=[0,0,0],cargoRope=[0,0,0],bridgeViscosity=[0,0,0],cargoViscosity=[0,0,0];
   if(path&&l.left+l.right<=rest.left+rest.right+maxElasticExtension){
@@ -103,9 +119,13 @@ export function createRoom35CapstanCell({world:existingWorld=null,cargoBody:exis
    ledger.maxConeViolation=Math.max(ledger.maxConeViolation,damp.leftTension-r.ratio*damp.rightTension,damp.rightTension-r.ratio*damp.leftTension);
    bridgeRope=V.scale(nLeft,r.leftTension);cargoRope=V.scale(nRight,r.rightTension);
    bridgeViscosity=V.scale(nLeft,damp.leftTension-r.leftTension);cargoViscosity=V.scale(nRight,damp.rightTension-r.rightTension);
-   bridge.applyForce(C(V.add(bridgeRope,bridgeViscosity)),C(beforeEye).vsub(bridge.position));cargo.applyForce(C(V.add(cargoRope,cargoViscosity)));
+   bridge.applyForce(C(V.add(bridgeRope,bridgeViscosity)),C(beforeEye).vsub(bridge.position));
+   const tailForce=C(V.add(cargoRope,cargoViscosity));
+   // Cannon wakes even on applyForce(0). A slack or disconnected rope must
+   // not keep an otherwise resting original cargo artificially awake.
+   if(tailForce.lengthSquared()>0)cargo.applyForce(tailForce);
   }else if(path){ledger.disconnectHeat+=ropeEnergy(l);path=null;tensions={leftTension:0,rightTension:0,elasticEnergy:0,ratio:1};}
-  const atControl=control.pressed&&distance(control.position,crank)<=controlRange;
+  const controlDistance=distance(control.position,crank),atControl=control.pressed&&controlDistance<=controlRange;
   const direction=V.unit(V.sub(fairlead,beforeEye)),eyeVelocity=bridge.getVelocityAtWorldPoint(C(beforeEye),new Vec3()),velocity=V.dot(direction,xyz(eyeVelocity));
   const arm=C(beforeEye).vsub(bridge.position),normal=C(direction),cross=arm.cross(normal),response=bridge.invInertiaWorld.vmult(cross).cross(arm);
   const effectiveInverseMass=bridge.invMass+normal.dot(response),budget=manualPower*dt;
@@ -115,9 +135,26 @@ export function createRoom35CapstanCell({world:existingWorld=null,cargoBody:exis
   if(impulse){bridge.applyImpulse(C(V.scale(direction,impulse)),arm);manualApplications++;}
   const work=bodyEnergy(bridge)-beforeHandEnergy,magnitude=impulse/dt;
   const dampingTorque=-1200*bridge.angularVelocity.x,cargoDamping=cargo.velocity.scale(-1.6);
-  bridge.torque.x+=dampingTorque;cargo.applyForce(cargoDamping);
+  bridge.torque.x+=dampingTorque;if(cargoDamping.lengthSquared()>0)cargo.applyForce(cargoDamping);
   const springBefore=ropeEnergy(),potentialBefore=potentialEnergy(),kineticBefore=bodiesEnergy()-potentialBefore;
-  world.step(dt);time+=dt;steps++;
+  pendingStep={worldStep:world.stepnumber,worldTime:world.time,beforeEye,beforeCargo,beforeAngle,bridgeRope,cargoRope,bridgeViscosity,cargoViscosity,
+   work,magnitude,dampingTorque,cargoDamping,springBefore,potentialBefore,kineticBefore,atControl,controlDistance,
+   cargoForce:C(V.add(cargoRope,cargoViscosity)).vadd(cargoDamping)};
+  return {worldStep:pendingStep.worldStep,dt};
+ }
+ /** Read measurements only after the owner's full fixed step has returned.
+  * A missing, duplicate or different-duration world step is an error, never
+  * an accepted energy sample or an implicit second integration. These clock
+  * guards do not identify the caller: the adapter must call LabPhysics.step,
+  * not just world.step, so its own CCD and post-solver work run first. */
+ function finishStep(){
+  checkBinding();
+  if(!pendingStep)throw new Error('No capstan step is prepared');
+  if(world.stepnumber!==pendingStep.worldStep+1)throw new Error('Finish requires exactly one native world step');
+  if(world.dt!==dt||Math.abs(world.time-pendingStep.worldTime-dt)>1e-10*Math.max(1,Math.abs(world.time)))throw new Error('The native world used a different capstan fixed step');
+  const {beforeEye,beforeCargo,beforeAngle,bridgeRope,cargoRope,bridgeViscosity,cargoViscosity,work,magnitude,dampingTorque,cargoDamping,
+   springBefore,potentialBefore,kineticBefore,atControl,controlDistance}=pendingStep;
+  time+=dt;steps++;
   ledger.manualWork+=work;ledger.manualPositiveWork+=Math.max(0,work);ledger.manualNegativeWork+=Math.min(0,work);
   const dEye=V.sub(eye(),beforeEye),dCargo=V.sub(xyz(cargo.position),beforeCargo),ropeWork=V.dot(bridgeRope,dEye)+V.dot(cargoRope,dCargo);
   const bodyDampingWork=dampingTorque*(angle()-beforeAngle)+cargoDamping.dot(C(dCargo)),ropeDampingWork=V.dot(bridgeViscosity,dEye)+V.dot(cargoViscosity,dCargo);
@@ -128,21 +165,39 @@ export function createRoom35CapstanCell({world:existingWorld=null,cargoBody:exis
   const residual=mechanical()+ledger.capstanHeat+ledger.disconnectHeat+ledger.passiveDampingLoss+ledger.ropeDampingLoss-initialEnergy-ledger.manualWork-ledger.fixtureInsertionWork-ledger.portalGeometryWork;
   if(residual>ledger.maxResidual){ledger.maxResidual=residual;ledger.maxResidualAt={time,angle:angle(),springDiscretizationWork:ledger.springDiscretizationWork,integratorAndConstraintWork:ledger.integratorAndConstraintWork};}
   ledger.minResidual=Math.min(ledger.minResidual,residual);ledger.steps=steps;
-  lastManual={active:atControl,force:magnitude,power:work/dt,work,controlDistance:distance(control.position,crank)};maxAngle=Math.max(maxAngle,angle());
+  lastManual={active:atControl,force:magnitude,power:work/dt,work,controlDistance};maxAngle=Math.max(maxAngle,angle());
   ledger.maxManualPower=Math.max(ledger.maxManualPower,lastManual.power);ledger.minManualPower=Math.min(ledger.minManualPower,lastManual.power);ledger.maxManualForce=Math.max(ledger.maxManualForce,magnitude);
- }return diagnostics();}
+  completedWorldStep=world.stepnumber;completedWorldTime=world.time;pendingStep=null;
+  return steps;
+ }
+ /** Convenience clock for the isolated owned world only. A borrowed game
+  * world must retain its owner's entire physics pipeline, including CCD. */
+ function step(count=1){
+  if(existingWorld)throw new Error('A borrowed world requires prepareStep, its original LabPhysics.step, then finishStep');
+  if(!Number.isInteger(count)||count<0)throw new RangeError('The capstan step count must be a nonnegative integer');
+  for(let n=0;n<count;n++){prepareStep();world.step(dt);finishStep();}
+  return diagnostics();
+ }
  function surrogateContacts(){return contactSurrogates.map(body=>{let normalForce=0,contacts=0;for(const c of world.contacts)if(c.enabled!==false&&c.multiplier>0&&[c.bi,c.bj].includes(body)&&[c.bi,c.bj].includes(bridge)){const ny=(c.bi===body?-1:1)*c.ni.y;if(ny>.5){normalForce+=ny*c.multiplier;contacts++;}}return {bodyId:body.id,mass:body.mass,contacts,normalForce,position:xyz(body.position)};});}
  function addContactSurrogate(){
+  requireIdle();
   const p=bridge.pointToWorldFrame(new Vec3(0,1.38,-6)),body=new Body({mass:3.2,position:p,shape:new Box(new Vec3(.4,1.2,.4)),material:mat,linearDamping:0,angularDamping:0,allowSleep:false});
   contactSurrogates.push(body);own(body);ledger.fixtureInsertionWork+=bodyEnergy(body);return body;
  }
- function diagnostics(){const residual=mechanical()+ledger.capstanHeat+ledger.disconnectHeat+ledger.passiveDampingLoss+ledger.ropeDampingLoss-initialEnergy-ledger.manualWork-ledger.fixtureInsertionWork-ledger.portalGeometryWork;return {scope:'assetless passive prototype; no production/game-player load claim',time,steps,dt,angle:angle(),maxAngle,energyResidual:residual,
+ function diagnostics(){const residual=mechanical()+ledger.capstanHeat+ledger.disconnectHeat+ledger.passiveDampingLoss+ledger.ropeDampingLoss-initialEnergy-ledger.manualWork-ledger.fixtureInsertionWork-ledger.portalGeometryWork;return {scope:'assetless passive prototype; no production/game-player load claim',time,steps,dt,phase:disposed?'disposed':pendingStep?'prepared':'idle',worldStep:world.stepnumber,angle:angle(),maxAngle,energyResidual:residual,
   originalCargoBodyId:cargo.id,originalCargoShapeId:originalShape.id,cargoBodyId:cargo.id,cargoShapeId:cargo.shapes[0].id,cargoMass:cargo.mass,cargoPosition:xyz(cargo.position),cargoVelocity:xyz(cargo.velocity),
   bridgePosition:xyz(bridge.position),bridgeAngularVelocity:xyz(bridge.angularVelocity),theta:path?.theta??null,curvatureTurn:path?.curvatureTurn??null,
   pathLength:path?.length??null,crossingClearance:path?path.crossing.distance-2*guide.ropeRadius:null,restLength:rest.left+rest.right,slip,tensions:{...tensions},mechanicalEnergy:mechanical(),initialEnergy,
   ledger:{...ledger},lastManual:{...lastManual},manualApplications,motorEquationPresent:joint.equations.includes(joint.motorEquation),
   keeperBodyId:keeper.id,keeperShapeCount:keeper.shapes.length,keeperInWorld:keeper.world===world,surrogateContacts:surrogateContacts(),energyBarriers:[energyBarrier(-.5),energyBarrier(0)],
   control:{position:[...control.position],pressed:control.pressed},budget:{gravity:G,bridgeMass:bridge.mass,length,width,thickness,originalMass:3.2,originalCargoProvided:!!existingCargo,worldProvided:!!existingWorld,solverIterations:world.solver.iterations,solverTolerance:world.solver.tolerance,cargoLinearDamping:cargo.linearDamping,cargoAngularDamping:cargo.angularDamping,contactEquationStiffness:contactMaterial.contactEquationStiffness,mu,stiffness,ropeViscosity,ropeDiameter:guide.ropeRadius*2,maxElasticExtension,manualPower,manualForce,controlRange,crank:[...crank],gamePlayerMass:0,surrogatePlayerMass:contactSurrogates.reduce((s,b)=>s+b.mass,0)}};}
- return {world,bridge,cargo,originalShape,guide,control,crank,ledger,step,angle,diagnostics,setPortal,mechanical,rest,addContactSurrogate,energyBarrier,
-  dispose(){world.removeConstraint(joint);for(const b of ownedBodies)if(b.world===world)world.removeBody(b);world.removeContactMaterial(contactMaterial);}};
+ return {world,bridge,cargo,originalShape,guide,control,crank,ledger,prepareStep,finishStep,step,angle,diagnostics,setPortal,mechanical,rest,addContactSurrogate,energyBarrier,
+  dispose(){
+   if(disposed)return;
+   // If preparation is abandoned before integration, remove only our still
+   // pending cargo force. Never clear another system's force or advance it.
+   if(pendingStep&&world.stepnumber===pendingStep.worldStep&&cargo.world===world)cargo.force.vsub(pendingStep.cargoForce,cargo.force);
+   pendingStep=null;disposed=true;
+   world.removeConstraint(joint);for(const b of ownedBodies)if(b.world===world)world.removeBody(b);world.removeContactMaterial(contactMaterial);
+  }};
 }

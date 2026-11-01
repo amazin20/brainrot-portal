@@ -1,0 +1,118 @@
+TAP version 13
+# Subtest: 35 capstan: the former long lead admits the rope but obstructs the complete native aperture
+ok 1 - 35 capstan: the former long lead admits the rope but obstructs the complete native aperture
+  ---
+  duration_ms: 183.640855
+  type: 'test'
+  ...
+# Subtest: 35 capstan: both extended pockets clear every actual keeper solid over the full native depth prism
+ok 2 - 35 capstan: both extended pockets clear every actual keeper solid over the full native depth prism
+  ---
+  duration_ms: 82.949537
+  type: 'test'
+  ...
+# Subtest: 35 capstan: a real new obstacle still blocks a geometrically clear extended pocket
+ok 3 - 35 capstan: a real new obstacle still blocks a geometrically clear extended pocket
+  ---
+  duration_ms: 56.646642
+  type: 'test'
+  ...
+# Subtest: 35 capstan: equal lead extension preserves curvature and force ratio and recalibrates finite rope rest length
+ok 4 - 35 capstan: equal lead extension preserves curvature and force ratio and recalibrates finite rope rest length
+  ---
+  duration_ms: 829.119213
+  type: 'test'
+  ...
+# Subtest: 35 native component: one original LabPhysics step owns streaming, integration and original cargo identity
+ok 5 - 35 native component: one original LabPhysics step owns streaming, integration and original cargo identity
+  ---
+  duration_ms: 313.070483
+  type: 'test'
+  ...
+# Subtest: 35 native component: the owner still runs its thin-wall CCD after its original world step
+ok 6 - 35 native component: the owner still runs its thin-wall CCD after its original world step
+  ---
+  duration_ms: 83.508498
+  type: 'test'
+  ...
+# Subtest: 35 native component: disconnected resting original cargo sleeps and zero forces do not wake it
+ok 7 - 35 native component: disconnected resting original cargo sleeps and zero forces do not wake it
+  ---
+  duration_ms: 119.428372
+  type: 'test'
+  ...
+# Subtest: 35 native component: preparation cannot double-apply work or accept a missing or duplicated completion
+ok 8 - 35 native component: preparation cannot double-apply work or accept a missing or duplicated completion
+  ---
+  duration_ms: 63.340661
+  type: 'test'
+  ...
+# Subtest: 35 native component: skipped, doubled and wrong-duration world steps are rejected without accepted ledger samples
+ok 9 - 35 native component: skipped, doubled and wrong-duration world steps are rejected without accepted ledger samples
+  ---
+  duration_ms: 186.911758
+  type: 'test'
+  ...
+# Subtest: 35 native component: original material identity and pending-force ownership survive refusal and disposal
+ok 10 - 35 native component: original material identity and pending-force ownership survive refusal and disposal
+  ---
+  duration_ms: 66.304811
+  type: 'test'
+  ...
+# Subtest: 35 native component: nonnative gravity is refused before constructing a misleading energy ledger
+ok 11 - 35 native component: nonnative gravity is refused before constructing a misleading energy ledger
+  ---
+  duration_ms: 0.750681
+  type: 'test'
+  ...
+# Subtest: 35 prototype: current tangencies, helical keeper and involute apertures determine turn and conserve path length
+ok 12 - 35 prototype: current tangencies, helical keeper and involute apertures determine turn and conserve path length
+  ---
+  duration_ms: 359.784421
+  type: 'test'
+  ...
+# Subtest: 35 prototype: every unilateral static slip projection dissipates elastic energy, including slack and both reversals
+ok 13 - 35 prototype: every unilateral static slip projection dissipates elastic energy, including slack and both reversals
+  ---
+  duration_ms: 10.997587
+  type: 'test'
+  ...
+# Subtest: 35 prototype: projected axial viscosity never leaves the static force cone or supplies positive endpoint work
+ok 14 - 35 prototype: projected axial viscosity never leaves the static force cone or supplies positive endpoint work
+  ---
+  duration_ms: 12.845772
+  type: 'test'
+  ...
+# Subtest: 35 prototype: 0.35rad physical cell has bounded actual-control work and zero positive raw residual at explicit1/960 clock
+ok 15 - 35 prototype: 0.35rad physical cell has bounded actual-control work and zero positive raw residual at explicit1/960 clock
+  ---
+  duration_ms: 1406.023334
+  type: 'test'
+  ...
+# Subtest: 35 prototype: 4.8rad physical cell has bounded actual-control work and zero positive raw residual at explicit1/960 clock
+ok 16 - 35 prototype: 4.8rad physical cell has bounded actual-control work and zero positive raw residual at explicit1/960 clock
+  ---
+  duration_ms: 980.199612
+  type: 'test'
+  ...
+# Subtest: 35 prototype: equal-length readdressing redistributes tension dissipatively and has no portal-work source
+ok 17 - 35 prototype: equal-length readdressing redistributes tension dissipatively and has no portal-work source
+  ---
+  duration_ms: 1006.09705
+  type: 'test'
+  ...
+# Subtest: 35 prototype: actual rope disconnection permits gravity return and original-body catch without a retained angle
+ok 18 - 35 prototype: actual rope disconnection permits gravity return and original-body catch without a retained angle
+  ---
+  duration_ms: 1160.527741
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7031.86744

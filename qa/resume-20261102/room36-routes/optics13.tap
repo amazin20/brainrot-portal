@@ -1,0 +1,21 @@
+✔ Observatory 31: original gameplay and all new relief vertices remain within the old wall panels (1467.004787ms)
+✔ Observatory 32: original gameplay and all new relief vertices remain within the old wall panels (661.029609ms)
+✔ Observatory 33: original gameplay and all new relief vertices remain within the old wall panels (301.29576ms)
+✔ Observatory 34: original gameplay and all new relief vertices remain within the old wall panels (479.836755ms)
+✔ Observatory 35: original gameplay and all new relief vertices remain within the old wall panels (322.445798ms)
+✔ Observatory 36: original gameplay and all new relief vertices remain within the old wall panels (272.774145ms)
+✔ Observatory 37: original gameplay and all new relief vertices remain within the old wall panels (522.220808ms)
+✔ Observatory 38: original gameplay and all new relief vertices remain within the old wall panels (1794.070438ms)
+✔ Observatory 39: original gameplay and all new relief vertices remain within the old wall panels (519.474109ms)
+✔ Observatory 40: original gameplay and all new relief vertices remain within the old wall panels (240.223483ms)
+✔ Original GLB geometry/materials and original portal porcelain retain their identities (304.518926ms)
+✔ Architecture releases its buffers/materials once and restores visibility without a stale render callback (722.082896ms)
+✔ The chapter bounds do not recolour other rooms (2334.714456ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10536.309366

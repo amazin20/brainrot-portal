@@ -1,0 +1,69 @@
+
+> brainrot-portal@1.0.0 build
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 328 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                               14.50 kB │ gzip:   4.61 kB
+dist/assets/index-C001kXKc.css                                58.60 kB │ gzip:  13.53 kB
+dist/assets/LabIntroductoryAlternates-DcdsCClA.js              1.34 kB │ gzip:   0.69 kB
+dist/assets/LabPortalFloorJourney-CSEEN8-s.js                  1.46 kB │ gzip:   0.81 kB
+dist/assets/LabExpansionAlternateJourney47-3qgixs4y.js         1.86 kB │ gzip:   0.92 kB
+dist/assets/LabPuzzleProgression44Journey-DaUntxwr.js          1.88 kB │ gzip:   0.95 kB
+dist/assets/LabExpansionAlternateJourney49-C5tIFxdN.js         1.99 kB │ gzip:   0.96 kB
+dist/assets/LabEchoHorizonJourney-CA_Va2zp.js                  2.22 kB │ gzip:   1.06 kB
+dist/assets/LabExpansionAlternateJourney48-Cm3QSHRU.js         2.28 kB │ gzip:   1.03 kB
+dist/assets/LabPortalEdgeJourney-PN3n9TQ-.js                   2.29 kB │ gzip:   1.17 kB
+dist/assets/LabRoom29Journey-FXLiWbZf.js                       2.59 kB │ gzip:   1.09 kB
+dist/assets/LabSiphonObservatoryJourney-BardtPPw.js            2.65 kB │ gzip:   1.21 kB
+dist/assets/LabRoom23Journey-BuXFJvcn.js                       2.69 kB │ gzip:   1.18 kB
+dist/assets/LabRoom16Journey-CQ-8-j0s.js                       2.75 kB │ gzip:   1.21 kB
+dist/assets/LabRoom22Journey-DiYn-kqX.js                       2.89 kB │ gzip:   1.21 kB
+dist/assets/LabExpansionAlternateJourneyB-6M9dQfOe.js          2.92 kB │ gzip:   1.27 kB
+dist/assets/LabAnimationJourney-DlkAa1vU.js                    3.04 kB │ gzip:   1.50 kB
+dist/assets/LabRoom19Journey-BVk2pOJ3.js                       3.09 kB │ gzip:   1.46 kB
+dist/assets/LabPuzzlePilot43Journey-EONEqQ-I.js                3.11 kB │ gzip:   1.34 kB
+dist/assets/LabRoom28Journey-BK5o10zU.js                       3.24 kB │ gzip:   1.35 kB
+dist/assets/LabRoom17Journey-C2EE7523.js                       3.26 kB │ gzip:   1.41 kB
+dist/assets/LabRoom14Journey-Dhd7slz3.js                       3.29 kB │ gzip:   1.56 kB
+dist/assets/LabRoom27Journey-CtMoXjWq.js                       3.35 kB │ gzip:   1.31 kB
+dist/assets/LabPuzzleProgression51Journey-CN1evakj.js          3.37 kB │ gzip:   1.47 kB
+dist/assets/LabPuzzleProgression46Journey-BXVBK6sz.js          3.57 kB │ gzip:   1.54 kB
+dist/assets/LabRoom24Journey-D25w1OQu.js                       3.62 kB │ gzip:   1.41 kB
+dist/assets/LabCreativeRoom18Journey-tsyd8_5c.js               3.64 kB │ gzip:   1.63 kB
+dist/assets/LabRoom30Journey-zAsFaYdh.js                       3.76 kB │ gzip:   1.53 kB
+dist/assets/LabRoom23PhysicalJourney-CPxEgl0X.js               4.14 kB │ gzip:   1.66 kB
+dist/assets/LabPuzzleProgression49Journey-CAjx8wCt.js          4.59 kB │ gzip:   1.71 kB
+dist/assets/LabRoom15Journey-C0enSrIw.js                       4.60 kB │ gzip:   1.91 kB
+dist/assets/LabRoom25Journey-COqi9k-Z.js                       4.63 kB │ gzip:   1.73 kB
+dist/assets/LabCreativeRoom20Journey-DhSh3-lS.js               4.66 kB │ gzip:   1.96 kB
+dist/assets/LabRoom26Journey-GMbq5-ym.js                       4.94 kB │ gzip:   1.84 kB
+dist/assets/LabRoom20Journey-Dnjdo837.js                       5.01 kB │ gzip:   1.76 kB
+dist/assets/LabPuzzleProgression45Journey-2BZQRxyO.js          5.41 kB │ gzip:   2.00 kB
+dist/assets/LabExpansionJourneyB-DYPYJx8N.js                   5.55 kB │ gzip:   1.96 kB
+dist/assets/LabCreativeRoom17Journey-BTx5Oon6.js               5.83 kB │ gzip:   2.28 kB
+dist/assets/LabPuzzleProgression50Journey-DOsymarP.js          6.10 kB │ gzip:   2.34 kB
+dist/assets/LabPuzzleProgression47Journey-CuTWpOl8.js          6.13 kB │ gzip:   2.70 kB
+dist/assets/LabRoom18Journey-DCd_QK1f.js                       6.17 kB │ gzip:   2.36 kB
+dist/assets/LabRoom13Journey-BJQMsvRB.js                       6.28 kB │ gzip:   2.23 kB
+dist/assets/LabOpenJourney-D1tSbfgB.js                         6.35 kB │ gzip:   2.80 kB
+dist/assets/LabPuzzleProgression48Journey-DeEjXSWz.js          6.92 kB │ gzip:   2.53 kB
+dist/assets/LabExpansionJourneyA-7r-jIxSv.js                   7.36 kB │ gzip:   2.90 kB
+dist/assets/LabResearchJourney-CkdMUPyi.js                     7.90 kB │ gzip:   2.78 kB
+dist/assets/LabWorkshopJourney-BHP4kkk9.js                     8.37 kB │ gzip:   3.39 kB
+dist/assets/LabExtendedJourney-CXvj2AtU.js                     9.20 kB │ gzip:   3.41 kB
+dist/assets/LabFoundationJourney-EfELhFOD.js                   9.21 kB │ gzip:   3.19 kB
+dist/assets/LabPostJourneyB-D69xHFQr.js                       11.18 kB │ gzip:   4.35 kB
+dist/assets/LabPostJourneyA-DzmyhaWj.js                       12.17 kB │ gzip:   4.44 kB
+dist/assets/LabFoundation20PhysicalJourney-C1kDCro_.js        12.26 kB │ gzip:   4.72 kB
+dist/assets/LabPuzzleProgression50BeamJourney-CW9ZLCWv.js     12.59 kB │ gzip:   4.98 kB
+dist/assets/LabV8Journey-DgEsLyft.js                          19.86 kB │ gzip:   5.55 kB
+dist/assets/LabTower41RatchetCellJourney-HPmdIYHw.js          24.19 kB │ gzip:   8.69 kB
+dist/assets/LabSingularityJourney-KONR1hl7.js                 29.44 kB │ gzip:   9.05 kB
+dist/assets/LabTowerJourney-5kHoc0YF.js                       31.41 kB │ gzip:  10.36 kB
+dist/assets/index-1m6rJrS8.js                              2,449.63 kB │ gzip: 793.76 kB
+Campaign package: 14 models, 3.29 MB models; 1 referenced public images/audio; 7.39 MB complete files before ZIP. Startup transfer is measured separately.
+✓ built in 5.32s

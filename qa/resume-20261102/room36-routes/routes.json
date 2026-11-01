@@ -1,0 +1,201 @@
+{
+  "kind": "room36-initial-view-ordinary-regression",
+  "scope": "Real headless production inputs from zero-step normal spawn; not rendered route or aesthetics proof",
+  "pass": true,
+  "rows": [
+    {
+      "route": "off-centre-impact",
+      "pass": true,
+      "state": "won",
+      "physicsSteps": 9626,
+      "observations": 9626,
+      "zeroResets": true,
+      "sameOriginalOwners": true,
+      "assetBuffersUnchanged": true,
+      "frames": 4813,
+      "milestones": [
+        {
+          "name": "Floor-to-wall pair is aimed at the long arm of the real dynamic rotor",
+          "player": [
+            -9.916448321690247,
+            -4,
+            -10.168985042409052
+          ],
+          "cargo": [
+            -24.497533636926068,
+            10.38999815792999,
+            0.1581858067812045
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "The original loose companion retains its falling momentum through the portal",
+          "player": [
+            -18.001818934436102,
+            10,
+            -6.264916654144681
+          ],
+          "cargo": [
+            -11.925638066377772,
+            3.254841639644983,
+            -12.54
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "Actual angular momentum turns the spindle and translates the bridge into its dock",
+          "player": [
+            -18.001818934436162,
+            10,
+            -6.264916654141494
+          ],
+          "cargo": [
+            -12.498886676075315,
+            -3.6100018419701545,
+            -2.2361354034908794
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "The same companion is recovered on the lower service floor",
+          "player": [
+            -11.298034768755631,
+            -4,
+            -2.386230679573422
+          ],
+          "cargo": [
+            -11.066599989126122,
+            -2.9399950777223776,
+            -3.0680209250096304
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "Both travellers walk across the physically docked high cassette",
+          "player": [
+            16.93615830624092,
+            10,
+            -13.000002372014603
+          ],
+          "cargo": [
+            17.656146431826492,
+            11.06738974710296,
+            -13.002677054280088
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            16.93615830624092,
+            10,
+            -13.000002372014603
+          ],
+          "cargo": [
+            17.656146431826492,
+            11.06738974710296,
+            -13.002677054280088
+          ],
+          "teleports": 0
+        }
+      ]
+    },
+    {
+      "route": "scout-impact-first",
+      "pass": true,
+      "state": "won",
+      "physicsSteps": 9808,
+      "observations": 9808,
+      "zeroResets": true,
+      "sameOriginalOwners": true,
+      "assetBuffersUnchanged": true,
+      "frames": 4904,
+      "milestones": [
+        {
+          "name": "Floor-to-wall pair is aimed at the long arm of the real dynamic rotor",
+          "player": [
+            -18.075716890455137,
+            -4,
+            10.19839725094593
+          ],
+          "cargo": [
+            -24.602729704999806,
+            10.389998161323337,
+            1.2217873526919019
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "The original loose companion retains its falling momentum through the portal",
+          "player": [
+            -18.00181564350715,
+            10,
+            -6.2641061167023295
+          ],
+          "cargo": [
+            -12.055431960264848,
+            1.6889064548767414,
+            -12.54
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "Actual angular momentum turns the spindle and translates the bridge into its dock",
+          "player": [
+            -18.001815643507207,
+            10,
+            -6.264106116699158
+          ],
+          "cargo": [
+            -11.881754803488592,
+            -3.6100018425365006,
+            -2.3284708509808003
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "The same companion is recovered on the lower service floor",
+          "player": [
+            -11.296994159784209,
+            -4,
+            -2.0417399651398864
+          ],
+          "cargo": [
+            -11.062253089439633,
+            -2.9400016701381237,
+            -2.7223989295604807
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "Both travellers walk across the physically docked high cassette",
+          "player": [
+            16.93615831012665,
+            10,
+            -13.00000237228151
+          ],
+          "cargo": [
+            17.656146419394652,
+            11.050867775144415,
+            -12.98848076326864
+          ],
+          "teleports": 0
+        },
+        {
+          "name": "both at exit",
+          "player": [
+            16.93615831012665,
+            10,
+            -13.00000237228151
+          ],
+          "cargo": [
+            17.656146419394652,
+            11.050867775144415,
+            -12.98848076326864
+          ],
+          "teleports": 0
+        }
+      ]
+    }
+  ]
+}

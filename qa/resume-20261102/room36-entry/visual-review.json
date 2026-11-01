@@ -1,0 +1,33 @@
+{
+  "kind": "individual-native-entry-visual-review",
+  "reviewer": "room36_camera",
+  "keptView": {
+    "yaw": -1,
+    "pitch": -0.55
+  },
+  "previousView": {
+    "yaw": -1.6,
+    "pitch": -0.78
+  },
+  "reviewedFiles": {
+    "room-36-wide-spawn.png": "e447dcb15e146ad986726a302a2c5f93e5b8ce6ca87538d3e0879476b950bb17",
+    "room-36-wide-prior-angle.png": "502039d57517c59fa8b162dc1355f308108f10faa8864a6d837c8002743f5bdd",
+    "room-36-wide-candidate-a.png": "28d08e604ef0735e818aa863d659710eee81df4307068e3150cd00c5ffdeaabf",
+    "room-36-portrait-spawn-ui.png": "f4bba84370c05c2b45399bf633a4cf4d547a02a1edfe2c8cc0b273aaad6815a7",
+    "room-36-portrait-prior-angle-ui.png": "2e1c43c10e64fa4a26653cf33ca5ced941d62a18e2d325584a8a75dc278d3939",
+    "room-36-portrait-candidate-a-ui.png": "2159d7e7a2ca81ef6e58ba5e77a7dd9081d094c1e14bb4db8516a6ea779116b4"
+  },
+  "decision": "Keep candidate B (spawn) for room36 entry.",
+  "findings": {
+    "wide": "Rotor is now to the right of the hero, with its grey paddle silhouette, orange ratchet side and support assembly readable together. Upper receiving gallery is in view. Original companion remains fully visible and separate at lower left. Downward angle is visibly calmer than prior view.",
+    "portrait": "Original hero and companion are both fully inside the viewport with separate silhouettes. Rotor and orange ratchet are inside the frame to the right of the hero, where prior-angle clipped most of the mechanism at left. Upper gallery is readable. Full-page room36 badge is intact.",
+    "candidateA": "Improves baseline but leaves machine closer behind hero and uses a steeper downward angle. B provides clearer horizontal separation."
+  },
+  "limits": [
+    "Entry framing only; no claim of whole-room aesthetic completion.",
+    "Near quay edge and existing cage still conceal lower parts of mechanism; no physics or guard geometry was removed.",
+    "Native screenshots use software WebGL and establish composition, not real hardware FPS."
+  ],
+  "entryFramingAccepted": true,
+  "wholeRoomVisualAccepted": false
+}
