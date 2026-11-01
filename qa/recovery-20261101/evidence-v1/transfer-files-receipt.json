@@ -1,0 +1,40 @@
+{
+  "archive": {
+    "bytes": 13846726,
+    "path": "historical-and-current-qa-evidence-v1.tar.gz",
+    "sha256": "de758140deb682c5b937a5dbd1379efb9f763eaf5612bd1a05efb466b5dc6850"
+  },
+  "archiveBytesUnchangedSinceVerification": true,
+  "auxiliaryFiles": {
+    "build-proof-archive.log": {
+      "bytes": 1728,
+      "sha256": "c897ce0f035a92d181a1fc71330b8000cb9abeb111d75396302d3ff716d9d81c"
+    },
+    "build_proof_archive.py": {
+      "bytes": 21213,
+      "sha256": "fefe8c29f5d23cb55fc7e07c2495d117ce8553a7cb34513ab2172528ae1f9eb9"
+    },
+    "ordered-parts-manifest.json": {
+      "bytes": 1787,
+      "sha256": "8888ec86e64132369652c6cb9cdbf614b073f6b206d34bce0fe6d9a9b3d60a59"
+    },
+    "original-file-manifest.json": {
+      "bytes": 140820,
+      "sha256": "60642978ebcfa389f61306f11c2bccca45852c274f86f79964bd7d269c1dbde9"
+    },
+    "scope-and-external-references.json": {
+      "bytes": 97104,
+      "sha256": "f68e4f7d1d7e5c38d4c1a394dbb0ad5f94dfd081362e567decda7bbf98afc1ea"
+    },
+    "selection-sanity-summary.json": {
+      "bytes": 10091,
+      "sha256": "70130e143f86306130c36a290113fcfc52552d695357466710c9d7b7e3e220f5"
+    },
+    "verification-receipt.json": {
+      "bytes": 1397,
+      "sha256": "f9f3009df7f4c4a500cc08d670e64bb9f6abc43b45a0780e22642153f00ee894"
+    }
+  },
+  "partsManifest": "ordered-parts-manifest.json",
+  "uploadedByThisAgent": false
+}

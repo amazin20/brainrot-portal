@@ -1,0 +1,36 @@
+Frozen selection: 532 files, 155073699 logical bytes
+Scoped text scan: 511 files, no detected patterns
+First deterministic serialization: 13846726 de758140deb682c5b937a5dbd1379efb9f763eaf5612bd1a05efb466b5dc6850
+Second serialization byte count and SHA exactly equal
+Actual extracted roundtrip and original/source immutability PASS
+{
+  "kind": "DETERMINISTIC_QA_DURABLE_CANDIDATE_VERIFIED_NOT_UPLOADED",
+  "createdAt": "2026-11-01T10:41:39.260459+00:00",
+  "archive": "historical-and-current-qa-evidence-v1.tar.gz",
+  "archiveBytes": 13846726,
+  "archiveSha256": "de758140deb682c5b937a5dbd1379efb9f763eaf5612bd1a05efb466b5dc6850",
+  "originalFileManifestSha256": "60642978ebcfa389f61306f11c2bccca45852c274f86f79964bd7d269c1dbde9",
+  "scopeSha256": "f68e4f7d1d7e5c38d4c1a394dbb0ad5f94dfd081362e567decda7bbf98afc1ea",
+  "partsManifestSha256": "8888ec86e64132369652c6cb9cdbf614b073f6b206d34bce0fe6d9a9b3d60a59",
+  "parts": 7,
+  "logicalOriginalFiles": 532,
+  "logicalOriginalBytes": 155073699,
+  "storedRegularBytes": 113416101,
+  "wholeFileHardlinks": 117,
+  "originalFailedReportFilesPreserved": 19,
+  "allActualExtractedMemberLengthsAndSha256Match": true,
+  "sourceFilesBeforeAfterByteExact": true,
+  "selectedFamilyInventoryBeforeAfterExact": true,
+  "currentMain393Build5SourceBeforeAfterExact": true,
+  "secondSerializationExactlySameShaAndLength": true,
+  "roundtripStagingRemoved": true,
+  "scopedSecretPatternFindings": [],
+  "allMemberPathsRetained": true,
+  "allOriginalFailureFlagsUnchanged": true,
+  "rootRuntimeClosedBeforeArchiving": true,
+  "newRuntimeStarted": false,
+  "mainOrGitOrGithubWritten": false,
+  "all51QualityAccepted": false,
+  "wholeRoomVisualAccepted": false,
+  "elapsedSeconds": 13.725765751998551
+}

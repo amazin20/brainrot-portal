@@ -1,0 +1,2238 @@
+{
+  "activeOrSeparatelyArchivedFamiliesExcludedWithoutTraversal": [
+    "room44-live-integration-proposal",
+    "room44-native-prestep-proposal",
+    "room44-signed-bridge-proposal",
+    "room48-phase-proof-archive",
+    "room48-phase-proposal"
+  ],
+  "all51UniqueAndExcellentAccepted": false,
+  "archivePolicy": {
+    "duplicates": "Hardlink only identical complete SHA256+length, to an earlier regular payload; every original path retained",
+    "fileModeOctal": "0644",
+    "gid": 0,
+    "gzipFilename": "",
+    "gzipMtime": 0,
+    "memberOrder": "binary lexicographic",
+    "mtime": 0,
+    "uid": 0
+  },
+  "createdAt": "2026-11-01T10:41:29.746753+00:00",
+  "currentMainSource": {
+    "build": 5,
+    "changedFromBuild4": [
+      "src/game/LabOpticsArchitecture.js"
+    ],
+    "manifestSha256": "6740a831f72f8e34dc765414e4f8785c6d24c25ae6b6d069ce205ae2a12a4636",
+    "sourceCount": 393
+  },
+  "currentWholeRoomVisualAccepted": false,
+  "evidenceScope": [
+    "Accepted18 ordinary-input headless cases across frozen snapshots; all older failed cases/logs also kept",
+    "Historic build4 selected66checks plus strict38 complete before/after contracts and original failed attempts",
+    "Every original native failed/partial/passed report and RAW image from selected historical families; originalFAIL flags never rewritten",
+    "Build4 collector10 can pass entry guards while strictNetwork/report staysFAIL; neither is relabeled",
+    "Current build5 material-only32 candidate: original393source/77dist/14GLB manifests, selectedcontract/lifecycle/pixellocality and native32twoformats",
+    "Individual ROOT entry reviews are observations, not whole-room or all51 aesthetic approval"
+  ],
+  "excludedFiles": [
+    {
+      "bytes": 243028,
+      "path": "qa-recovery-20261101/durable-source-backup/alternate-index",
+      "reason": "Temporary binary Git index"
+    },
+    {
+      "bytes": 244108,
+      "path": "qa-recovery-20261101/durable-source-backup/alternate-index2",
+      "reason": "Temporary binary Git index"
+    },
+    {
+      "bytes": 245161,
+      "path": "qa-recovery-20261101/durable-source-backup/checkpoint3-index",
+      "reason": "Temporary binary Git index"
+    },
+    {
+      "bytes": 245457,
+      "path": "qa-recovery-20261101/durable-source-backup/checkpoint4-index",
+      "reason": "Temporary binary Git index"
+    },
+    {
+      "bytes": 246602,
+      "path": "qa-recovery-20261101/durable-source-backup/checkpoint5-index",
+      "reason": "Temporary binary Git index"
+    },
+    {
+      "bytes": 248069,
+      "path": "qa-recovery-20261101/durable-source-backup/checkpoint6-index",
+      "reason": "Temporary binary Git index"
+    },
+    {
+      "bytes": 244212,
+      "path": "qa-recovery-20261101/durable-source-backup/core-fix-index",
+      "reason": "Temporary binary Git index"
+    },
+    {
+      "bytes": 158200,
+      "path": "qa-recovery-20261101/frozen-build1/dist/art/portal-laboratory-menu.webp",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3040,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabAnimationJourney-CFaKxLSA.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5831,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabCreativeRoom17Journey-yveMH46N.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3636,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabCreativeRoom18Journey-B9lAs1hZ.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4663,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabCreativeRoom20Journey-C28Skoxk.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2217,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabEchoHorizonJourney-BEDXDu0K.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1864,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabExpansionAlternateJourney47-3qgixs4y.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2275,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabExpansionAlternateJourney48-Be02sl9P.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1985,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabExpansionAlternateJourney49-ChmYeqGR.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2916,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabExpansionAlternateJourneyB-CoR9vIhn.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 7363,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabExpansionJourneyA-CP_WRxMo.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5545,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabExpansionJourneyB-D9XLU6Yt.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 9204,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabExtendedJourney-BOhF9ZdD.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 12259,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabFoundation20PhysicalJourney-CZYniFbq.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 9213,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabFoundationJourney-Dk4IFzNs.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1341,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6345,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabOpenJourney-9ye2vdjX.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2293,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabPortalEdgeJourney-BZ2VW136.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1462,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabPortalFloorJourney-BvIQYKws.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 12151,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabPostJourneyA-CicJme-Y.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 11176,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabPostJourneyB-DQhZqaqM.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3106,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabPuzzlePilot43Journey-D39wBFsn.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1876,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabPuzzleProgression44Journey-C5xTXS2r.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5412,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabPuzzleProgression45Journey-BX6GJWqg.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3569,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabPuzzleProgression46Journey-3Mw4vAuV.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6134,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabPuzzleProgression47Journey-BvCDKrMF.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6921,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabPuzzleProgression48Journey-DTVWVvAw.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4589,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabPuzzleProgression49Journey-CivUCQMm.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 12593,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabPuzzleProgression50BeamJourney-B2JZ3EM_.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6103,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabPuzzleProgression50Journey-CbRAsJ0l.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3372,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabPuzzleProgression51Journey-DRpXp_ek.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 7904,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabResearchJourney-C14dd9G9.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6276,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabRoom13Journey-BJQMsvRB.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3287,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabRoom14Journey-C5zgrQj-.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4604,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabRoom15Journey-DdOa6AU-.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2747,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabRoom16Journey-CQ-8-j0s.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3260,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabRoom17Journey-C2EE7523.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6174,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabRoom18Journey-DdmyYOkC.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3087,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabRoom19Journey-BVk2pOJ3.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5013,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabRoom20Journey-Dnjdo837.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2888,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabRoom22Journey-Ba4wIKbS.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2689,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabRoom23Journey-l6XXTRWw.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4135,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabRoom23PhysicalJourney-CwHDBUEL.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3621,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabRoom24Journey-CInHAT4m.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4626,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabRoom25Journey-COqi9k-Z.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4935,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabRoom26Journey-GMbq5-ym.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3350,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabRoom27Journey-CtMoXjWq.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3238,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabRoom28Journey-BK5o10zU.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2592,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabRoom29Journey-FXLiWbZf.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3762,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabRoom30Journey-zAsFaYdh.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 29437,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabSingularityJourney-botJ13c9.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2649,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabSiphonObservatoryJourney-Ba-itCoT.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 24187,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabTower41RatchetCellJourney-CVWH2-11.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 31405,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabTowerJourney-CWNNLRwz.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 19856,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabV8Journey-Dt2_32au.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 8365,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/LabWorkshopJourney-DK2x5eL2.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 58602,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/index-C001kXKc.css",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2438583,
+      "path": "qa-recovery-20261101/frozen-build1/dist/assets/index-CZS_dQtR.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 719410,
+      "path": "qa-recovery-20261101/frozen-build1/dist/draco/draco_decoder.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 285747,
+      "path": "qa-recovery-20261101/frozen-build1/dist/draco/draco_decoder.wasm",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 58763,
+      "path": "qa-recovery-20261101/frozen-build1/dist/draco/draco_wasm_wrapper.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 14498,
+      "path": "qa-recovery-20261101/frozen-build1/dist/index.html",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2421,
+      "path": "qa-recovery-20261101/frozen-build1/dist/models/runtime/manifest.json",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 549756,
+      "path": "qa-recovery-20261101/frozen-build1/dist/models/runtime/model-01-player.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 510376,
+      "path": "qa-recovery-20261101/frozen-build1/dist/models/runtime/model-02-cargo.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 393116,
+      "path": "qa-recovery-20261101/frozen-build1/dist/models/runtime/model-11-portal-gun.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 404076,
+      "path": "qa-recovery-20261101/frozen-build1/dist/models/runtime/model-19-lift-platform.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 377108,
+      "path": "qa-recovery-20261101/frozen-build1/dist/models/runtime/model-22-terminal.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 103600,
+      "path": "qa-recovery-20261101/frozen-build1/dist/models/runtime/model-23-floor-tile.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 62448,
+      "path": "qa-recovery-20261101/frozen-build1/dist/models/runtime/model-24-wall-panel.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 366120,
+      "path": "qa-recovery-20261101/frozen-build1/dist/models/runtime/model-28-rotating-panel.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 390244,
+      "path": "qa-recovery-20261101/frozen-build1/dist/models/runtime/model-29-pressure-platform.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 25768,
+      "path": "qa-recovery-20261101/frozen-build1/dist/models/runtime/model-31-wind-generator.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 25400,
+      "path": "qa-recovery-20261101/frozen-build1/dist/models/runtime/model-32-spring-ram.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 27816,
+      "path": "qa-recovery-20261101/frozen-build1/dist/models/runtime/model-35-shutter-fan.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 25764,
+      "path": "qa-recovery-20261101/frozen-build1/dist/models/runtime/model-37-extension-bridge.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 28608,
+      "path": "qa-recovery-20261101/frozen-build1/dist/models/runtime/model-39-cable-winch.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 158200,
+      "path": "qa-recovery-20261101/frozen-build2/dist/art/portal-laboratory-menu.webp",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3040,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabAnimationJourney-CFaKxLSA.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5831,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabCreativeRoom17Journey-yveMH46N.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3636,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabCreativeRoom18Journey-B9lAs1hZ.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4663,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabCreativeRoom20Journey-C28Skoxk.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2217,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabEchoHorizonJourney-BEDXDu0K.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1864,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabExpansionAlternateJourney47-3qgixs4y.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2275,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabExpansionAlternateJourney48-Be02sl9P.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1985,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabExpansionAlternateJourney49-ChmYeqGR.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2916,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabExpansionAlternateJourneyB-CoR9vIhn.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 7363,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabExpansionJourneyA-CP_WRxMo.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5545,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabExpansionJourneyB-D9XLU6Yt.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 9204,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabExtendedJourney-BOhF9ZdD.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 12259,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabFoundation20PhysicalJourney-CZYniFbq.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 9213,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabFoundationJourney-Dk4IFzNs.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1341,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6345,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabOpenJourney-9ye2vdjX.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2293,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabPortalEdgeJourney-BZ2VW136.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1462,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabPortalFloorJourney-BvIQYKws.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 12151,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabPostJourneyA-CicJme-Y.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 11176,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabPostJourneyB-DQhZqaqM.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3106,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabPuzzlePilot43Journey-D39wBFsn.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1876,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabPuzzleProgression44Journey-C5xTXS2r.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5412,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabPuzzleProgression45Journey-BX6GJWqg.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3569,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabPuzzleProgression46Journey-3Mw4vAuV.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6134,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabPuzzleProgression47Journey-BvCDKrMF.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6921,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabPuzzleProgression48Journey-DTVWVvAw.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4589,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabPuzzleProgression49Journey-CivUCQMm.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 12593,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabPuzzleProgression50BeamJourney-B2JZ3EM_.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6103,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabPuzzleProgression50Journey-CbRAsJ0l.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3372,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabPuzzleProgression51Journey-DRpXp_ek.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 7904,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabResearchJourney-C14dd9G9.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6276,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabRoom13Journey-BJQMsvRB.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3287,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabRoom14Journey-C5zgrQj-.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4604,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabRoom15Journey-DdOa6AU-.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2747,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabRoom16Journey-CQ-8-j0s.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3260,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabRoom17Journey-C2EE7523.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6174,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabRoom18Journey-DdmyYOkC.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3087,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabRoom19Journey-BVk2pOJ3.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5013,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabRoom20Journey-Dnjdo837.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2888,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabRoom22Journey-Ba4wIKbS.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2689,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabRoom23Journey-l6XXTRWw.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4135,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabRoom23PhysicalJourney-CwHDBUEL.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3621,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabRoom24Journey-CInHAT4m.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4626,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabRoom25Journey-COqi9k-Z.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4935,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabRoom26Journey-GMbq5-ym.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3350,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabRoom27Journey-CtMoXjWq.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3238,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabRoom28Journey-BK5o10zU.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2592,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabRoom29Journey-FXLiWbZf.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3762,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabRoom30Journey-zAsFaYdh.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 29437,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabSingularityJourney-botJ13c9.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2649,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabSiphonObservatoryJourney-Ba-itCoT.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 24187,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabTower41RatchetCellJourney-CVWH2-11.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 31405,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabTowerJourney-CWNNLRwz.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 19856,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabV8Journey-Dt2_32au.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 8365,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/LabWorkshopJourney-DK2x5eL2.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 58602,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/index-C001kXKc.css",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2438583,
+      "path": "qa-recovery-20261101/frozen-build2/dist/assets/index-CZS_dQtR.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 719410,
+      "path": "qa-recovery-20261101/frozen-build2/dist/draco/draco_decoder.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 285747,
+      "path": "qa-recovery-20261101/frozen-build2/dist/draco/draco_decoder.wasm",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 58763,
+      "path": "qa-recovery-20261101/frozen-build2/dist/draco/draco_wasm_wrapper.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 14498,
+      "path": "qa-recovery-20261101/frozen-build2/dist/index.html",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2421,
+      "path": "qa-recovery-20261101/frozen-build2/dist/models/runtime/manifest.json",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 549756,
+      "path": "qa-recovery-20261101/frozen-build2/dist/models/runtime/model-01-player.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 510376,
+      "path": "qa-recovery-20261101/frozen-build2/dist/models/runtime/model-02-cargo.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 393116,
+      "path": "qa-recovery-20261101/frozen-build2/dist/models/runtime/model-11-portal-gun.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 404076,
+      "path": "qa-recovery-20261101/frozen-build2/dist/models/runtime/model-19-lift-platform.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 377108,
+      "path": "qa-recovery-20261101/frozen-build2/dist/models/runtime/model-22-terminal.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 103600,
+      "path": "qa-recovery-20261101/frozen-build2/dist/models/runtime/model-23-floor-tile.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 62448,
+      "path": "qa-recovery-20261101/frozen-build2/dist/models/runtime/model-24-wall-panel.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 366120,
+      "path": "qa-recovery-20261101/frozen-build2/dist/models/runtime/model-28-rotating-panel.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 390244,
+      "path": "qa-recovery-20261101/frozen-build2/dist/models/runtime/model-29-pressure-platform.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 25768,
+      "path": "qa-recovery-20261101/frozen-build2/dist/models/runtime/model-31-wind-generator.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 25400,
+      "path": "qa-recovery-20261101/frozen-build2/dist/models/runtime/model-32-spring-ram.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 27816,
+      "path": "qa-recovery-20261101/frozen-build2/dist/models/runtime/model-35-shutter-fan.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 25764,
+      "path": "qa-recovery-20261101/frozen-build2/dist/models/runtime/model-37-extension-bridge.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 28608,
+      "path": "qa-recovery-20261101/frozen-build2/dist/models/runtime/model-39-cable-winch.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 158200,
+      "path": "qa-recovery-20261101/frozen-build3/dist/art/portal-laboratory-menu.webp",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3040,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabAnimationJourney-CRvS_p81.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5831,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabCreativeRoom17Journey-BkUpuE1n.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3636,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabCreativeRoom18Journey-BFoZ5MZw.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4663,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabCreativeRoom20Journey-ugjv2Vpv.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2217,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabEchoHorizonJourney-D1cw5C7T.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1864,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabExpansionAlternateJourney47-3qgixs4y.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2275,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabExpansionAlternateJourney48-BCdvWD8U.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1985,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabExpansionAlternateJourney49-D1n3Xonv.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2916,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabExpansionAlternateJourneyB-D4N89osg.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 7363,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabExpansionJourneyA-CdqDpFNX.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5545,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabExpansionJourneyB-PNkSdBBH.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 9204,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabExtendedJourney-DoCtN2Yg.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 12259,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabFoundation20PhysicalJourney-0n-GEAWR.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 9213,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabFoundationJourney--o1YixaW.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1341,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6345,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabOpenJourney-guBBIbAc.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2293,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabPortalEdgeJourney-BLudo2HV.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1462,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabPortalFloorJourney-CBk9jFHD.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 12151,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabPostJourneyA-CPXTm6xA.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 11176,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabPostJourneyB-CYmT5nTQ.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3106,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabPuzzlePilot43Journey-E-1dfQfB.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1876,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabPuzzleProgression44Journey-BQ1m1uLm.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5412,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabPuzzleProgression45Journey-DGtsOn6I.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3569,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabPuzzleProgression46Journey-CjKcUN65.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6134,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabPuzzleProgression47Journey-B174hI0-.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6921,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabPuzzleProgression48Journey-DtzlWFG6.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4589,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabPuzzleProgression49Journey-B1uPWxim.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 12593,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabPuzzleProgression50BeamJourney-xXWpjsnd.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6103,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabPuzzleProgression50Journey-CDkRjTwt.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3372,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabPuzzleProgression51Journey-BtnEjNYP.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 7904,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabResearchJourney-BMM_tyX7.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6276,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabRoom13Journey-BJQMsvRB.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3287,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabRoom14Journey-DapoFrKc.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4604,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabRoom15Journey-B5TpNpXv.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2747,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabRoom16Journey-CQ-8-j0s.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3260,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabRoom17Journey-C2EE7523.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6174,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabRoom18Journey-DiX58me_.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3087,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabRoom19Journey-BVk2pOJ3.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5013,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabRoom20Journey-Dnjdo837.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2888,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabRoom22Journey-BITbCJjR.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2689,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabRoom23Journey-FeiL8f7l.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4135,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabRoom23PhysicalJourney--Znxzn9O.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3621,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabRoom24Journey-DCOMGWTh.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4626,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabRoom25Journey-COqi9k-Z.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4935,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabRoom26Journey-GMbq5-ym.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3350,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabRoom27Journey-CtMoXjWq.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3238,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabRoom28Journey-BK5o10zU.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2592,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabRoom29Journey-FXLiWbZf.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3762,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabRoom30Journey-zAsFaYdh.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 29437,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabSingularityJourney-11OXrbl5.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2649,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabSiphonObservatoryJourney-DZoEPC9K.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 24187,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabTower41RatchetCellJourney-CMSSUY5Z.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 31405,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabTowerJourney-CGnqPoxE.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 19856,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabV8Journey-BdMeMZbQ.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 8365,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/LabWorkshopJourney-CHSoW4s8.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 58602,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/index-C001kXKc.css",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2438570,
+      "path": "qa-recovery-20261101/frozen-build3/dist/assets/index-uomaZS5x.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 719410,
+      "path": "qa-recovery-20261101/frozen-build3/dist/draco/draco_decoder.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 285747,
+      "path": "qa-recovery-20261101/frozen-build3/dist/draco/draco_decoder.wasm",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 58763,
+      "path": "qa-recovery-20261101/frozen-build3/dist/draco/draco_wasm_wrapper.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 14498,
+      "path": "qa-recovery-20261101/frozen-build3/dist/index.html",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2421,
+      "path": "qa-recovery-20261101/frozen-build3/dist/models/runtime/manifest.json",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 549756,
+      "path": "qa-recovery-20261101/frozen-build3/dist/models/runtime/model-01-player.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 510376,
+      "path": "qa-recovery-20261101/frozen-build3/dist/models/runtime/model-02-cargo.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 393116,
+      "path": "qa-recovery-20261101/frozen-build3/dist/models/runtime/model-11-portal-gun.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 404076,
+      "path": "qa-recovery-20261101/frozen-build3/dist/models/runtime/model-19-lift-platform.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 377108,
+      "path": "qa-recovery-20261101/frozen-build3/dist/models/runtime/model-22-terminal.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 103600,
+      "path": "qa-recovery-20261101/frozen-build3/dist/models/runtime/model-23-floor-tile.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 62448,
+      "path": "qa-recovery-20261101/frozen-build3/dist/models/runtime/model-24-wall-panel.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 366120,
+      "path": "qa-recovery-20261101/frozen-build3/dist/models/runtime/model-28-rotating-panel.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 390244,
+      "path": "qa-recovery-20261101/frozen-build3/dist/models/runtime/model-29-pressure-platform.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 25768,
+      "path": "qa-recovery-20261101/frozen-build3/dist/models/runtime/model-31-wind-generator.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 25400,
+      "path": "qa-recovery-20261101/frozen-build3/dist/models/runtime/model-32-spring-ram.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 27816,
+      "path": "qa-recovery-20261101/frozen-build3/dist/models/runtime/model-35-shutter-fan.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 25764,
+      "path": "qa-recovery-20261101/frozen-build3/dist/models/runtime/model-37-extension-bridge.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 28608,
+      "path": "qa-recovery-20261101/frozen-build3/dist/models/runtime/model-39-cable-winch.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 158200,
+      "path": "qa-recovery-20261101/frozen-build4/dist/art/portal-laboratory-menu.webp",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3040,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabAnimationJourney-C9ilZHOo.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5831,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabCreativeRoom17Journey-Cg5-E8y6.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3636,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabCreativeRoom18Journey-BwnFnbwk.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4663,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabCreativeRoom20Journey-DQZl3uqm.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2217,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabEchoHorizonJourney-DcqTxZEP.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1864,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabExpansionAlternateJourney47-3qgixs4y.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2275,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabExpansionAlternateJourney48-CJ_iY0zc.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1985,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabExpansionAlternateJourney49-Cb_Fa8lw.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2916,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabExpansionAlternateJourneyB-CnoKJJsY.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 7363,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabExpansionJourneyA-DOSBXAq8.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5545,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabExpansionJourneyB-9zFhyNXE.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 9204,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabExtendedJourney-CAoXW_zt.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 12259,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabFoundation20PhysicalJourney-DiygL0Sk.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 9213,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabFoundationJourney-BD97uB9S.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1341,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6345,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabOpenJourney-BtJF7rPa.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2293,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabPortalEdgeJourney-CAE6BVeW.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1462,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabPortalFloorJourney-B0dpE56J.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 12170,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabPostJourneyA-DiXRQGqR.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 11176,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabPostJourneyB-D0BefTXv.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3106,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabPuzzlePilot43Journey-BLdngNyY.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1876,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabPuzzleProgression44Journey-CpYxHE54.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5412,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabPuzzleProgression45Journey-DyL6AD7d.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3569,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabPuzzleProgression46Journey-CbkBQ3nh.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6134,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabPuzzleProgression47Journey-ylNJuPu7.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6921,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabPuzzleProgression48Journey-DVP33S1B.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4589,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabPuzzleProgression49Journey-CYY5oBci.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 12593,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabPuzzleProgression50BeamJourney-BfdOkLql.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6103,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabPuzzleProgression50Journey-BSsjcVLm.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3372,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabPuzzleProgression51Journey-DA0ZrDc4.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 7904,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabResearchJourney-DVOrEAwl.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6276,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabRoom13Journey-BJQMsvRB.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3287,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabRoom14Journey-CpSIIKdh.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4604,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabRoom15Journey-DwEBHZ-O.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2747,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabRoom16Journey-CQ-8-j0s.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3260,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabRoom17Journey-C2EE7523.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6174,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabRoom18Journey-Dk2lbr9k.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3087,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabRoom19Journey-BVk2pOJ3.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5013,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabRoom20Journey-Dnjdo837.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2888,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabRoom22Journey-DDirImp-.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2689,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabRoom23Journey-DzkJIn6-.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4135,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabRoom23PhysicalJourney-C8oZ-nOa.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3621,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabRoom24Journey-DOfB-2KO.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4626,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabRoom25Journey-COqi9k-Z.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4935,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabRoom26Journey-GMbq5-ym.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3350,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabRoom27Journey-CtMoXjWq.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3238,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabRoom28Journey-BK5o10zU.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2592,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabRoom29Journey-FXLiWbZf.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3762,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabRoom30Journey-zAsFaYdh.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 29437,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabSingularityJourney-BxldkPrS.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2649,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabSiphonObservatoryJourney-CsOcO3Gc.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 24187,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabTower41RatchetCellJourney-DIhCAGl7.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 31405,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabTowerJourney-D-UFRTqz.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 19856,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabV8Journey-asnhwDW_.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 8365,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/LabWorkshopJourney-Dgr_mXoV.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 58602,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/index-C001kXKc.css",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2438570,
+      "path": "qa-recovery-20261101/frozen-build4/dist/assets/index-y9XS5R-w.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 719410,
+      "path": "qa-recovery-20261101/frozen-build4/dist/draco/draco_decoder.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 285747,
+      "path": "qa-recovery-20261101/frozen-build4/dist/draco/draco_decoder.wasm",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 58763,
+      "path": "qa-recovery-20261101/frozen-build4/dist/draco/draco_wasm_wrapper.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 14498,
+      "path": "qa-recovery-20261101/frozen-build4/dist/index.html",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2421,
+      "path": "qa-recovery-20261101/frozen-build4/dist/models/runtime/manifest.json",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 549756,
+      "path": "qa-recovery-20261101/frozen-build4/dist/models/runtime/model-01-player.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 510376,
+      "path": "qa-recovery-20261101/frozen-build4/dist/models/runtime/model-02-cargo.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 393116,
+      "path": "qa-recovery-20261101/frozen-build4/dist/models/runtime/model-11-portal-gun.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 404076,
+      "path": "qa-recovery-20261101/frozen-build4/dist/models/runtime/model-19-lift-platform.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 377108,
+      "path": "qa-recovery-20261101/frozen-build4/dist/models/runtime/model-22-terminal.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 103600,
+      "path": "qa-recovery-20261101/frozen-build4/dist/models/runtime/model-23-floor-tile.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 62448,
+      "path": "qa-recovery-20261101/frozen-build4/dist/models/runtime/model-24-wall-panel.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 366120,
+      "path": "qa-recovery-20261101/frozen-build4/dist/models/runtime/model-28-rotating-panel.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 390244,
+      "path": "qa-recovery-20261101/frozen-build4/dist/models/runtime/model-29-pressure-platform.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 25768,
+      "path": "qa-recovery-20261101/frozen-build4/dist/models/runtime/model-31-wind-generator.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 25400,
+      "path": "qa-recovery-20261101/frozen-build4/dist/models/runtime/model-32-spring-ram.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 27816,
+      "path": "qa-recovery-20261101/frozen-build4/dist/models/runtime/model-35-shutter-fan.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 25764,
+      "path": "qa-recovery-20261101/frozen-build4/dist/models/runtime/model-37-extension-bridge.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 28608,
+      "path": "qa-recovery-20261101/frozen-build4/dist/models/runtime/model-39-cable-winch.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 158200,
+      "path": "qa-recovery-20261101/frozen-build5/dist/art/portal-laboratory-menu.webp",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3040,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabAnimationJourney-4QaTXxv0.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5831,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabCreativeRoom17Journey-3GXxozHF.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3636,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabCreativeRoom18Journey-BkWobgnF.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4663,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabCreativeRoom20Journey-DBguXC0N.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2217,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabEchoHorizonJourney-cZ5j6KGi.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1864,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabExpansionAlternateJourney47-3qgixs4y.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2275,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabExpansionAlternateJourney48-Drlqu3v3.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1985,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabExpansionAlternateJourney49-C4rhH96n.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2916,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabExpansionAlternateJourneyB-VifwrXqV.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 7363,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabExpansionJourneyA-Cnks-IPj.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5545,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabExpansionJourneyB-DtgiRUVu.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 9204,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabExtendedJourney-Cl0qF81X.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 12259,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabFoundation20PhysicalJourney-CgzfylvQ.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 9213,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabFoundationJourney-6h3Qln-D.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1341,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabIntroductoryAlternates-DcdsCClA.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6345,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabOpenJourney-DoeHoS_f.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2293,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabPortalEdgeJourney-o7mz5qU4.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1462,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabPortalFloorJourney-DC6h1lGA.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 12170,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabPostJourneyA-IjsbElNV.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 11176,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabPostJourneyB-B-T_cj2m.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3106,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabPuzzlePilot43Journey-BjtmD8E4.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 1876,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabPuzzleProgression44Journey-CYGRtyE9.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5412,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabPuzzleProgression45Journey-DqNvpvHS.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3569,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabPuzzleProgression46Journey-ujaI3xol.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6134,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabPuzzleProgression47Journey-LNEyy_lt.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6921,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabPuzzleProgression48Journey-DOagr9uW.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4589,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabPuzzleProgression49Journey-B5Nzw0W4.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 12593,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabPuzzleProgression50BeamJourney-DX3uXH-B.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6103,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabPuzzleProgression50Journey-Db5Euz60.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3372,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabPuzzleProgression51Journey-Dalk0SnB.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 7904,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabResearchJourney-BrLmC8Ko.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6276,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabRoom13Journey-BJQMsvRB.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3287,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabRoom14Journey-Do7zQwTz.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4604,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabRoom15Journey-C_R7iosP.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2747,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabRoom16Journey-CQ-8-j0s.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3260,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabRoom17Journey-C2EE7523.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 6174,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabRoom18Journey-BOZT9nEt.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3087,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabRoom19Journey-BVk2pOJ3.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 5013,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabRoom20Journey-Dnjdo837.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2888,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabRoom22Journey-B-GvQ5P9.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2689,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabRoom23Journey-tYPRE0-y.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4135,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabRoom23PhysicalJourney-l1jhcFIe.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3621,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabRoom24Journey-D2_E0uqi.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4626,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabRoom25Journey-COqi9k-Z.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 4935,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabRoom26Journey-GMbq5-ym.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3350,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabRoom27Journey-CtMoXjWq.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3238,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabRoom28Journey-BK5o10zU.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2592,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabRoom29Journey-FXLiWbZf.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 3762,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabRoom30Journey-zAsFaYdh.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 29437,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabSingularityJourney-eJGxmbMT.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2649,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabSiphonObservatoryJourney-DjDLB6Nf.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 24187,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabTower41RatchetCellJourney-C7qoxdSw.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 31405,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabTowerJourney-BVJHzPMd.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 19856,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabV8Journey-CloiBD4H.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 8365,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/LabWorkshopJourney-DvVwKNyw.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 58602,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/index-C001kXKc.css",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2439976,
+      "path": "qa-recovery-20261101/frozen-build5/dist/assets/index-IKWlKJGa.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 719410,
+      "path": "qa-recovery-20261101/frozen-build5/dist/draco/draco_decoder.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 285747,
+      "path": "qa-recovery-20261101/frozen-build5/dist/draco/draco_decoder.wasm",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 58763,
+      "path": "qa-recovery-20261101/frozen-build5/dist/draco/draco_wasm_wrapper.js",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 14498,
+      "path": "qa-recovery-20261101/frozen-build5/dist/index.html",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 2421,
+      "path": "qa-recovery-20261101/frozen-build5/dist/models/runtime/manifest.json",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 549756,
+      "path": "qa-recovery-20261101/frozen-build5/dist/models/runtime/model-01-player.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 510376,
+      "path": "qa-recovery-20261101/frozen-build5/dist/models/runtime/model-02-cargo.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 393116,
+      "path": "qa-recovery-20261101/frozen-build5/dist/models/runtime/model-11-portal-gun.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 404076,
+      "path": "qa-recovery-20261101/frozen-build5/dist/models/runtime/model-19-lift-platform.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 377108,
+      "path": "qa-recovery-20261101/frozen-build5/dist/models/runtime/model-22-terminal.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 103600,
+      "path": "qa-recovery-20261101/frozen-build5/dist/models/runtime/model-23-floor-tile.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 62448,
+      "path": "qa-recovery-20261101/frozen-build5/dist/models/runtime/model-24-wall-panel.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 366120,
+      "path": "qa-recovery-20261101/frozen-build5/dist/models/runtime/model-28-rotating-panel.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 390244,
+      "path": "qa-recovery-20261101/frozen-build5/dist/models/runtime/model-29-pressure-platform.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 25768,
+      "path": "qa-recovery-20261101/frozen-build5/dist/models/runtime/model-31-wind-generator.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 25400,
+      "path": "qa-recovery-20261101/frozen-build5/dist/models/runtime/model-32-spring-ram.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 27816,
+      "path": "qa-recovery-20261101/frozen-build5/dist/models/runtime/model-35-shutter-fan.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 25764,
+      "path": "qa-recovery-20261101/frozen-build5/dist/models/runtime/model-37-extension-bridge.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 28608,
+      "path": "qa-recovery-20261101/frozen-build5/dist/models/runtime/model-39-cable-winch.glb",
+      "reason": "Reproducible package copy; original manifest/log/receipt retained"
+    },
+    {
+      "bytes": 35691659,
+      "path": "qa-recovery-20261101/room38-strict-current-fixture2/room38-freight-current-contract.json",
+      "reason": "Exact canonical fixture already durable in referenced Git gzip"
+    },
+    {
+      "bytes": 860349,
+      "path": "qa-recovery-20261101/room38-strict-current-fixture2/room38-freight-current-contract.json.gz",
+      "reason": "Exact canonical fixture already durable in referenced Git gzip"
+    }
+  ],
+  "excludedGroups": [
+    "{\"path\": \"qa-recovery-20261101/ceiling-floor-source-plan-31-40\", \"reason\": \"Already-durable prototype reference or unrelated/active new source-only plan; no traversal/content freezing\"}",
+    "{\"path\": \"qa-recovery-20261101/proof-archive-plan\", \"reason\": \"Already-durable prototype reference or unrelated/active new source-only plan; no traversal/content freezing\"}",
+    "{\"path\": \"qa-recovery-20261101/room44-live-integration-proposal\", \"reason\": \"Already-durable prototype reference or unrelated/active new source-only plan; no traversal/content freezing\"}",
+    "{\"path\": \"qa-recovery-20261101/room44-native-prestep-proposal\", \"reason\": \"Already-durable prototype reference or unrelated/active new source-only plan; no traversal/content freezing\"}",
+    "{\"path\": \"qa-recovery-20261101/room44-signed-bridge-proposal\", \"reason\": \"Already-durable prototype reference or unrelated/active new source-only plan; no traversal/content freezing\"}",
+    "{\"path\": \"qa-recovery-20261101/room48-phase-proposal\", \"reason\": \"Already-durable prototype reference or unrelated/active new source-only plan; no traversal/content freezing\"}"
+  ],
+  "externalReferencesNotCopied": [
+    {
+      "bytes": 1208880,
+      "gitCommit": "1c3a221c21fbc6e7e346aab541b31c29a3377941",
+      "gitPath": "qa/recovery-20261101/prototypes/room44-signed-bridge-and-prestep-evidence-v1.tar.gz",
+      "kind": "already-durable-room44-source-and-all-original-evidence",
+      "localPath": "/workspace/scratch/c17b1f9ac2be/brainrot-portal/qa/recovery-20261101/prototypes/room44-signed-bridge-and-prestep-evidence-v1.tar.gz",
+      "sha256": "dbb85258032fd8789984dd00d17df2769302f3af53eb8e427af45013d70d16b1"
+    },
+    {
+      "bytes": 860349,
+      "gitCommit": "1c3a221c21fbc6e7e346aab541b31c29a3377941",
+      "gitPath": "tests/fixtures/room38-freight-current-contract.json.gz",
+      "kind": "already-durable-strict38-canonical-lossless-fixture",
+      "localPath": "/workspace/scratch/c17b1f9ac2be/brainrot-portal/tests/fixtures/room38-freight-current-contract.json.gz",
+      "sha256": "d3258a3c1cf7586819ec65ca43b5de38c40233929e0c0fccc5b5557b1031f04c",
+      "uncompressedBytes": 35691659,
+      "uncompressedSha256": "7edd1be268e4b17d743498a3270d243e5b4a7227ce527032092f984ad48de6e6"
+    },
+    {
+      "bytes": 2305034,
+      "gitCommit": "1c3a221c21fbc6e7e346aab541b31c29a3377941",
+      "gitPath": "qa/recovery-20261101/prototypes/room48-phase-source-and-empty-evidence-v1.tar.gz",
+      "kind": "already-durable-phase-source-and-empty-v1",
+      "localPath": "/workspace/scratch/c17b1f9ac2be/qa-recovery-20261101/room48-phase-proof-archive/room48-phase-source-and-empty-evidence-v1.tar.gz",
+      "sha256": "20ad5e9e5405d9cbd256698466bde8f515012d74c1801ed8dce256ce817fcab4"
+    },
+    {
+      "bytes": 15730061,
+      "contactQualityAccepted": false,
+      "fullOriginalLoadedRawBytes": 114645635,
+      "fullOriginalReturnRawBytes": 220611156,
+      "gitCommit": "1c3a221c21fbc6e7e346aab541b31c29a3377941",
+      "gitPath": "qa/recovery-20261101/prototypes/phase-v2/room48-positive-return-v2.parts.json",
+      "kind": "already-durable-phase-full-positive-and-return-v2-eight-parts",
+      "localPath": "/workspace/scratch/c17b1f9ac2be/qa-recovery-20261101/room48-phase-proof-archive/room48-phase-positive-and-return-evidence-delta-v2.tar.gz",
+      "remoteParts": 8,
+      "sha256": "53ed8a5738c8eb373a94d29c1c11222f53f8ce1e2a823c0166f72481d6a18c98",
+      "wholeMechanismAccepted": false
+    }
+  ],
+  "frozenHarnessFamilyAllowlist": [
+    "native-static-build3-batches-20261101",
+    "native-static-build4-batches-20261101",
+    "native-static-build4-one-retry8-single-rooms-20261101",
+    "native-static-build4-remaining-batches-20261101",
+    "native-static-build4-single-rooms-20261101",
+    "native-static-build4-unpaused-single-rooms-20261101",
+    "native-static-headless-shell-prepared2-20261101",
+    "native-static-headless-shell-prepared3-20261101",
+    "native-static-headless-shell-prepared4-20261101",
+    "native-static-headless-shell-prepared5-20261101",
+    "native-static-headless-shell-prepared6-20261101",
+    "native-static-headless-shell-prepared7-20261101",
+    "native-static-headless-shell-prepared8-20261101",
+    "native-static-headless-shell-prepared9-20261101",
+    "native-static-prepared-20261101",
+    "native-visual-entry-build4-single-rooms-20261101",
+    "native-visual-entry-build5-room32-20261101",
+    "native-visual-entry-collector-prepared10-20261101"
+  ],
+  "frozenHistoricalFamilyAllowlist": [
+    "durable-source-backup",
+    "final-qa-backup-proposal",
+    "frozen-build1",
+    "frozen-build2",
+    "frozen-build3",
+    "frozen-build4",
+    "frozen-build5",
+    "integrated-targeted-tests",
+    "integrated-targeted-tests2",
+    "native-build4-one-retry8-single-rooms-review5",
+    "native-build4-pairs-review1",
+    "native-build4-remaining-pairs-review2",
+    "native-build4-single-rooms-review3",
+    "native-build4-unpaused-single-rooms-review4",
+    "native-build5-room32-material-review1",
+    "native-room33-build3-review5",
+    "native-room33-build4-review7",
+    "native-room33-review1",
+    "native-room33-shell-review2",
+    "native-room33-shell-review3",
+    "native-visual-entry-collector-review6",
+    "observatory-entry-reconstruction",
+    "observatory-finishes-manifold-attempt1",
+    "observatory-ordinary-prepared",
+    "observatory-ordinary-prepared-v2",
+    "ordinary-batch1",
+    "ordinary-batch2",
+    "ordinary-batch3",
+    "ordinary-batch4",
+    "ordinary-frozen1",
+    "ordinary-frozen2",
+    "ordinary-frozen3",
+    "ordinary-frozen4",
+    "room30-floor-shader-review",
+    "room32-pickup-causal-frozen1",
+    "room32-pickup-causal-review1",
+    "room32-pickup-diagnostic-prepared",
+    "room32-pickup-route-proposal",
+    "room32-rear-cover-material-proposal",
+    "room33-exact-transit",
+    "room33-transit-causal-frozen1",
+    "room33-transit-causal-frozen2",
+    "room33-transit-causal-review1",
+    "room33-transit-causal-review2",
+    "room33-transit-diagnostic-prepared",
+    "room38-strict-current-baseline-capture1",
+    "room38-strict-current-baseline-capture2",
+    "room38-strict-current-current-capture2",
+    "room38-strict-current-fixture2",
+    "room38-strict-current-freeze1",
+    "room38-strict-current-freeze2",
+    "room38-strict-current-prepared",
+    "room38-strict-current-prepared-v2"
+  ],
+  "githubWriteByArchiver": false,
+  "kind": "HISTORICAL_AND_CURRENT_TARGETED_QA_BACKUP_NOT_RELEASE_ACCEPTANCE",
+  "latestExternalBackupCommit": "1c3a221c21fbc6e7e346aab541b31c29a3377941",
+  "latestExternalBackupTree": "6e958260cb2b7d4ec519dda3eea66e77b712745a",
+  "mainWritesByArchiver": false,
+  "portability": "Original absolute provenance/config paths and fixture imports are preserved, not rewritten. Replaying requires matching pinned game/dependency source and a reviewed fresh environment; extraction alone is not fresh validation.",
+  "preservedOriginalTopLevelFailedReports": [
+    {
+      "path": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/report.json",
+      "sha256": "68c4629155b2f85036f2b0c8af0e836cde125fdea0b6973e92293822cc228ecb"
+    },
+    {
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/room30-32/report.json",
+      "sha256": "c7a5dec6451b10f99f0e3dd2fc1c83d2e4f91f8bea529321e07dd184275abfb1"
+    },
+    {
+      "path": "qa-recovery-20261101/native-build4-remaining-pairs-review2/room30-32/report.json",
+      "sha256": "6a6bd74366c205b1c67b3496a36ddce450ca857dbaf884ec12439e45bbb87a81"
+    },
+    {
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room38/report.json",
+      "sha256": "a9621877539539b3173da13048558cb6f9d3e5d56b47e2aa8f8928618f4ca82d"
+    },
+    {
+      "path": "qa-recovery-20261101/native-build4-unpaused-single-rooms-review4/room38/report.json",
+      "sha256": "94433e611dd28e34a7194076c51d9c41c7886ceb683ef0a27e41ecbb97a146a7"
+    },
+    {
+      "path": "qa-recovery-20261101/native-room33-build3-review5/report.json",
+      "sha256": "d90bf40611670d52c859ceb2f67418a401b6c1f32aae0af7d3c4636176ccf91f"
+    },
+    {
+      "path": "qa-recovery-20261101/native-room33-review1/report.json",
+      "sha256": "a2cdaf2fe1ab15e03c10b0c6e62aba1ead787d0e4ac395ec099a111b2c9b12d4"
+    },
+    {
+      "path": "qa-recovery-20261101/native-room33-shell-review2/report.json",
+      "sha256": "b86a507e59e32d714c2145c6aa639f2dc6aba7530dc680b422de92165468cdc8"
+    },
+    {
+      "path": "qa-recovery-20261101/native-room33-shell-review3/report.json",
+      "sha256": "2d0eefd8f85346e6a01986720c228427655c8545f1c99d2612ed4a7cdabb6d66"
+    },
+    {
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room35/report.json",
+      "sha256": "6b1a0161946f366006998c41403000b68cbcb2c1199630b6008064232628a318"
+    },
+    {
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room38/report.json",
+      "sha256": "4096cf679a5957278c25513ca6a05985a1d78c3af391e5658a24c290d47a0e0a"
+    },
+    {
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room39/report.json",
+      "sha256": "aba058bef4d55bdb26a48afbb6fbadea9eb81f61c5e69e844c4e3a258d10da2d"
+    },
+    {
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room40/report.json",
+      "sha256": "f769a6f43fb9490cf8b6939521f09361a446ed5f5a629c61126de6ed7de74423"
+    },
+    {
+      "path": "qa-recovery-20261101/ordinary-batch1/room33-canonical/report.json",
+      "sha256": "bca51dca65eaef0ab48c15f63bb6651f428eceb50fc9fc752be7e7ecff0b0967"
+    },
+    {
+      "path": "qa-recovery-20261101/ordinary-batch2/room33-alternate/report.json",
+      "sha256": "8899372ce32c3ee577c30ba20f4e149ce69a5d44bb169ae08c8e80fc155e2d11"
+    },
+    {
+      "path": "qa-recovery-20261101/ordinary-batch3/room32-canonical/report.json",
+      "sha256": "69ed215d71b71bea3f5b489d18cd88d7e2ba4e8dc79946cabdbf624d8233e5b6"
+    },
+    {
+      "path": "qa-recovery-20261101/room32-pickup-causal-review1/report.json",
+      "sha256": "4f3132b0126434921efc28899a274811784218c9e839329263ed8a0dd510ea48"
+    },
+    {
+      "path": "qa-recovery-20261101/room33-transit-causal-review1/report.json",
+      "sha256": "740aa9f90e30322ce93ab9af65f92e1d8f46f51217e281d2ab6823fb0834858b"
+    },
+    {
+      "path": "qa-recovery-20261101/room38-strict-current-baseline-capture1/report.json",
+      "sha256": "75e86303852ae7398790ab74b410fe38a2d85da9a08a8aafb4c8d8d888922658"
+    }
+  ],
+  "releaseAccepted": false,
+  "runtimeLaunchedByArchiver": false,
+  "secretScan": {
+    "findings": [],
+    "patterns": [
+      "private-key",
+      "github-token",
+      "aws-access-id",
+      "slack-token",
+      "openai-like-key",
+      "google-key",
+      "jwt",
+      "url-credentials",
+      "signed-url-secret",
+      "sensitive-literal"
+    ],
+    "scope": "Strong token/sensitive-literal pattern scan of selected text and nested small reusable-source archive text; PNG visual data not OCR-scanned",
+    "textBytes": 143660862,
+    "textFiles": 511
+  }
+}

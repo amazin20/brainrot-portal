@@ -1,0 +1,187 @@
+{
+  "all51QualityAccepted": false,
+  "archiveBytes": 13846726,
+  "archiveSha256": "de758140deb682c5b937a5dbd1379efb9f763eaf5612bd1a05efb466b5dc6850",
+  "excludedActive44And48": true,
+  "files": 532,
+  "latestExternalReference": "1c3a221c21fbc6e7e346aab541b31c29a3377941",
+  "logicalBytes": 155073699,
+  "originalFailedReports": [
+    {
+      "path": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/report.json",
+      "sha256": "68c4629155b2f85036f2b0c8af0e836cde125fdea0b6973e92293822cc228ecb"
+    },
+    {
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/room30-32/report.json",
+      "sha256": "c7a5dec6451b10f99f0e3dd2fc1c83d2e4f91f8bea529321e07dd184275abfb1"
+    },
+    {
+      "path": "qa-recovery-20261101/native-build4-remaining-pairs-review2/room30-32/report.json",
+      "sha256": "6a6bd74366c205b1c67b3496a36ddce450ca857dbaf884ec12439e45bbb87a81"
+    },
+    {
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room38/report.json",
+      "sha256": "a9621877539539b3173da13048558cb6f9d3e5d56b47e2aa8f8928618f4ca82d"
+    },
+    {
+      "path": "qa-recovery-20261101/native-build4-unpaused-single-rooms-review4/room38/report.json",
+      "sha256": "94433e611dd28e34a7194076c51d9c41c7886ceb683ef0a27e41ecbb97a146a7"
+    },
+    {
+      "path": "qa-recovery-20261101/native-room33-build3-review5/report.json",
+      "sha256": "d90bf40611670d52c859ceb2f67418a401b6c1f32aae0af7d3c4636176ccf91f"
+    },
+    {
+      "path": "qa-recovery-20261101/native-room33-review1/report.json",
+      "sha256": "a2cdaf2fe1ab15e03c10b0c6e62aba1ead787d0e4ac395ec099a111b2c9b12d4"
+    },
+    {
+      "path": "qa-recovery-20261101/native-room33-shell-review2/report.json",
+      "sha256": "b86a507e59e32d714c2145c6aa639f2dc6aba7530dc680b422de92165468cdc8"
+    },
+    {
+      "path": "qa-recovery-20261101/native-room33-shell-review3/report.json",
+      "sha256": "2d0eefd8f85346e6a01986720c228427655c8545f1c99d2612ed4a7cdabb6d66"
+    },
+    {
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room35/report.json",
+      "sha256": "6b1a0161946f366006998c41403000b68cbcb2c1199630b6008064232628a318"
+    },
+    {
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room38/report.json",
+      "sha256": "4096cf679a5957278c25513ca6a05985a1d78c3af391e5658a24c290d47a0e0a"
+    },
+    {
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room39/report.json",
+      "sha256": "aba058bef4d55bdb26a48afbb6fbadea9eb81f61c5e69e844c4e3a258d10da2d"
+    },
+    {
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room40/report.json",
+      "sha256": "f769a6f43fb9490cf8b6939521f09361a446ed5f5a629c61126de6ed7de74423"
+    },
+    {
+      "path": "qa-recovery-20261101/ordinary-batch1/room33-canonical/report.json",
+      "sha256": "bca51dca65eaef0ab48c15f63bb6651f428eceb50fc9fc752be7e7ecff0b0967"
+    },
+    {
+      "path": "qa-recovery-20261101/ordinary-batch2/room33-alternate/report.json",
+      "sha256": "8899372ce32c3ee577c30ba20f4e149ce69a5d44bb169ae08c8e80fc155e2d11"
+    },
+    {
+      "path": "qa-recovery-20261101/ordinary-batch3/room32-canonical/report.json",
+      "sha256": "69ed215d71b71bea3f5b489d18cd88d7e2ba4e8dc79946cabdbf624d8233e5b6"
+    },
+    {
+      "path": "qa-recovery-20261101/room32-pickup-causal-review1/report.json",
+      "sha256": "4f3132b0126434921efc28899a274811784218c9e839329263ed8a0dd510ea48"
+    },
+    {
+      "path": "qa-recovery-20261101/room33-transit-causal-review1/report.json",
+      "sha256": "740aa9f90e30322ce93ab9af65f92e1d8f46f51217e281d2ab6823fb0834858b"
+    },
+    {
+      "path": "qa-recovery-20261101/room38-strict-current-baseline-capture1/report.json",
+      "sha256": "75e86303852ae7398790ab74b410fe38a2d85da9a08a8aafb4c8d8d888922658"
+    }
+  ],
+  "pngFiles": 66,
+  "requiredHistoricAndCurrentBuildRootsPresent": true,
+  "selectedFamilyFileCounts": {
+    "qa-recovery-20261101/build-frozen5.py": 1,
+    "qa-recovery-20261101/ceiling-floor-postflush-material-feasibility-review.json": 1,
+    "qa-recovery-20261101/ceiling-floor-source-proposals-36-40.json": 1,
+    "qa-recovery-20261101/durable-source-backup": 16,
+    "qa-recovery-20261101/final-qa-backup-proposal": 5,
+    "qa-recovery-20261101/frozen-build1": 3,
+    "qa-recovery-20261101/frozen-build2": 4,
+    "qa-recovery-20261101/frozen-build3": 4,
+    "qa-recovery-20261101/frozen-build4": 4,
+    "qa-recovery-20261101/frozen-build5": 5,
+    "qa-recovery-20261101/integrated-targeted-tests": 2,
+    "qa-recovery-20261101/integrated-targeted-tests2": 2,
+    "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5": 5,
+    "qa-recovery-20261101/native-build4-pairs-review1": 17,
+    "qa-recovery-20261101/native-build4-remaining-pairs-review2": 8,
+    "qa-recovery-20261101/native-build4-single-rooms-review3": 23,
+    "qa-recovery-20261101/native-build4-unpaused-single-rooms-review4": 5,
+    "qa-recovery-20261101/native-build5-room32-material-review1": 6,
+    "qa-recovery-20261101/native-preparation-build3-reusable-receipt.json": 1,
+    "qa-recovery-20261101/native-preparation-build3-reusable.tar.gz": 1,
+    "qa-recovery-20261101/native-preparation-build4-reusable-receipt.json": 1,
+    "qa-recovery-20261101/native-preparation-build4-reusable.tar.gz": 1,
+    "qa-recovery-20261101/native-room33-build3-review5": 6,
+    "qa-recovery-20261101/native-room33-build4-review7": 6,
+    "qa-recovery-20261101/native-room33-review1": 2,
+    "qa-recovery-20261101/native-room33-shell-review2": 4,
+    "qa-recovery-20261101/native-room33-shell-review3": 4,
+    "qa-recovery-20261101/native-root-entry-review-30-32-33-36-37.json": 1,
+    "qa-recovery-20261101/native-root-entry-review-31-34.json": 1,
+    "qa-recovery-20261101/native-root-entry-review-35-38-39-40.json": 1,
+    "qa-recovery-20261101/native-visual-entry-collector-review6": 25,
+    "qa-recovery-20261101/new9-room44-independent-source-review.json": 1,
+    "qa-recovery-20261101/observatory-entry-reconstruction": 9,
+    "qa-recovery-20261101/observatory-finishes-manifold-attempt1": 5,
+    "qa-recovery-20261101/observatory-ordinary-prepared": 4,
+    "qa-recovery-20261101/observatory-ordinary-prepared-v2": 5,
+    "qa-recovery-20261101/ordinary-batch1": 3,
+    "qa-recovery-20261101/ordinary-batch2": 5,
+    "qa-recovery-20261101/ordinary-batch3": 11,
+    "qa-recovery-20261101/ordinary-batch4": 29,
+    "qa-recovery-20261101/ordinary-frozen1": 2,
+    "qa-recovery-20261101/ordinary-frozen2": 2,
+    "qa-recovery-20261101/ordinary-frozen3": 2,
+    "qa-recovery-20261101/ordinary-frozen4": 2,
+    "qa-recovery-20261101/room30-floor-shader-review": 1,
+    "qa-recovery-20261101/room32-pickup-causal-frozen1": 2,
+    "qa-recovery-20261101/room32-pickup-causal-review1": 1,
+    "qa-recovery-20261101/room32-pickup-diagnostic-prepared": 12,
+    "qa-recovery-20261101/room32-pickup-route-proposal": 5,
+    "qa-recovery-20261101/room32-rear-cover-material-proposal": 19,
+    "qa-recovery-20261101/room33-exact-transit": 14,
+    "qa-recovery-20261101/room33-transit-causal-frozen1": 2,
+    "qa-recovery-20261101/room33-transit-causal-frozen2": 2,
+    "qa-recovery-20261101/room33-transit-causal-review1": 2,
+    "qa-recovery-20261101/room33-transit-causal-review2": 2,
+    "qa-recovery-20261101/room33-transit-diagnostic-prepared": 4,
+    "qa-recovery-20261101/room38-strict-current-baseline-capture1": 1,
+    "qa-recovery-20261101/room38-strict-current-baseline-capture1-guard.json": 1,
+    "qa-recovery-20261101/room38-strict-current-baseline-capture1.log": 1,
+    "qa-recovery-20261101/room38-strict-current-baseline-capture2": 3,
+    "qa-recovery-20261101/room38-strict-current-baseline-capture2-guard.json": 1,
+    "qa-recovery-20261101/room38-strict-current-baseline-capture2.log": 1,
+    "qa-recovery-20261101/room38-strict-current-current-capture2": 3,
+    "qa-recovery-20261101/room38-strict-current-current-capture2-guard.json": 1,
+    "qa-recovery-20261101/room38-strict-current-current-capture2.log": 1,
+    "qa-recovery-20261101/room38-strict-current-fixture2": 7,
+    "qa-recovery-20261101/room38-strict-current-freeze1": 5,
+    "qa-recovery-20261101/room38-strict-current-freeze2": 5,
+    "qa-recovery-20261101/room38-strict-current-prepared": 12,
+    "qa-recovery-20261101/room38-strict-current-prepared-v2": 7,
+    "qa-recovery-20261101/room48-phase-proof-archive": 2,
+    "qa-recovery-20261101/run-frozen-native-one-retry8-single-rooms.mjs": 1,
+    "qa-recovery-20261101/run-frozen-native-pairs.mjs": 1,
+    "qa-recovery-20261101/run-frozen-native-remaining-pairs.mjs": 1,
+    "qa-recovery-20261101/run-frozen-native-single-rooms.mjs": 1,
+    "qa-recovery-20261101/run-frozen-native-unpaused-single-rooms.mjs": 1,
+    "qa-recovery-20261101/run-native-visual-collector.mjs": 1,
+    "qa-recovery/derive-generated-blob-inventory.py": 1,
+    "qa-recovery/native-static-build3-batches-20261101": 16,
+    "qa-recovery/native-static-build4-batches-20261101": 11,
+    "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101": 10,
+    "qa-recovery/native-static-build4-remaining-batches-20261101": 9,
+    "qa-recovery/native-static-build4-single-rooms-20261101": 15,
+    "qa-recovery/native-static-build4-unpaused-single-rooms-20261101": 9,
+    "qa-recovery/native-static-headless-shell-prepared2-20261101": 4,
+    "qa-recovery/native-static-headless-shell-prepared3-20261101": 7,
+    "qa-recovery/native-static-headless-shell-prepared4-20261101": 9,
+    "qa-recovery/native-static-headless-shell-prepared5-20261101": 9,
+    "qa-recovery/native-static-headless-shell-prepared6-20261101": 8,
+    "qa-recovery/native-static-headless-shell-prepared7-20261101": 9,
+    "qa-recovery/native-static-headless-shell-prepared8-20261101": 12,
+    "qa-recovery/native-static-headless-shell-prepared9-20261101": 8,
+    "qa-recovery/native-static-prepared-20261101": 4,
+    "qa-recovery/native-visual-entry-build4-single-rooms-20261101": 9,
+    "qa-recovery/native-visual-entry-build5-room32-20261101": 5,
+    "qa-recovery/native-visual-entry-collector-prepared10-20261101": 8
+  }
+}

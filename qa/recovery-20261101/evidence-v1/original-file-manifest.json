@@ -1,0 +1,3320 @@
+{
+  "createdAt": "2026-11-01T10:41:29.746753+00:00",
+  "files": [
+    {
+      "bytes": 3551,
+      "path": "qa-recovery-20261101/build-frozen5.py",
+      "sha256": "addca5b643dd67651b46f835803d96998cfde87293fc7479fbc9838e78c94c2e",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 4944,
+      "path": "qa-recovery-20261101/ceiling-floor-postflush-material-feasibility-review.json",
+      "sha256": "1ca5b5fd72d84be2b92cf06e0a42353e65f1cdd7b327abf187c5ac3d425eed24",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 9774,
+      "path": "qa-recovery-20261101/ceiling-floor-source-proposals-36-40.json",
+      "sha256": "af3a5e1b0b792d63c4bbcab39ecd820743b8b6cf21fae44728edcac71955b58b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 463,
+      "path": "qa-recovery-20261101/durable-source-backup/checkpoint2-receipt.json",
+      "sha256": "4eb48c4334c30d4695adac1be7a085661c4a98c21b92e6082c11ade3126a949e",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 798,
+      "path": "qa-recovery-20261101/durable-source-backup/checkpoint3-receipt.json",
+      "sha256": "a9e9581a2bf339950e810d47d5b6c04874a5f0d16b5bde1df345d75770329987",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 405,
+      "path": "qa-recovery-20261101/durable-source-backup/checkpoint4-receipt.json",
+      "sha256": "a982d603350508cad992745549b8cf32725276d582fc44d1eccab214f447d906",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 855,
+      "path": "qa-recovery-20261101/durable-source-backup/checkpoint5-receipt.json",
+      "sha256": "6bc8259fc2f307892d3e78fed7c54225d7c6233b6882484f3e30fd28564b866a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1043,
+      "path": "qa-recovery-20261101/durable-source-backup/checkpoint6-receipt.json",
+      "sha256": "e8167e257bc108336995bc128221702880c376befacbb4d7ba78dea23baab589",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 116407,
+      "path": "qa-recovery-20261101/durable-source-backup/core-fix-tree-entries.json",
+      "sha256": "de81eda897033a6765a18d201d12234d65104e50e0f4a97d0af204eb859613f3",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 672,
+      "path": "qa-recovery-20261101/durable-source-backup/destination-and-content-check.json",
+      "sha256": "08c8257323b386fd983d62d94ba3c9b310dfd24645bb8323a1019f92c077da73",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 248,
+      "path": "qa-recovery-20261101/durable-source-backup/read-binary-slice.py",
+      "sha256": "1506e250513e38f49730c0b3b6a0fe22fed51e4a7b3cd0994b53d3712bf9e203",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 358,
+      "path": "qa-recovery-20261101/durable-source-backup/receipt.json",
+      "sha256": "01070399767636c507f4094617b53b3b6378926316c9be885caab7a640d64023",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 493,
+      "path": "qa-recovery-20261101/durable-source-backup/remote-backup-success.json",
+      "sha256": "9b6142ce80f732e993b75fa22c1392772765a4ef10efe4c6d9693c23dd1a5737",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 402,
+      "path": "qa-recovery-20261101/durable-source-backup/remote-checkpoint3-success.json",
+      "sha256": "fd40e7cdee2750c15d7c3bd39e0d1a5d510186441d5a1bbd2a76e08ef7d4b829",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 356,
+      "path": "qa-recovery-20261101/durable-source-backup/remote-checkpoint4-success.json",
+      "sha256": "74963761d631d2efbd96dc3908082f86477012c5cfccfa9223fb3ab023bc88d8",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 505,
+      "path": "qa-recovery-20261101/durable-source-backup/remote-checkpoint5-success.json",
+      "sha256": "335221166582cc91345dcf8dae82e98400a98e429067891d3744b7d8e2bfdb78",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 520,
+      "path": "qa-recovery-20261101/durable-source-backup/remote-checkpoint6-success.json",
+      "sha256": "dd9bdd4e333852655ab4ac74f9e4449319855fbb48020a806681323a453ae7bf",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 303,
+      "path": "qa-recovery-20261101/durable-source-backup/remote-core-fix-success.json",
+      "sha256": "c9d32b868149d1ad779ef3f1ba01077b30e7a45fafc705769bd4a7ed41c14c0b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1236703,
+      "path": "qa-recovery-20261101/durable-source-backup/tree-entries.json",
+      "sha256": "dd34b43e88812d5f6b9433b6b50ba6a139b64ec84ba567f190a333c664203b2c",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 13707,
+      "path": "qa-recovery-20261101/final-qa-backup-proposal/accepted-evidence-index.json",
+      "sha256": "160c8ee730790d7be742e65263069b29176b085406705ecbc89ec80dbedd67cb",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2893,
+      "path": "qa-recovery-20261101/final-qa-backup-proposal/proposed-qa-write-manifest.json",
+      "sha256": "5505ec9c3256b93672699683233a3fd35e6fe3b1447e2d3df9d4abbd065573f3",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 4407,
+      "path": "qa-recovery-20261101/final-qa-backup-proposal/qa-backup-candidate-manifest.json",
+      "sha256": "c251b13cd0002be53c3ccc20a145aad6dc348e167a946b478cebb81b190e4728",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2421,
+      "path": "qa-recovery-20261101/final-qa-backup-proposal/source-and-binary-index.json",
+      "sha256": "f4375a77ad13c6a07750f8b556a70fb7f7bbacd5aecef36a223c0084bd7f9571",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 5649,
+      "path": "qa-recovery-20261101/final-qa-backup-proposal/status-proposal.json",
+      "sha256": "7b4d25513c57a2fc7928cda022fb11850a0b6e0c6101d9702816c0fccc622abc",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 8135,
+      "path": "qa-recovery-20261101/frozen-build1/build.log",
+      "sha256": "bae21cad2dfdf694aad482d219bc340ce7c152700f4d9b0f98d37b95ce00b818",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 12625,
+      "path": "qa-recovery-20261101/frozen-build1/dist-manifest.json",
+      "sha256": "dc46f3a22b2e13416d12301a2be49c76d8e3f17e2ee9afa00d1508dc7e6b3f5f",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 55655,
+      "path": "qa-recovery-20261101/frozen-build1/source-manifest.json",
+      "sha256": "60a0382b24613706ae14523ce67b883a8fba696055f0e3dd19bc4ce83292a347",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2747,
+      "path": "qa-recovery-20261101/frozen-build2/build-receipt.json",
+      "sha256": "9da6c1d542f86cca8dfbaf0ac773afae16490e4ea583cea70d3fcb88d626ca39",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 8135,
+      "path": "qa-recovery-20261101/frozen-build2/build.log",
+      "sha256": "eb21a5aa5030150fae8c7b1e618193fcc2dc5fef1577d119d487ef1ef5958898",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 12625,
+      "hardlinkTarget": "qa-recovery-20261101/frozen-build1/dist-manifest.json",
+      "path": "qa-recovery-20261101/frozen-build2/dist-manifest.json",
+      "sha256": "dc46f3a22b2e13416d12301a2be49c76d8e3f17e2ee9afa00d1508dc7e6b3f5f",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 55655,
+      "hardlinkTarget": "qa-recovery-20261101/frozen-build1/source-manifest.json",
+      "path": "qa-recovery-20261101/frozen-build2/source-manifest.json",
+      "sha256": "60a0382b24613706ae14523ce67b883a8fba696055f0e3dd19bc4ce83292a347",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 2779,
+      "path": "qa-recovery-20261101/frozen-build3/build-receipt.json",
+      "sha256": "9d8d17887e9ced3f23e35a78d04b6b295c997bbdf3ac2ff445f24cd3800a6511",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 8135,
+      "path": "qa-recovery-20261101/frozen-build3/build.log",
+      "sha256": "fa7d4f287c2785bb6527b68807d0f3b9b9656ea92fc1125f4d5618ac8c4362e7",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 12625,
+      "path": "qa-recovery-20261101/frozen-build3/dist-manifest.json",
+      "sha256": "c5434e19c4e857fe760f6afd2589e61e8dd301599fe13466c64fab55aa475f0e",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 55655,
+      "path": "qa-recovery-20261101/frozen-build3/source-manifest.json",
+      "sha256": "7d6abeaf9e0005405785303d451dff1a226b60bcf4744286105d434aeba855a1",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2791,
+      "path": "qa-recovery-20261101/frozen-build4/build-receipt.json",
+      "sha256": "42f5ab95a93b9601c41929bce734a70833e57ff68b9a2fa932a3c214338bd410",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 8134,
+      "path": "qa-recovery-20261101/frozen-build4/build.log",
+      "sha256": "b757131fa5395f885e55823e1211db5796c7e20769f8066fb4491f4e8026d83f",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 12625,
+      "path": "qa-recovery-20261101/frozen-build4/dist-manifest.json",
+      "sha256": "cdbc512ea65415cfadbe4310e84666617a42cf2b21e73d30450336deb3e37c13",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 55655,
+      "path": "qa-recovery-20261101/frozen-build4/source-manifest.json",
+      "sha256": "cb5a3781b8f01c39dc5b12c56e2fffedba7f19f55a3ad3e251ef7364ded0b859",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 3211,
+      "path": "qa-recovery-20261101/frozen-build5/build-receipt.json",
+      "sha256": "335971347705d294ac1789f257ebe444436bbc08e00a4d382ecba4089742364d",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 8135,
+      "path": "qa-recovery-20261101/frozen-build5/build.log",
+      "sha256": "471b381c66ac889f61b9729fde0ebeaef814a8e93c7def99aa30fda8a3a0d93c",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 12625,
+      "path": "qa-recovery-20261101/frozen-build5/dist-manifest.json",
+      "sha256": "ede79a7dac9630e58879ee2e04f50533ad1b5e06616623c979c0a29ad6a259cc",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 55655,
+      "path": "qa-recovery-20261101/frozen-build5/source-manifest-after.json",
+      "sha256": "6740a831f72f8e34dc765414e4f8785c6d24c25ae6b6d069ce205ae2a12a4636",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 55655,
+      "hardlinkTarget": "qa-recovery-20261101/frozen-build5/source-manifest-after.json",
+      "path": "qa-recovery-20261101/frozen-build5/source-manifest.json",
+      "sha256": "6740a831f72f8e34dc765414e4f8785c6d24c25ae6b6d069ce205ae2a12a4636",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 407,
+      "path": "qa-recovery-20261101/integrated-targeted-tests/receipt.json",
+      "sha256": "afea377e17c2dd1950a163e341dbda4d3903f13369375f211ce7bada3b54c135",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 6567,
+      "path": "qa-recovery-20261101/integrated-targeted-tests/tests.tap",
+      "sha256": "5b2cb68fe1943aa049d1f8895caded491bad3b59dd250813ca96cc2110aa2839",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 612,
+      "path": "qa-recovery-20261101/integrated-targeted-tests2/receipt.json",
+      "sha256": "fb6869256f52dcd56a2fd379da88c1b983fc30cc9cb0e518fc8735f97a1efb7b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 8169,
+      "path": "qa-recovery-20261101/integrated-targeted-tests2/tests.tap",
+      "sha256": "f78a8131f083ea9203829a26351db0369b3204ca7696b161d64444f413ca56a2",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 823,
+      "path": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/rollup.json",
+      "sha256": "891aa59b0ddc0dfacbc4faaff0b63e2fd47542e4fd7d9898e7acb770c9d1f6ec",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1376,
+      "path": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/config-frozen.json",
+      "sha256": "e106b24d167525726d6a181f68b3af285d4ac746aa382e654d0118788aa1c8dc",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 427188,
+      "path": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/report.json",
+      "sha256": "68c4629155b2f85036f2b0c8af0e836cde125fdea0b6973e92293822cc228ecb",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 249982,
+      "path": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/room-38-wide/entry-canvas.png",
+      "sha256": "f851699cfa723dea8c4d48e7ecc548fcba260181a545ac48e748c4a1a16829c4",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 249982,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/room-38-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/room-38-wide/entry-hud.png",
+      "sha256": "f851699cfa723dea8c4d48e7ecc548fcba260181a545ac48e748c4a1a16829c4",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1055,
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/rollup.json",
+      "sha256": "9ec37775d731b1702e64f83f46b26537ab475f5cc69e4ae5aa01438039f469ae",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1384,
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/room30-32/config-frozen.json",
+      "sha256": "ec7030fc2c945a83bc03012ecb6fa8b62064b4681e9e9e2c86c086404ca0cb40",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 833987,
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/room30-32/report.json",
+      "sha256": "c7a5dec6451b10f99f0e3dd2fc1c83d2e4f91f8bea529321e07dd184275abfb1",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 87834,
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/room30-32/room-30-portrait/entry-canvas.png",
+      "sha256": "7f338b9f07ff4fb1aa0eaa98df8ed95ae83364183a73b806bf04d094716ceb1e",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 89462,
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/room30-32/room-30-portrait/entry-hud.png",
+      "sha256": "200637886362e3aa7d9a3e71480deec386c6bedf042a49f46ffff72a7efed594",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 264429,
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/room30-32/room-30-wide/entry-canvas.png",
+      "sha256": "480b4063011c90c2290cd9285e8c10580683ffcf94a7b316499862940d1798fb",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 264429,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-pairs-review1/room30-32/room-30-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/room30-32/room-30-wide/entry-hud.png",
+      "sha256": "480b4063011c90c2290cd9285e8c10580683ffcf94a7b316499862940d1798fb",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1384,
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/room31-34/config-frozen.json",
+      "sha256": "92c583a63e172a20c298d677a62ae91ad2fa89574ab4f4f06064eaacf73bb7f1",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1224400,
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/room31-34/report.json",
+      "sha256": "1c50416b6f97eee1759e9ab17df0f4834530648d32f88a89f2596a9b121ac5d1",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 109881,
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/room31-34/room-31-portrait/entry-canvas.png",
+      "sha256": "00ca1a97be7874645b83779ec73d67d100a15fe9d2a33b44abd44b1647b70384",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 111296,
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/room31-34/room-31-portrait/entry-hud.png",
+      "sha256": "76fcd1898e6796d18dfc00a580f4bdd81f9a719991b301a734c049c0b19b5a2d",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 234708,
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/room31-34/room-31-wide/entry-canvas.png",
+      "sha256": "3409cdadb2cf5ea79c0620df42d6a0f75d51fb4e6bc1737e9bdd5b89c8519d56",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 234708,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-pairs-review1/room31-34/room-31-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/room31-34/room-31-wide/entry-hud.png",
+      "sha256": "3409cdadb2cf5ea79c0620df42d6a0f75d51fb4e6bc1737e9bdd5b89c8519d56",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 90040,
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/room31-34/room-34-portrait/entry-canvas.png",
+      "sha256": "a5e0dc31ca7178ac8c6a8111a2b692e063a56ca5d79677d9bb7517b739614198",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 91664,
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/room31-34/room-34-portrait/entry-hud.png",
+      "sha256": "5f434426fef6aeffeb50589640c9e81f4e42cad3f5c0633e1a706eb3cf6f2696",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 236333,
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/room31-34/room-34-wide/entry-canvas.png",
+      "sha256": "d41c00f770cdfadeca0f2631a308fce170ef7bcd300e95b0d30191e939d231e3",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 236333,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-pairs-review1/room31-34/room-34-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-build4-pairs-review1/room31-34/room-34-wide/entry-hud.png",
+      "sha256": "d41c00f770cdfadeca0f2631a308fce170ef7bcd300e95b0d30191e939d231e3",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 592,
+      "path": "qa-recovery-20261101/native-build4-remaining-pairs-review2/rollup.json",
+      "sha256": "bae4d0982d75400e987db04cf1dff671a451a744f6539e7ea9834bf9712af83b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1384,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-pairs-review1/room30-32/config-frozen.json",
+      "path": "qa-recovery-20261101/native-build4-remaining-pairs-review2/room30-32/config-frozen.json",
+      "sha256": "ec7030fc2c945a83bc03012ecb6fa8b62064b4681e9e9e2c86c086404ca0cb40",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 909064,
+      "path": "qa-recovery-20261101/native-build4-remaining-pairs-review2/room30-32/report.json",
+      "sha256": "6a6bd74366c205b1c67b3496a36ddce450ca857dbaf884ec12439e45bbb87a81",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 87834,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-pairs-review1/room30-32/room-30-portrait/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-build4-remaining-pairs-review2/room30-32/room-30-portrait/entry-canvas.png",
+      "sha256": "7f338b9f07ff4fb1aa0eaa98df8ed95ae83364183a73b806bf04d094716ceb1e",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 89462,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-pairs-review1/room30-32/room-30-portrait/entry-hud.png",
+      "path": "qa-recovery-20261101/native-build4-remaining-pairs-review2/room30-32/room-30-portrait/entry-hud.png",
+      "sha256": "200637886362e3aa7d9a3e71480deec386c6bedf042a49f46ffff72a7efed594",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 264429,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-pairs-review1/room30-32/room-30-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-build4-remaining-pairs-review2/room30-32/room-30-wide/entry-canvas.png",
+      "sha256": "480b4063011c90c2290cd9285e8c10580683ffcf94a7b316499862940d1798fb",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 264429,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-pairs-review1/room30-32/room-30-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-build4-remaining-pairs-review2/room30-32/room-30-wide/entry-hud.png",
+      "sha256": "480b4063011c90c2290cd9285e8c10580683ffcf94a7b316499862940d1798fb",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1854,
+      "path": "qa-recovery-20261101/native-build4-remaining-pairs-review2/room30-case-aggregation-post-inventory.json",
+      "sha256": "048946734ac1a14435d60347794b86c0045796a6f0ba18c721567a5bf414c0d8",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1271,
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/rollup.json",
+      "sha256": "160e820d04094dce52d87913c1e4828b440c73fb582a8b53554dadab2127048f",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1376,
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room32/config-frozen.json",
+      "sha256": "7d047a0b8d0dbd6613f29ca6110ffee72d0bc79723779a9b3d2c41ab2934527d",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 576646,
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room32/report.json",
+      "sha256": "46913018ab1268d31df43f8e8b9baa44c438a3ae187e7f57d4da4426feecf33f",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 104465,
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room32/room-32-portrait/entry-canvas.png",
+      "sha256": "1086456865916cd09d647719200bd3dd9013e1f6e57adca4eea4de84a5f2c150",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 105956,
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room32/room-32-portrait/entry-hud.png",
+      "sha256": "a153bf5a7b6fc0ec9537542a0cb57a8a0beb0ab4f3225ab05c0c9e8affe51b56",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 223895,
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room32/room-32-wide/entry-canvas.png",
+      "sha256": "4f370eb7d4dc3c81616a442515c38d5cde22f5c1436fb341035d0293addc14eb",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 223895,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-single-rooms-review3/room32/room-32-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room32/room-32-wide/entry-hud.png",
+      "sha256": "4f370eb7d4dc3c81616a442515c38d5cde22f5c1436fb341035d0293addc14eb",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1376,
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room36/config-frozen.json",
+      "sha256": "5c411f4250d4cff70fe85933316f23ea10506ee1b7c1a4f62ab90e84cc0166f8",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 593232,
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room36/report.json",
+      "sha256": "f1251aee7fd3d2d3db3303af0df6e31010be9193a7152e420c2a4b5cf08db6a4",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 85701,
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room36/room-36-portrait/entry-canvas.png",
+      "sha256": "981970fee54f40a125b0bac22cf24c3ff9a9b7362a117d11e6281aa1c9692aba",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 87345,
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room36/room-36-portrait/entry-hud.png",
+      "sha256": "419867e1690141e96080fcbed04ce53f5d8705420139d3170d418f1531e420ce",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 266727,
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room36/room-36-wide/entry-canvas.png",
+      "sha256": "d62815f3c647c45e4b8c8a4f6b6974dd944a11096c83d2a04268f35727d5d990",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 266727,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-single-rooms-review3/room36/room-36-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room36/room-36-wide/entry-hud.png",
+      "sha256": "d62815f3c647c45e4b8c8a4f6b6974dd944a11096c83d2a04268f35727d5d990",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1376,
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room37/config-frozen.json",
+      "sha256": "ebba114acbed081336d69633698716266116ad9fe46de3106b062417ed4f888a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 484067,
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room37/report.json",
+      "sha256": "ea27c26561001496d04c9987d1f78fd945b937aa066387a0e87680587b3e86f4",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 89920,
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room37/room-37-portrait/entry-canvas.png",
+      "sha256": "c2d59cf5f0800f710268748669a7b3cd468a58ddf4ec9b50e71adadb4de6e021",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 91555,
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room37/room-37-portrait/entry-hud.png",
+      "sha256": "86a40a762e78aff6ec1ce0163581138a8ebc600485a063b10ae19c1a9a898dbd",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 234722,
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room37/room-37-wide/entry-canvas.png",
+      "sha256": "dc8f0ec74fcd02d606f825b373f7d64d7d335319470217b14f32632504c414c2",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 234722,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-single-rooms-review3/room37/room-37-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room37/room-37-wide/entry-hud.png",
+      "sha256": "dc8f0ec74fcd02d606f825b373f7d64d7d335319470217b14f32632504c414c2",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/config-frozen.json",
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room38/config-frozen.json",
+      "sha256": "e106b24d167525726d6a181f68b3af285d4ac746aa382e654d0118788aa1c8dc",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 427249,
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room38/report.json",
+      "sha256": "a9621877539539b3173da13048558cb6f9d3e5d56b47e2aa8f8928618f4ca82d",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 249982,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/room-38-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room38/room-38-wide/entry-canvas.png",
+      "sha256": "f851699cfa723dea8c4d48e7ecc548fcba260181a545ac48e748c4a1a16829c4",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 249982,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/room-38-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-build4-single-rooms-review3/room38/room-38-wide/entry-hud.png",
+      "sha256": "f851699cfa723dea8c4d48e7ecc548fcba260181a545ac48e748c4a1a16829c4",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 813,
+      "path": "qa-recovery-20261101/native-build4-unpaused-single-rooms-review4/rollup.json",
+      "sha256": "636be60f1b70732e3434fb8d945ee39be94faad2043bdfc671d8f8df64344252",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/config-frozen.json",
+      "path": "qa-recovery-20261101/native-build4-unpaused-single-rooms-review4/room38/config-frozen.json",
+      "sha256": "e106b24d167525726d6a181f68b3af285d4ac746aa382e654d0118788aa1c8dc",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 420109,
+      "path": "qa-recovery-20261101/native-build4-unpaused-single-rooms-review4/room38/report.json",
+      "sha256": "94433e611dd28e34a7194076c51d9c41c7886ceb683ef0a27e41ecbb97a146a7",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 249982,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/room-38-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-build4-unpaused-single-rooms-review4/room38/room-38-wide/entry-canvas.png",
+      "sha256": "f851699cfa723dea8c4d48e7ecc548fcba260181a545ac48e748c4a1a16829c4",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 249982,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/room-38-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-build4-unpaused-single-rooms-review4/room38/room-38-wide/entry-hud.png",
+      "sha256": "f851699cfa723dea8c4d48e7ecc548fcba260181a545ac48e748c4a1a16829c4",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1449,
+      "path": "qa-recovery-20261101/native-build5-room32-material-review1/config-frozen.json",
+      "sha256": "ae90b3f1e034b618e60daf8167896984a00081d10ef1cb9b5cef41f7e629ede9",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 574087,
+      "path": "qa-recovery-20261101/native-build5-room32-material-review1/report.json",
+      "sha256": "5126f8b1956ac5db20d926c2e298f16c6d1288e5b8cfabc8d0785c4da7c509c9",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 104541,
+      "path": "qa-recovery-20261101/native-build5-room32-material-review1/room-32-portrait/entry-canvas.png",
+      "sha256": "a6de8f4a602b4f5a9ea05b433ceb559a9571fb8a4e73468f464d0f62443d3e53",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 106029,
+      "path": "qa-recovery-20261101/native-build5-room32-material-review1/room-32-portrait/entry-hud.png",
+      "sha256": "92af9b555d36944308aecc439ddbbbe8be50a6f7e8a1fd9c6a034f94726a2287",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 223972,
+      "path": "qa-recovery-20261101/native-build5-room32-material-review1/room-32-wide/entry-canvas.png",
+      "sha256": "1f64976948f2335dd2d360ba76ad9133df56b08636fbf9a7bf9bb08d4d3c2a93",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 223972,
+      "hardlinkTarget": "qa-recovery-20261101/native-build5-room32-material-review1/room-32-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-build5-room32-material-review1/room-32-wide/entry-hud.png",
+      "sha256": "1f64976948f2335dd2d360ba76ad9133df56b08636fbf9a7bf9bb08d4d3c2a93",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 6072,
+      "path": "qa-recovery-20261101/native-preparation-build3-reusable-receipt.json",
+      "sha256": "932a2eae3cddb9c693c359b94454d05512ed301711fd6e1c246c39155798062b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 92268,
+      "path": "qa-recovery-20261101/native-preparation-build3-reusable.tar.gz",
+      "sha256": "f81b707f6aaddb75957a44f49b58b4f47d1d34fffbe54996a6eccbf54fde311b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 4863,
+      "path": "qa-recovery-20261101/native-preparation-build4-reusable-receipt.json",
+      "sha256": "8325e6baa5a9b56a32298c0c91bf4c175c77336333d228a6da1640a933c43235",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 100152,
+      "path": "qa-recovery-20261101/native-preparation-build4-reusable.tar.gz",
+      "sha256": "4da2519202d674ca1ea8d53899dc2bba53716315fd17c85655ec83a1d03eba51",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1376,
+      "path": "qa-recovery-20261101/native-room33-build3-review5/config-frozen.json",
+      "sha256": "36c87816dca27d4309e4eb60ecda232a7a8f934694190cea502d9e4a158d286e",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 534416,
+      "path": "qa-recovery-20261101/native-room33-build3-review5/report.json",
+      "sha256": "d90bf40611670d52c859ceb2f67418a401b6c1f32aae0af7d3c4636176ccf91f",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 105241,
+      "path": "qa-recovery-20261101/native-room33-build3-review5/room-33-portrait/entry-canvas.png",
+      "sha256": "6873968a85afcf030ef955514c7fb353ff98e792f93c8e05b2cb8fca21c659f4",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 106524,
+      "path": "qa-recovery-20261101/native-room33-build3-review5/room-33-portrait/entry-hud.png",
+      "sha256": "adbbd5b2b7a3489042a375467cc3b40040a83f4c972ce9fff055eac0155597b9",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 243371,
+      "path": "qa-recovery-20261101/native-room33-build3-review5/room-33-wide/entry-canvas.png",
+      "sha256": "49e3e01427bb05d523821c35be9404abf58ffd7cd0d4af0ea83676c874a7606f",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 243371,
+      "hardlinkTarget": "qa-recovery-20261101/native-room33-build3-review5/room-33-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-room33-build3-review5/room-33-wide/entry-hud.png",
+      "sha256": "49e3e01427bb05d523821c35be9404abf58ffd7cd0d4af0ea83676c874a7606f",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1376,
+      "path": "qa-recovery-20261101/native-room33-build4-review7/config-frozen.json",
+      "sha256": "1307fd98130a7e20f2f75a3d0e797dba1146e0a1ad4b2a6ce68999e72d276af6",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 618471,
+      "path": "qa-recovery-20261101/native-room33-build4-review7/report.json",
+      "sha256": "a66760f0f8393ba01bf308cd0ac1a8ac0b4993969b505736f443b5c986819dbf",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 105241,
+      "hardlinkTarget": "qa-recovery-20261101/native-room33-build3-review5/room-33-portrait/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-room33-build4-review7/room-33-portrait/entry-canvas.png",
+      "sha256": "6873968a85afcf030ef955514c7fb353ff98e792f93c8e05b2cb8fca21c659f4",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 106524,
+      "hardlinkTarget": "qa-recovery-20261101/native-room33-build3-review5/room-33-portrait/entry-hud.png",
+      "path": "qa-recovery-20261101/native-room33-build4-review7/room-33-portrait/entry-hud.png",
+      "sha256": "adbbd5b2b7a3489042a375467cc3b40040a83f4c972ce9fff055eac0155597b9",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 243371,
+      "hardlinkTarget": "qa-recovery-20261101/native-room33-build3-review5/room-33-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-room33-build4-review7/room-33-wide/entry-canvas.png",
+      "sha256": "49e3e01427bb05d523821c35be9404abf58ffd7cd0d4af0ea83676c874a7606f",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 243371,
+      "hardlinkTarget": "qa-recovery-20261101/native-room33-build3-review5/room-33-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-room33-build4-review7/room-33-wide/entry-hud.png",
+      "sha256": "49e3e01427bb05d523821c35be9404abf58ffd7cd0d4af0ea83676c874a7606f",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1084,
+      "path": "qa-recovery-20261101/native-room33-review1/config-frozen.json",
+      "sha256": "aa2060266267b0ab95bf6da045ceb1d07a97c96b220d28efb78262f8e42356a0",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 17182,
+      "path": "qa-recovery-20261101/native-room33-review1/report.json",
+      "sha256": "a2cdaf2fe1ab15e03c10b0c6e62aba1ead787d0e4ac395ec099a111b2c9b12d4",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1121,
+      "path": "qa-recovery-20261101/native-room33-shell-review2/config-frozen.json",
+      "sha256": "e50ad7a105bd8adf0f9e01eed5ead86e4ff8b27987d8154ac65f6bfa59aa5889",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 257488,
+      "path": "qa-recovery-20261101/native-room33-shell-review2/report.json",
+      "sha256": "b86a507e59e32d714c2145c6aa639f2dc6aba7530dc680b422de92165468cdc8",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 243371,
+      "hardlinkTarget": "qa-recovery-20261101/native-room33-build3-review5/room-33-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-room33-shell-review2/room-33-wide/entry-canvas.png",
+      "sha256": "49e3e01427bb05d523821c35be9404abf58ffd7cd0d4af0ea83676c874a7606f",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 243371,
+      "hardlinkTarget": "qa-recovery-20261101/native-room33-build3-review5/room-33-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-room33-shell-review2/room-33-wide/entry-hud.png",
+      "sha256": "49e3e01427bb05d523821c35be9404abf58ffd7cd0d4af0ea83676c874a7606f",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1376,
+      "path": "qa-recovery-20261101/native-room33-shell-review3/config-frozen.json",
+      "sha256": "e9e697a7762fe3443d05b200a3e41d4bce9cab762232519c19a4b260f37f3809",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 275218,
+      "path": "qa-recovery-20261101/native-room33-shell-review3/report.json",
+      "sha256": "2d0eefd8f85346e6a01986720c228427655c8545f1c99d2612ed4a7cdabb6d66",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 243371,
+      "hardlinkTarget": "qa-recovery-20261101/native-room33-build3-review5/room-33-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-room33-shell-review3/room-33-wide/entry-canvas.png",
+      "sha256": "49e3e01427bb05d523821c35be9404abf58ffd7cd0d4af0ea83676c874a7606f",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 243371,
+      "hardlinkTarget": "qa-recovery-20261101/native-room33-build3-review5/room-33-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-room33-shell-review3/room-33-wide/entry-hud.png",
+      "sha256": "49e3e01427bb05d523821c35be9404abf58ffd7cd0d4af0ea83676c874a7606f",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 4563,
+      "path": "qa-recovery-20261101/native-root-entry-review-30-32-33-36-37.json",
+      "sha256": "fc7b0032c470a4a654b024f1cf4d622db591fa9b1165cdbd63ff44532a3391e5",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2124,
+      "path": "qa-recovery-20261101/native-root-entry-review-31-34.json",
+      "sha256": "dde48d74d15d36846a4546bc6ba6ae7f8cff838c2540eadbc96000827c5eea9e",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 3938,
+      "path": "qa-recovery-20261101/native-root-entry-review-35-38-39-40.json",
+      "sha256": "c685e68f4a9dff134aa7d4d789fefac96084c98bda5e886cf295bd95e7cc163a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1517,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/rollup.json",
+      "sha256": "9ddd37201208773a3697b50afd4efa9ef39b67447ab52edaaba90fb9eabb24f5",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1454,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room35/config-frozen.json",
+      "sha256": "2252c79fd3cfe252da4822233157af187a8a3a69e1b33672a8063f66568bce19",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 648106,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room35/report.json",
+      "sha256": "6b1a0161946f366006998c41403000b68cbcb2c1199630b6008064232628a318",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 97160,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room35/room-35-portrait/entry-canvas.png",
+      "sha256": "6e420a966d7c38b0a4954b7ddc3274f7786de5d89d77fb72638a51dfeb994e9d",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 98780,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room35/room-35-portrait/entry-hud.png",
+      "sha256": "90b7773f6b107fafccb5465c5dd1534d23054e1b4476ac74e84ed4fb06420e2b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 200242,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room35/room-35-wide/entry-canvas.png",
+      "sha256": "458dea8194088032eb7d1c9689f4361ad48d99cd7194650e84b5733ab6ac9e9b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 200242,
+      "hardlinkTarget": "qa-recovery-20261101/native-visual-entry-collector-review6/room35/room-35-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room35/room-35-wide/entry-hud.png",
+      "sha256": "458dea8194088032eb7d1c9689f4361ad48d99cd7194650e84b5733ab6ac9e9b",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1454,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room38/config-frozen.json",
+      "sha256": "fc20891f21c0cd20669c793e4c5b4f63d38b4cbb167a6e8e7eafc37548b2f005",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 869113,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room38/report.json",
+      "sha256": "4096cf679a5957278c25513ca6a05985a1d78c3af391e5658a24c290d47a0e0a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 94236,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room38/room-38-portrait/entry-canvas.png",
+      "sha256": "8ced47e64937fe6981da4559eee6eae940ab736b63c8124137a32d1fffb6d302",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 95884,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room38/room-38-portrait/entry-hud.png",
+      "sha256": "ff486f35f9aa7465c421da8c3960c9dcfdf47a7cbb76522aeac7a04d1d67a2b6",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 249982,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/room-38-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room38/room-38-wide/entry-canvas.png",
+      "sha256": "f851699cfa723dea8c4d48e7ecc548fcba260181a545ac48e748c4a1a16829c4",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 249982,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/room-38-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room38/room-38-wide/entry-hud.png",
+      "sha256": "f851699cfa723dea8c4d48e7ecc548fcba260181a545ac48e748c4a1a16829c4",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1454,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room39/config-frozen.json",
+      "sha256": "db37eb603872c26e10b9be2ebebcfd539fd8873b7912608cf77e9ad74739a757",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 441937,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room39/report.json",
+      "sha256": "aba058bef4d55bdb26a48afbb6fbadea9eb81f61c5e69e844c4e3a258d10da2d",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 89039,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room39/room-39-portrait/entry-canvas.png",
+      "sha256": "55cf6def3f95920c04655d3cdbde666230b7494a889365b94474610882900b30",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 90732,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room39/room-39-portrait/entry-hud.png",
+      "sha256": "d4dac9a85e6cc61653c125e6c7632c631f60939fe37464d9733b618eb9a65a71",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 215318,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room39/room-39-wide/entry-canvas.png",
+      "sha256": "6d60fb536edb8e59f157ebb925ae796f0d7fa4df5a55c03f2ef343d28cd5827a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 215318,
+      "hardlinkTarget": "qa-recovery-20261101/native-visual-entry-collector-review6/room39/room-39-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room39/room-39-wide/entry-hud.png",
+      "sha256": "6d60fb536edb8e59f157ebb925ae796f0d7fa4df5a55c03f2ef343d28cd5827a",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1454,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room40/config-frozen.json",
+      "sha256": "7e71ceaed639a80877dae4abe8f6c53899a53ade2a0ba37fa5b0de3250a473a6",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 485239,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room40/report.json",
+      "sha256": "f769a6f43fb9490cf8b6939521f09361a446ed5f5a629c61126de6ed7de74423",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 94875,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room40/room-40-portrait/entry-canvas.png",
+      "sha256": "1dbb960851422c3446a93c764dfc406de3e1a20b6c64989e65bc813e3195c76f",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 96450,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room40/room-40-portrait/entry-hud.png",
+      "sha256": "402847f0585532b241300c08ed9870fcc80bd887c9bf9bfc645ded41475d202d",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 239157,
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room40/room-40-wide/entry-canvas.png",
+      "sha256": "1ff7560445aae1d52b8609876cdf3816a7deed79ae5b482c11f3fb942e3fde1b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 239157,
+      "hardlinkTarget": "qa-recovery-20261101/native-visual-entry-collector-review6/room40/room-40-wide/entry-canvas.png",
+      "path": "qa-recovery-20261101/native-visual-entry-collector-review6/room40/room-40-wide/entry-hud.png",
+      "sha256": "1ff7560445aae1d52b8609876cdf3816a7deed79ae5b482c11f3fb942e3fde1b",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 3446,
+      "path": "qa-recovery-20261101/new9-room44-independent-source-review.json",
+      "sha256": "1c0fa8970c302ad297b7efd620f94203ec5fbc00fd4c2b381930202090a5846b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 10331,
+      "path": "qa-recovery-20261101/observatory-entry-reconstruction/before/src/game/LabCreativeCounterweightRoom.js",
+      "sha256": "470ca4207829c7e8be0cdd2a5a7fac75b67d4f2c6f59e1d9fc9c3692388efebe",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 7146,
+      "path": "qa-recovery-20261101/observatory-entry-reconstruction/before/src/game/LabCreativeFinalJourney.js",
+      "sha256": "0e990bcef88a99cb4a68b327b644a30b54d8bac59f98e712ff56e175ee1f8438",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 22197,
+      "path": "qa-recovery-20261101/observatory-entry-reconstruction/before/src/game/LabCreativeFinalRooms.js",
+      "sha256": "533f77713da3256ab3c0ac4536bb6187ab96c725fcd10fe2066c4229803933e7",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 7930,
+      "path": "qa-recovery-20261101/observatory-entry-reconstruction/before/src/game/LabLateCampaignRoomsA.js",
+      "sha256": "7b3c56ca2bf084adc8746b255c44ce1310e81b6fa71b1c8e122e44f00d65dc3c",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 6628,
+      "path": "qa-recovery-20261101/observatory-entry-reconstruction/before/src/game/LabLateCampaignThermalRoom.js",
+      "sha256": "963fe87ad5379510b2ce961312654a4f3e50ae0a2fdb32747da5c8d700601f4d",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 17855,
+      "path": "qa-recovery-20261101/observatory-entry-reconstruction/before/src/game/LabPostCampaignA.js",
+      "sha256": "07554cb1d0301bc74c96c5c351bfb95ef363ea2ca9f64327e9bb38b3facadcdd",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 5659,
+      "path": "qa-recovery-20261101/observatory-entry-reconstruction/before/src/game/LabPostCampaignB.js",
+      "sha256": "55085edd040ff8c12227ae23bbad57c510797796c91d9fd7879d1c08e8facd25",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 3593,
+      "path": "qa-recovery-20261101/observatory-entry-reconstruction/receipt.json",
+      "sha256": "3cce07ec4dea69cfb018b342701111a1a5c4ede7ca6fc7bd1476eddf243d3dc9",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 10496,
+      "path": "qa-recovery-20261101/observatory-entry-reconstruction/source-only.patch",
+      "sha256": "1c652aeb9a866e0c56ef19488f037a36d79ef155dfb73643e0a6a7347bd4734b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1717,
+      "path": "qa-recovery-20261101/observatory-finishes-manifold-attempt1/bad-edges.json",
+      "sha256": "409202a8a7bbbee79cbf28a0a94bf1da2b417cf4d09acb4aa95ed14497f47bbe",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 429,
+      "path": "qa-recovery-20261101/observatory-finishes-manifold-attempt1/corrected-tiny.tap",
+      "sha256": "8a44fd73b5af938052d980bde44b12f7d1e7cec4fe1ac7a423b1959f0c90e95c",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2744,
+      "path": "qa-recovery-20261101/observatory-finishes-manifold-attempt1/source-and-tiny-receipt.json",
+      "sha256": "ec37bcd18843ab6b9fc87e6fa3cf36e4efc6a08ba041af2bd9dd5906b129e18f",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 4461,
+      "path": "qa-recovery-20261101/observatory-finishes-manifold-attempt1/test-failed-b4f6.mjs",
+      "sha256": "b4f6ccddf6265bd0388fd257b064f47e7a37e1862498e4419e857099d94ee1a7",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 4496,
+      "path": "qa-recovery-20261101/observatory-finishes-manifold-attempt1/wall-failed-2d989.mjs",
+      "sha256": "2d989809b4903c2ca11adc397978ed431e670df2562031d84517d1ec4e7e4c21",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 4368,
+      "path": "qa-recovery-20261101/observatory-ordinary-prepared-v2/REVIEW.md",
+      "sha256": "7b34031cb156d4229325330441876d4a950a5f9b3c1070c3041316dfd71e46a1",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 16899,
+      "path": "qa-recovery-20261101/observatory-ordinary-prepared-v2/controller.mjs",
+      "sha256": "d475a303ef6b81fdad7da0ee0ee250d7e904d9e34410c6762364b2b8b597ea0a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2305,
+      "path": "qa-recovery-20261101/observatory-ordinary-prepared-v2/freeze.py",
+      "sha256": "fb4b1f8379c6e8866164c160bb256ef32764bad8407d7298dd9c9499f6bf0bf9",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 4876,
+      "path": "qa-recovery-20261101/observatory-ordinary-prepared-v2/from-failed-a2.patch",
+      "sha256": "063a13e75fb6cb0c0e1a673f955b3bee13ab1645c4aedbb28253e3eab56be214",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1005,
+      "path": "qa-recovery-20261101/observatory-ordinary-prepared-v2/source-only-derivative-receipt.json",
+      "sha256": "7b7458842fa7de5432b90207cd5a0dd3f1b781fcdb2a8ab6b65bae0d77be010f",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 3793,
+      "path": "qa-recovery-20261101/observatory-ordinary-prepared/REVIEW.md",
+      "sha256": "432450f2d003fd1919b62353e9c2ef2990cc3cc056a12dc5bc206522788f2f2a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 16114,
+      "path": "qa-recovery-20261101/observatory-ordinary-prepared/controller.mjs",
+      "sha256": "a2bce9271aa45725c8be3cbeed7fc96260deea5d684c6bfd62f8e0e7e83d4fee",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2305,
+      "hardlinkTarget": "qa-recovery-20261101/observatory-ordinary-prepared-v2/freeze.py",
+      "path": "qa-recovery-20261101/observatory-ordinary-prepared/freeze.py",
+      "sha256": "fb4b1f8379c6e8866164c160bb256ef32764bad8407d7298dd9c9499f6bf0bf9",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1252,
+      "path": "qa-recovery-20261101/observatory-ordinary-prepared/source-preparation-receipt.json",
+      "sha256": "5b2dee271e1aeeb3fcc40b6dc4438a9df3e06357c6b1a6ed08e5fac64f021635",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 579,
+      "path": "qa-recovery-20261101/ordinary-batch1/batch.json",
+      "sha256": "6de9023e700e8c394d4da5ef612cc58427f6157e3976a8fdc17bf263b834f5be",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 413,
+      "path": "qa-recovery-20261101/ordinary-batch1/room33-canonical.log",
+      "sha256": "8a86353416eb6206917f6309546e1c9a72e1c06495ce864c676918caab3e9a18",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1659,
+      "path": "qa-recovery-20261101/ordinary-batch1/room33-canonical/report.json",
+      "sha256": "bca51dca65eaef0ab48c15f63bb6651f428eceb50fc9fc752be7e7ecff0b0967",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1210,
+      "path": "qa-recovery-20261101/ordinary-batch2/batch.json",
+      "sha256": "5e70969a96e0654a5ca0c1737be2f26840f43e6d86aeed6a72858f782338c851",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 869,
+      "path": "qa-recovery-20261101/ordinary-batch2/room33-alternate.log",
+      "sha256": "e4fa437093994decea57279aff484ce54ffb00cc3fbde7137c810b5faf320f81",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 48666,
+      "path": "qa-recovery-20261101/ordinary-batch2/room33-alternate/report.json",
+      "sha256": "8899372ce32c3ee577c30ba20f4e149ce69a5d44bb169ae08c8e80fc155e2d11",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 121,
+      "path": "qa-recovery-20261101/ordinary-batch2/room33-canonical.log",
+      "sha256": "903224779c17b01703eb6ac761ca3c8621bae527ac58dbbdbfe6a7bcdee70aca",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 93013,
+      "path": "qa-recovery-20261101/ordinary-batch2/room33-canonical/report.json",
+      "sha256": "275ee962b2dd7337084306112040696420b9fb40df4a6de296836aefc2f7a027",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1634,
+      "path": "qa-recovery-20261101/ordinary-batch3/batch.json",
+      "sha256": "ffa33308edf45ddc15c110deff78429cad6e99bc9813ff798f35c76328b49802",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 122,
+      "path": "qa-recovery-20261101/ordinary-batch3/room31-alternate.log",
+      "sha256": "d65a5d2fe2641feb7d04ad4f61468dbf571cc1ce6e280458908f2cf4c73b486c",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 90436,
+      "path": "qa-recovery-20261101/ordinary-batch3/room31-alternate/report.json",
+      "sha256": "89e827fd96000f6fe20bedc33c5cc5b7ae129bbf0eb11b242817c7e49e0c0f12",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 121,
+      "path": "qa-recovery-20261101/ordinary-batch3/room31-canonical.log",
+      "sha256": "bc85d4f65d568413e9ab00de78a38c0f02347a5bd053ff2c698af8ff0c81cce7",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 89820,
+      "path": "qa-recovery-20261101/ordinary-batch3/room31-canonical/report.json",
+      "sha256": "1c524d72adde3234b5bac1b1c7091c373a28d4c4250db584c2dd287aad5c53fb",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 752,
+      "path": "qa-recovery-20261101/ordinary-batch3/room32-canonical.log",
+      "sha256": "9205470b51f237364a90b3bd9dc5f2b48a72fc51ad8035f76283698dbc2b4c4c",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 49221,
+      "path": "qa-recovery-20261101/ordinary-batch3/room32-canonical/report.json",
+      "sha256": "69ed215d71b71bea3f5b489d18cd88d7e2ba4e8dc79946cabdbf624d8233e5b6",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 122,
+      "path": "qa-recovery-20261101/ordinary-batch3/room33-alternate.log",
+      "sha256": "03e8f3ad4c22f06a1e4997316e1f8ce800b812677ce59130fceb906d241da7f1",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 93014,
+      "path": "qa-recovery-20261101/ordinary-batch3/room33-alternate/report.json",
+      "sha256": "11cc4160c9c2793a33d2ccb574ec88192a45b49f6148c1a375fc3b7746641364",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 121,
+      "path": "qa-recovery-20261101/ordinary-batch3/room33-canonical.log",
+      "sha256": "b241e0cd829de6d1fe2dbde0e5b1511f92f6f3c67470ebf0014c3a41bce41698",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 93013,
+      "path": "qa-recovery-20261101/ordinary-batch3/room33-canonical/report.json",
+      "sha256": "8413c9d79e99e7990292ad30861a8166e77cf50b296b5b13befe00b962574a16",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2593,
+      "path": "qa-recovery-20261101/ordinary-batch4/batch.json",
+      "sha256": "635efe5a62d63365cdbcba990e16033a74b57ced5f8c5d2238d1e991fb12229b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 121,
+      "path": "qa-recovery-20261101/ordinary-batch4/room30-alternate.log",
+      "sha256": "5484ca522f44decb377bbc8a50f8e02901e4488a04b70d2fa2ecfb9d40c50ad0",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 91600,
+      "path": "qa-recovery-20261101/ordinary-batch4/room30-alternate/report.json",
+      "sha256": "2753a78ae5e52fd401bd0f137f3dfada250ef3849c01b97fbfb3b25039400bd6",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 121,
+      "path": "qa-recovery-20261101/ordinary-batch4/room30-canonical.log",
+      "sha256": "f09b2aca3b1b6a7b794f6c0af5d8f77c6ab4b660e82dfa9821c3f6a39ecc9858",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 91523,
+      "path": "qa-recovery-20261101/ordinary-batch4/room30-canonical/report.json",
+      "sha256": "10f893ac43e60364a4ace7e28841e704be49baa1fb61f7cf30275225e2a0c73e",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 121,
+      "path": "qa-recovery-20261101/ordinary-batch4/room32-alternate.log",
+      "sha256": "86beba7b95c9eff6beb07079f8d69a17f3dac4b0724bb4025a847e7dfc301734",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 91865,
+      "path": "qa-recovery-20261101/ordinary-batch4/room32-alternate/report.json",
+      "sha256": "f35695b6488c9eff2318e332f76776a22a2d3e1ed41a16c3998f9db54992670c",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 121,
+      "path": "qa-recovery-20261101/ordinary-batch4/room32-canonical.log",
+      "sha256": "6e1c7717f95a8e0eac9df703663dae8ce568339ba151e1f6b3dbd8c83957b21a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 91209,
+      "path": "qa-recovery-20261101/ordinary-batch4/room32-canonical/report.json",
+      "sha256": "4dade20a6400f0e64d2b33a465f18ed087bc9f0c0e680ea59361ace5b654aca7",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 121,
+      "path": "qa-recovery-20261101/ordinary-batch4/room34-alternate.log",
+      "sha256": "c7442d46f07e56eecef861bff3178173659397b900a5890405b24b4ded97196f",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 92852,
+      "path": "qa-recovery-20261101/ordinary-batch4/room34-alternate/report.json",
+      "sha256": "505d1f180eaa585e9a48469863db0401a5816d881a2d3202a1511d033175e166",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 121,
+      "path": "qa-recovery-20261101/ordinary-batch4/room34-canonical.log",
+      "sha256": "946fd0700cc020a4bc5823d2e3e5f41eb78301a8e5bc7212037fd93a17c36fc6",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 92173,
+      "path": "qa-recovery-20261101/ordinary-batch4/room34-canonical/report.json",
+      "sha256": "1be7625ccf948e89007e5a9a461ac336a487d9086b1554bd559e6dbf35b789ce",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 121,
+      "path": "qa-recovery-20261101/ordinary-batch4/room36-alternate.log",
+      "sha256": "a1d54bc7a099e10a11144387fe7f2c8e9bf939c574e6e43eae2bce7dbadaea44",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 91870,
+      "path": "qa-recovery-20261101/ordinary-batch4/room36-alternate/report.json",
+      "sha256": "017e02d0235eac4980ab22749f94cc72bc2d5bff9520917de1247d1c02853920",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 121,
+      "path": "qa-recovery-20261101/ordinary-batch4/room36-canonical.log",
+      "sha256": "ff220fa6595e2e6f11a6a88ac54ac49135f1705eb87e6e4bce256ec1dab67887",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 91888,
+      "path": "qa-recovery-20261101/ordinary-batch4/room36-canonical/report.json",
+      "sha256": "89957ee1544f463ecbd0160bef4c10bc764f423186b454958e1e8c1f4fdcfbfd",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 121,
+      "path": "qa-recovery-20261101/ordinary-batch4/room37-alternate.log",
+      "sha256": "eb16a71aa7b6e69a246b6395c37227225c708276c9d826af529a2f9b1c5cfbde",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 93923,
+      "path": "qa-recovery-20261101/ordinary-batch4/room37-alternate/report.json",
+      "sha256": "970e2d8828d04b3a7d267fd5ddc4bc1f3f50de1c69f5af676d95ae8eded84071",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 121,
+      "path": "qa-recovery-20261101/ordinary-batch4/room37-canonical.log",
+      "sha256": "1305801cf453df3fc8b61f4c8db82fe5f6609d9100e6de7264806637abbf1842",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 93273,
+      "path": "qa-recovery-20261101/ordinary-batch4/room37-canonical/report.json",
+      "sha256": "4147915fdec61c73d3645389f4301c48fb66d4750eec962c64bac7b997607fc0",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 121,
+      "path": "qa-recovery-20261101/ordinary-batch4/room39-alternate.log",
+      "sha256": "cf8bbef3ef80711eebb54df940845ba5c078b48d94803f1098f16579e4ff063b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 90513,
+      "path": "qa-recovery-20261101/ordinary-batch4/room39-alternate/report.json",
+      "sha256": "0c3acaf2c66b9ae58f2e5a5c9824f5d205478ffbdcddfebe3ee8446a6f34d6b1",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 121,
+      "path": "qa-recovery-20261101/ordinary-batch4/room39-canonical.log",
+      "sha256": "ea1b965522c5fbc2a8889edc1dc7a72ae2ea6126e875ce1b1fe2e16c095cb3f0",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 90457,
+      "path": "qa-recovery-20261101/ordinary-batch4/room39-canonical/report.json",
+      "sha256": "12f5108be7809be414a77dc50bf468703df20e84ed1f2b0fefd75530af72964a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 121,
+      "path": "qa-recovery-20261101/ordinary-batch4/room40-alternate.log",
+      "sha256": "0768c841a1f55488ef45d57d0f5855765261aa6d4248da78c745e5afaa3faf4a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 92605,
+      "path": "qa-recovery-20261101/ordinary-batch4/room40-alternate/report.json",
+      "sha256": "7c792cf768481699a86ed14ba7ea0f8429883e205b0a6a9c64feacb397f30873",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 121,
+      "path": "qa-recovery-20261101/ordinary-batch4/room40-canonical.log",
+      "sha256": "766f48b440f40de2f8946ae96dad8501d64b79293c2fa8c4a9fbd02a3a885769",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 91948,
+      "path": "qa-recovery-20261101/ordinary-batch4/room40-canonical/report.json",
+      "sha256": "68aff2e515fb5b89daa12a66d6baf650a0acd6cc044c4c8b778417fffa4069c4",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 500,
+      "path": "qa-recovery-20261101/ordinary-frozen1/config.json",
+      "sha256": "3b6ad8a5a69c4acdcd6f08b704d6d9c6a2e8dee8c5fd95231bddc5e07615cbc5",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 214283,
+      "path": "qa-recovery-20261101/ordinary-frozen1/source-inputs.json",
+      "sha256": "43c6c657f1bfff0b6bb6021b0550f4e8dc816a708c360e3f0b35c4ea41cb7ccb",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 500,
+      "path": "qa-recovery-20261101/ordinary-frozen2/config.json",
+      "sha256": "725d52d38b21120dde62cc37812d677457a47843a4ca9b86ffa970cbf31b033f",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 214283,
+      "hardlinkTarget": "qa-recovery-20261101/ordinary-frozen1/source-inputs.json",
+      "path": "qa-recovery-20261101/ordinary-frozen2/source-inputs.json",
+      "sha256": "43c6c657f1bfff0b6bb6021b0550f4e8dc816a708c360e3f0b35c4ea41cb7ccb",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 500,
+      "path": "qa-recovery-20261101/ordinary-frozen3/config.json",
+      "sha256": "444874807bc853cb5ccfd69cb112b5eb8c2dded00f6e48460ffee9ccdc496d3a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 214639,
+      "path": "qa-recovery-20261101/ordinary-frozen3/source-inputs.json",
+      "sha256": "ecf758721f5306f792ec30ea009e34c8768193cfe2fe42ae735d1416e78df0be",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 500,
+      "path": "qa-recovery-20261101/ordinary-frozen4/config.json",
+      "sha256": "6d3d10f66d0b9dee3abfdc628ca46952cb342e4c8ff46e3b29a138813ef62546",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 214830,
+      "path": "qa-recovery-20261101/ordinary-frozen4/source-inputs.json",
+      "sha256": "76c4af8b288ff15b704c02a2ce474438d7be59be1d02a93755069590b883be0e",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2489,
+      "path": "qa-recovery-20261101/room30-floor-shader-review/review-receipt.json",
+      "sha256": "926a2017c6a5a26ee3eff827a3c9693d38e8129feee73918826a4f592317ecaf",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 512,
+      "path": "qa-recovery-20261101/room32-pickup-causal-frozen1/config.json",
+      "sha256": "f703da59961189501380a71b5d39dea5eaa518c31221d6b9b14779d8c65fa3e1",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 214830,
+      "path": "qa-recovery-20261101/room32-pickup-causal-frozen1/source-inputs.json",
+      "sha256": "0e9f1b88a21617b3b08fc4a73c0adc257f9b606bb053cc078347030ee4d84125",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 645370,
+      "path": "qa-recovery-20261101/room32-pickup-causal-review1/report.json",
+      "sha256": "4f3132b0126434921efc28899a274811784218c9e839329263ed8a0dd510ea48",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 3508,
+      "path": "qa-recovery-20261101/room32-pickup-diagnostic-prepared/README.md",
+      "sha256": "45573736a1b0b62ea1b01ec01ac20ba32b6412f6c0a9d0d73d4e079edb98b7e7",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 25716,
+      "path": "qa-recovery-20261101/room32-pickup-diagnostic-prepared/controller.before-existing-index-hardening-1e7.mjs",
+      "sha256": "1e7c1e3b1651dcd42419380cf33bec6fdeb6983f2fe1fde60300b8f5b1ad282a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 23447,
+      "path": "qa-recovery-20261101/room32-pickup-diagnostic-prepared/controller.before-lazy-bounds-hardening-e07.mjs",
+      "sha256": "e07a36586fd0476b6ccaac7d23b361aeca43ac2d1a12b9527a8d7045229ea4a4",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 26487,
+      "path": "qa-recovery-20261101/room32-pickup-diagnostic-prepared/controller.mjs",
+      "sha256": "26b16e4bc5f8cee4dc58ac82d4456ecac54fcc5e88e6f33cd925e690f0da7453",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 9252,
+      "path": "qa-recovery-20261101/room32-pickup-diagnostic-prepared/existing-index-hardening.patch",
+      "sha256": "bcc1b6fbb3b97bb1986dc6d62ce3aae3e2a37889bb527e54201cd54be604530d",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 10813,
+      "path": "qa-recovery-20261101/room32-pickup-diagnostic-prepared/final-hardening-from-root-reviewed-e07.patch",
+      "sha256": "3114c4615d14e5d8a4da3a561c865201fede9693aaa7f61802ce31d031aa5186",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2305,
+      "hardlinkTarget": "qa-recovery-20261101/observatory-ordinary-prepared-v2/freeze.py",
+      "path": "qa-recovery-20261101/room32-pickup-diagnostic-prepared/freeze.py",
+      "sha256": "fb4b1f8379c6e8866164c160bb256ef32764bad8407d7298dd9c9499f6bf0bf9",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 13774,
+      "path": "qa-recovery-20261101/room32-pickup-diagnostic-prepared/from-reviewed-v2.patch",
+      "sha256": "fd5cbf6116eac323429b0e5aaa892d19efa7666215545ca7d40ba4eff5689a94",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1804,
+      "path": "qa-recovery-20261101/room32-pickup-diagnostic-prepared/independent-source-review-attempt1.json",
+      "sha256": "86736b157b1caf986312d813c6cb6b116c7558ed4546fb52c7bc3ccf2ce4dc31",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2157,
+      "path": "qa-recovery-20261101/room32-pickup-diagnostic-prepared/independent-source-review.json",
+      "sha256": "57ca1c2ebdee9bb57ae9648071484f6113806f1a7113fea7f8fa07942c11cc17",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 9738,
+      "path": "qa-recovery-20261101/room32-pickup-diagnostic-prepared/lazy-bounds-hardening.patch",
+      "sha256": "7d7a4fe36e79c61b16ed609ca41a1f702d705eedab8ec2695406064a4bf0f4b8",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1881,
+      "path": "qa-recovery-20261101/room32-pickup-diagnostic-prepared/source-only-receipt.json",
+      "sha256": "a860c00febca5c20833e8b25f068a5d24d59bca6cf6cbba77c7ccc6ccb47c52c",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 11626,
+      "path": "qa-recovery-20261101/room32-pickup-route-proposal/LabPostJourneyA.before-bd9e9e06.js",
+      "sha256": "bd9e9e06f4944bf4141cc465100c7a7146db27a924b0b2060fb09c6cb21123b7",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2309,
+      "path": "qa-recovery-20261101/room32-pickup-route-proposal/independent-proposal-source-review.json",
+      "sha256": "ae73b16eb22532f7deb97794012182e60159498a1c4dc752831d054f46f0e514",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 3976,
+      "path": "qa-recovery-20261101/room32-pickup-route-proposal/proposal-and-source-receipt.before-independent-ack-dde210a9.json",
+      "sha256": "dde210a97dcb729b8e970247ad892a75994a2748d884229fd276239bf0f40f34",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 4309,
+      "path": "qa-recovery-20261101/room32-pickup-route-proposal/proposal-and-source-receipt.json",
+      "sha256": "50d2a7e17daba5ff7d2401dd13030b9230268b42a55a57e4c2fbbdb31093ab41",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1032,
+      "path": "qa-recovery-20261101/room32-pickup-route-proposal/source-only.patch",
+      "sha256": "f8579aee9dec266d566b5717fb3a9a15bb32b1ca680430864fa359fa2c959bb2",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 10469,
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/LabOpticsArchitecture.before.js",
+      "sha256": "72ffeabfdfff494dfeddacbd9f5a338695146185d64107df2c16c8b6e5458f04",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 12255,
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/LabOpticsArchitecture.candidate.js",
+      "sha256": "365551a91780d7e82812ac9a4516bd9d0ea580c375f817e5a471d15f0f3bc5ec",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 4100,
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/inverse.patch",
+      "sha256": "06471f75d6be9c8ba9ab6beb4a7cce28e09bb1efff31b87238056fb6050252c3",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 504,
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/patch-roundtrip-verification.json",
+      "sha256": "ab40fa8c9d1ccff26d92d4529ef6f022902e880e7a2d5a482a82999c175d0a6a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 5919,
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/proposal-receipt.json",
+      "sha256": "2ef18e4be08bf02580fbd410d70fe999dcac41bb6c5363c7f8afccf3d934981d",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 10469,
+      "hardlinkTarget": "qa-recovery-20261101/room32-rear-cover-material-proposal/LabOpticsArchitecture.before.js",
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/review2/LabOpticsArchitecture.before.js",
+      "sha256": "72ffeabfdfff494dfeddacbd9f5a338695146185d64107df2c16c8b6e5458f04",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 12476,
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/review2/LabOpticsArchitecture.candidate.js",
+      "sha256": "f3de98359b16993f98298d824b14cbd8c4d2cef0facdeb1810ccfdfacef32aa5",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 545,
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/review2/actual-owned-lifecycle.json",
+      "sha256": "d9d6c950bd8d596f2f84a635cac88b8c2ff4bfdb37d0aa75511d0948f489baa9",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1333,
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/review2/actual-raw-pixel-comparison.json",
+      "sha256": "9428b5701a31435b753d28f81b511263ba9af044ef845f5e32599d652ca9c75b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 232,
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/review2/actual-selected-optics32.tap",
+      "sha256": "c0078c3af389f906d9b2a1cbc16725d5f1c9a28d2a5ac5ccf08c8d5c845d8338",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1449,
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/review2/final-source-ready-receipt.json",
+      "sha256": "3b971729bdaa6c0bbf5a1d56993f3fbcdb97ef0e2e8ff31a70f0ab1e21e4790c",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 924,
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/review2/from-review1.patch",
+      "sha256": "112201b565c6076aca52b4a4d4023b3dca4d67ea229272f04d514f38c194ea92",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2353,
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/review2/independent-source-review.json",
+      "sha256": "fbe90fbf01578a0fde1895493091f1432aea1c2343c695bf487f8b83b482dc9b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 4323,
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/review2/inverse.patch",
+      "sha256": "bc8ad4ef6b0f2f02bd7a313eb2dc2290c81b2b3b115d227421c17090b94e1feb",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 7852,
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/review2/proposal-receipt.json",
+      "sha256": "0588f20d74f553ad02c8fdf4475873b34e099555aee825fe3993487790e9c60a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 3221,
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/review2/source-bounds-projection.json",
+      "sha256": "9680b58bd3f9dfab9d737bc275f2fc978270e061e999d6ead8569e44b8139156",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 4323,
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/review2/source-only.patch",
+      "sha256": "5106207257c3bac7bb0f199f1baf46fc12ab1cb4d3fb6533aac9df28fff14aab",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2785,
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/review2/verify-owned-lifecycle.mjs",
+      "sha256": "2111cfe3159796189e79d58de4251a9641f52f4c28178809f5e3ec3181a488a0",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 4100,
+      "path": "qa-recovery-20261101/room32-rear-cover-material-proposal/source-only.patch",
+      "sha256": "629a3b8584121fdf104d8658b7cfa28e50e25481b3bea2cf0ad614d0db760dc4",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 26183,
+      "path": "qa-recovery-20261101/room33-exact-transit/SOURCE_AND_DISPATCH_FIX.patch",
+      "sha256": "e3db6109cf1c75259ebb56406460f1c118ee8594ca7661c8ea7e94148ec50d7a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 23171,
+      "path": "qa-recovery-20261101/room33-exact-transit/SOURCE_ONLY_COMPONENT.patch",
+      "sha256": "2c7e392df0a3c98b08715e33a46bc212aebd1f6725ab24cd3bd3270c66652843",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 794,
+      "path": "qa-recovery-20261101/room33-exact-transit/component-attempt1-failure.json",
+      "sha256": "42afaf712a0834c548a159868112c01e8644fac88e25aaa32a52eb52ad40b1ec",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 151,
+      "path": "qa-recovery-20261101/room33-exact-transit/component-attempt2-harness-failure.json",
+      "sha256": "e5c11335079bab32734a4e1ba13cd44de272b2ee490678fa419b05a5db3c56ed",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 803,
+      "path": "qa-recovery-20261101/room33-exact-transit/component-attempt3.json",
+      "sha256": "1986fbbdeddf48e8b3886603ef7220d6c54feb97acfdedb4822c61fce9c9a92c",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1188,
+      "path": "qa-recovery-20261101/room33-exact-transit/component-attempt3.tap",
+      "sha256": "a02143fb1c06856f3ad1600a4c87256ce15655886b2aed3a57ae7c9c42beaf8a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1001,
+      "path": "qa-recovery-20261101/room33-exact-transit/component-attempt4.json",
+      "sha256": "e6d8ed2537b5162f5e6eaeda5c93f222256ecaa6634fd76f189f673f447918d1",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1285,
+      "path": "qa-recovery-20261101/room33-exact-transit/component-attempt4.tap",
+      "sha256": "593bb9366112b4960bf469aa92a92bfc5099b9bb21a731cf19fc3e37212c6be5",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1630,
+      "path": "qa-recovery-20261101/room33-exact-transit/dispatch-correction-receipt.json",
+      "sha256": "8ac4101f733cdd07867def98e97ff3d289cebd68d634ec42d7736d15636e45d1",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1038,
+      "path": "qa-recovery-20261101/room33-exact-transit/dispatch-fix-components-attempt1.json",
+      "sha256": "677a004a433e91b52e2ec3231994802f31f12d76d656b50fb98064da0cff7a37",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1649,
+      "path": "qa-recovery-20261101/room33-exact-transit/dispatch-fix-components-attempt1.tap",
+      "sha256": "b2086eba39b4f8137fa30639c466d6be9662352b54411dc85ce0046de9c3ba7a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1749,
+      "path": "qa-recovery-20261101/room33-exact-transit/independent-source-review.json",
+      "sha256": "b90158ac236d1f3125afcbee8ab502ebd50a655a145a782f1944e3ffbc500e79",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 307,
+      "path": "qa-recovery-20261101/room33-exact-transit/legacy-provenance.json",
+      "sha256": "4836aa1f2892b645a797ceaa382d8b802927bcb600e85e17559b0a245fcdae43",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1346,
+      "path": "qa-recovery-20261101/room33-exact-transit/source-reconstruction-receipt.json",
+      "sha256": "d46a1a7c76811ef3381480786d1f1f29c4192282ead33a786205b37e5d37dd9c",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 513,
+      "path": "qa-recovery-20261101/room33-transit-causal-frozen1/config.json",
+      "sha256": "6441c8411e128ad7b961b4db6f13980f72f469237bf1ad338aff7e3d0dea5416",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 214283,
+      "hardlinkTarget": "qa-recovery-20261101/ordinary-frozen1/source-inputs.json",
+      "path": "qa-recovery-20261101/room33-transit-causal-frozen1/source-inputs.json",
+      "sha256": "43c6c657f1bfff0b6bb6021b0550f4e8dc816a708c360e3f0b35c4ea41cb7ccb",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 513,
+      "path": "qa-recovery-20261101/room33-transit-causal-frozen2/config.json",
+      "sha256": "ce54b63d832d328a86a45bb4405ceee421bc07d631aafbc412a0a9a3f02ed5b0",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 214459,
+      "path": "qa-recovery-20261101/room33-transit-causal-frozen2/source-inputs.json",
+      "sha256": "7a400eaa42129d386da37ac920a0b16dbc9c066bac64116bc6fe9ab6264308cc",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 8431594,
+      "path": "qa-recovery-20261101/room33-transit-causal-review1/physical-trace.ndjson",
+      "sha256": "6bec9e915506ca6a22a1ff82d33a51bdfab5ed904e392e06da0e20f6c24cfa86",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 428997,
+      "path": "qa-recovery-20261101/room33-transit-causal-review1/report.json",
+      "sha256": "740aa9f90e30322ce93ab9af65f92e1d8f46f51217e281d2ab6823fb0834858b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 46709933,
+      "path": "qa-recovery-20261101/room33-transit-causal-review2/physical-trace.ndjson",
+      "sha256": "a0b60259bcb4bf90dc884f8688229c373debda959bce5f01b7ce7fcaaa62848e",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 773816,
+      "path": "qa-recovery-20261101/room33-transit-causal-review2/report.json",
+      "sha256": "61f52b42ecacf30d650bcfbbf2a38250201516064102371f394f4016d704f860",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 22352,
+      "path": "qa-recovery-20261101/room33-transit-diagnostic-prepared/controller.mjs",
+      "sha256": "300125f44e3d7d3a480a7c6376ae55f93cd857476d9988e874ac011c5cc8c13b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2305,
+      "hardlinkTarget": "qa-recovery-20261101/observatory-ordinary-prepared-v2/freeze.py",
+      "path": "qa-recovery-20261101/room33-transit-diagnostic-prepared/freeze.py",
+      "sha256": "fb4b1f8379c6e8866164c160bb256ef32764bad8407d7298dd9c9499f6bf0bf9",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 12457,
+      "path": "qa-recovery-20261101/room33-transit-diagnostic-prepared/from-reviewed-ordinary-v2.patch",
+      "sha256": "9e0f90df1e514e29121b15fe1914a0f0c5adfe6b8829ef568badf621f56487a0",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1022,
+      "path": "qa-recovery-20261101/room33-transit-diagnostic-prepared/source-preparation-receipt.json",
+      "sha256": "c4a01473aa3da5c61da057aad66121b277faf994cdef76c45b435eb679a9c3cf",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 415,
+      "path": "qa-recovery-20261101/room38-strict-current-baseline-capture1-guard.json",
+      "sha256": "b4a9d7a99c689e4dbef78d0a7caefdb456775eb00eb4bd3c3c3646393101900d",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1054,
+      "path": "qa-recovery-20261101/room38-strict-current-baseline-capture1.log",
+      "sha256": "31c2033a6631fffe22b2afa64fc866d8b7b1152c7a39bae3eaa8b29e6a5ba430",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2038,
+      "path": "qa-recovery-20261101/room38-strict-current-baseline-capture1/report.json",
+      "sha256": "75e86303852ae7398790ab74b410fe38a2d85da9a08a8aafb4c8d8d888922658",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 417,
+      "path": "qa-recovery-20261101/room38-strict-current-baseline-capture2-guard.json",
+      "sha256": "bd9b8be7d2c1dc32a13b5a2b4713e04fdf6bb2e8bdca49c1d1816ef1b96d6755",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 265,
+      "path": "qa-recovery-20261101/room38-strict-current-baseline-capture2.log",
+      "sha256": "a7e9e8251d5741f36e5241905dca49d8730b20101d3957fe5645d566301d76f4",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 32704777,
+      "path": "qa-recovery-20261101/room38-strict-current-baseline-capture2/full-contract.json",
+      "sha256": "e41919d4a37fdb905683376fdd5676d1ce6eafc75185ad61779abd7ee71a422b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 271825,
+      "path": "qa-recovery-20261101/room38-strict-current-baseline-capture2/raw-allocation-receipt.json",
+      "sha256": "f372053c56a746522f5c8f348ce0dda2fe49668dcd6b7a949a81359aaaf5f3e8",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 3071,
+      "path": "qa-recovery-20261101/room38-strict-current-baseline-capture2/report.json",
+      "sha256": "bcd87f295875569668bbb6faf6133d11ca8c91e215c98d6053a5c1dac586c6a2",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 416,
+      "path": "qa-recovery-20261101/room38-strict-current-current-capture2-guard.json",
+      "sha256": "d25685146e794c4d07aa62daeb44f6cf340ab8cec05264ddba10ec71ac602524",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 264,
+      "path": "qa-recovery-20261101/room38-strict-current-current-capture2.log",
+      "sha256": "0f9c59bc95f879823d63cdf748f4ef480e973d0a417a69fac8efc5d16a230e9e",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 32704777,
+      "hardlinkTarget": "qa-recovery-20261101/room38-strict-current-baseline-capture2/full-contract.json",
+      "path": "qa-recovery-20261101/room38-strict-current-current-capture2/full-contract.json",
+      "sha256": "e41919d4a37fdb905683376fdd5676d1ce6eafc75185ad61779abd7ee71a422b",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 271825,
+      "path": "qa-recovery-20261101/room38-strict-current-current-capture2/raw-allocation-receipt.json",
+      "sha256": "efc3a2672b59c832c12c2ec9ad5d146a5c4144347ae805df33348ed74965987e",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 3034,
+      "path": "qa-recovery-20261101/room38-strict-current-current-capture2/report.json",
+      "sha256": "181bbc75dcc674d66b116b9d3ec6ddcd3ba11daac282c9b46b62ddc3bbdea13e",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 614,
+      "path": "qa-recovery-20261101/room38-strict-current-fixture2/comparison-receipt.json",
+      "sha256": "3f5dff2ba529818db434cafb10fa8b38f91bee1847c1c09efa227d8d15d60f1a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 883,
+      "path": "qa-recovery-20261101/room38-strict-current-fixture2/gzip-storage-receipt.json",
+      "sha256": "34c45a7cd430c891a019aa544d0c5ad05311111764a5994a3eef6202086c1ff0",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 5794,
+      "path": "qa-recovery-20261101/room38-strict-current-fixture2/lab-optics-architecture.test.final.js",
+      "sha256": "655d19c18ebfa81d9be23350d44b7240b398ff10e7915be055f9ef038bb58d6c",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 5518,
+      "path": "qa-recovery-20261101/room38-strict-current-fixture2/lab-optics-architecture.test.proposed.js",
+      "sha256": "2fd19869de8d778a6f4c76dcbabb0326d95cbe62969f82efe2c1ab86041bb32a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 903,
+      "path": "qa-recovery-20261101/room38-strict-current-fixture2/main-install-receipt.json",
+      "sha256": "f21c3584d18eed74346e923c573d4bae0a8f76b7adca19b3c6b1491f860ffcfa",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2884,
+      "path": "qa-recovery-20261101/room38-strict-current-fixture2/optics38-current-contract.final.patch",
+      "sha256": "0f197df066ae654fbbba7d755b0ff7f73e11026f3dc5f4a7a4ede859443e62ec",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2603,
+      "path": "qa-recovery-20261101/room38-strict-current-fixture2/optics38-current-contract.proposed.patch",
+      "sha256": "9bc60d7e436b788ee6bd80f738e1f3ce26145df77346ae15d75f3e983d7f8985",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 572,
+      "path": "qa-recovery-20261101/room38-strict-current-freeze1/baseline-config.json",
+      "sha256": "aad81a93d03b3b8bef3b57724a75b60c418920facc4119f560599b99a0934dae",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2687,
+      "path": "qa-recovery-20261101/room38-strict-current-freeze1/baseline-procedure.json",
+      "sha256": "1fd11dcc258df0984c5f4e3a5151988967683c2cea911cbe753df4fc5707529a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 214285,
+      "path": "qa-recovery-20261101/room38-strict-current-freeze1/baseline-source-inputs.json",
+      "sha256": "88a969a2db162538acd24f799e1894fdd02aeff928d1436c70e4f2b55318a68f",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 546,
+      "path": "qa-recovery-20261101/room38-strict-current-freeze1/current-config.json",
+      "sha256": "09154c0e0e014ea89fe2f19da11c811c832aac21bd30d29c9e0f995d20ae6636",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 214631,
+      "path": "qa-recovery-20261101/room38-strict-current-freeze1/current-source-inputs.json",
+      "sha256": "be8de0b28544160d0b506028d870406e45d4f0d4735c19a39e9a3f2fe7572b87",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 575,
+      "path": "qa-recovery-20261101/room38-strict-current-freeze2/baseline-config.json",
+      "sha256": "4744af79cc024c6a6690d7eba941a4a3e6186b98e6e5bb2ad963529cdafafc6a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2693,
+      "path": "qa-recovery-20261101/room38-strict-current-freeze2/baseline-procedure.json",
+      "sha256": "f45cb65efc7523f4eff0599698521d97da074961dc4119d3a4a5909903fcd4f8",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 214285,
+      "path": "qa-recovery-20261101/room38-strict-current-freeze2/baseline-source-inputs.json",
+      "sha256": "154cadc8b2ba3aa2c75997ea799a8860b58f239653b292338bd407c06d670de8",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 546,
+      "path": "qa-recovery-20261101/room38-strict-current-freeze2/current-config.json",
+      "sha256": "6279aec36a090a4e9875b07e4ae880f4a0979685c184522372780891931b2ee9",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 214631,
+      "path": "qa-recovery-20261101/room38-strict-current-freeze2/current-source-inputs.json",
+      "sha256": "dc1f43f00dd4d4bb979e8183959841523fcd4bcaeb5f3a9f999ee19605842b9d",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 7758,
+      "path": "qa-recovery-20261101/room38-strict-current-prepared-v2/README.md",
+      "sha256": "e04874162cd254e6c454cb0692dda7fee0f9debdfc8d1127b5817bd34340c698",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 6372,
+      "path": "qa-recovery-20261101/room38-strict-current-prepared-v2/capture.mjs",
+      "sha256": "826278a6a56acf0fd7a3ce76d07091b4da81f48c40a4a2c2d642a485960e0918",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 6684,
+      "path": "qa-recovery-20261101/room38-strict-current-prepared-v2/compare-and-create-fixture.mjs",
+      "sha256": "408da1e49b2966798cda27483cc2a736bafd77daded1fde3b681d2b36ff4b149",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 8786,
+      "path": "qa-recovery-20261101/room38-strict-current-prepared-v2/from-failed-db21.patch",
+      "sha256": "82340be7a619e260a0c1b748c6637be1a9b45c62d5272c4cfe83ddf82833d9b1",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 21184,
+      "path": "qa-recovery-20261101/room38-strict-current-prepared-v2/lab-room38-freight-contract.js",
+      "sha256": "95306188ca14b461a523aa7790504f918d7515baf9c24c5b9bf2df09c85d0eac",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 5333,
+      "path": "qa-recovery-20261101/room38-strict-current-prepared-v2/prepare_isolated_baseline.py",
+      "sha256": "1d17dd5bb799d1dd3e75d4162c7a8666abe78c2be48b48f11f7d30166123240b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1705,
+      "path": "qa-recovery-20261101/room38-strict-current-prepared-v2/source-only-derivative-receipt.json",
+      "sha256": "8a48194664f33fb093756619716558652e938df9ac31e83e679764b3ebd4a616",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 7042,
+      "path": "qa-recovery-20261101/room38-strict-current-prepared/README.md",
+      "sha256": "15c59f357ac2170b72d11d5272ae8e4a8670c72761bd2463fb6c499e4b7ea4e6",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 6372,
+      "hardlinkTarget": "qa-recovery-20261101/room38-strict-current-prepared-v2/capture.mjs",
+      "path": "qa-recovery-20261101/room38-strict-current-prepared/capture.mjs",
+      "sha256": "826278a6a56acf0fd7a3ce76d07091b4da81f48c40a4a2c2d642a485960e0918",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 6684,
+      "hardlinkTarget": "qa-recovery-20261101/room38-strict-current-prepared-v2/compare-and-create-fixture.mjs",
+      "path": "qa-recovery-20261101/room38-strict-current-prepared/compare-and-create-fixture.mjs",
+      "sha256": "408da1e49b2966798cda27483cc2a736bafd77daded1fde3b681d2b36ff4b149",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 19976,
+      "path": "qa-recovery-20261101/room38-strict-current-prepared/lab-room38-freight-contract.js",
+      "sha256": "db210aff66e36c1bd77db0f909ef5942bb88d765a7acd055d63a4450b32d6010",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 5333,
+      "hardlinkTarget": "qa-recovery-20261101/room38-strict-current-prepared-v2/prepare_isolated_baseline.py",
+      "path": "qa-recovery-20261101/room38-strict-current-prepared/prepare_isolated_baseline.py",
+      "sha256": "1d17dd5bb799d1dd3e75d4162c7a8666abe78c2be48b48f11f7d30166123240b",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 2919,
+      "path": "qa-recovery-20261101/room38-strict-current-prepared/review-delta/capture-hardening.patch",
+      "sha256": "0bf050922ca1eb78da01d8b9e4a98be214759f3b64fd195777be5843f7652d04",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 4040,
+      "path": "qa-recovery-20261101/room38-strict-current-prepared/review-delta/compare-hardening.patch",
+      "sha256": "f457e0c28db73006c2a353435ef0c4970e411ebdcfdac07f0544195fcbb1e0be",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 9313,
+      "path": "qa-recovery-20261101/room38-strict-current-prepared/review-delta/helper-hardening.patch",
+      "sha256": "f842b0e03e5838a0260b89d323d619414fb5f7645e3bd2f5ce3eeb025148ce45",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 19080,
+      "path": "qa-recovery-20261101/room38-strict-current-prepared/review-delta/helper-old-25ac-reconstructed.js",
+      "sha256": "25ac392f73c7ae8ce722100266382514fe9d1593536cb6f50eaa8a8663b76cf9",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1889,
+      "path": "qa-recovery-20261101/room38-strict-current-prepared/review-delta/prepare-hardening.patch",
+      "sha256": "bff9fbdf620077749251b8116ee9901dd15f7b59f4bfdf2e83c50c0aed1c4a51",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 811,
+      "path": "qa-recovery-20261101/room38-strict-current-prepared/review-delta/receipt.json",
+      "sha256": "0246d0e04dca07a0c67f086e7c3aae32b64ed6c442919a51b7c4c89eda8d8990",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1824,
+      "path": "qa-recovery-20261101/room38-strict-current-prepared/source-preparation-receipt.json",
+      "sha256": "9d32b2f699d1852669edf01e210b4b608956e0e93019e04a64e0aa23e67886c4",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 7215,
+      "path": "qa-recovery-20261101/room48-phase-proof-archive/room48-phase-positive-and-return-evidence-delta-v2.manifest.json",
+      "sha256": "f7786f16db38f31bcacbe8a8469a39f9f6bcd08a8b78021a60a7e9acf46f88b8",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 8326,
+      "path": "qa-recovery-20261101/room48-phase-proof-archive/room48-phase-source-and-empty-evidence-v1.manifest.json",
+      "sha256": "a9702c08fe3219bfad6d06db7d56cbca3315f26277b79b01099bac8bb8a84f79",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2741,
+      "path": "qa-recovery-20261101/run-frozen-native-one-retry8-single-rooms.mjs",
+      "sha256": "fc126f4bc7f5dd5ce781188ef8769d124af49d8502f06ea572bcb573bab3e738",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2244,
+      "path": "qa-recovery-20261101/run-frozen-native-pairs.mjs",
+      "sha256": "c5d4f0b2d2c7def0c5b6a7459bc3a7472af5c6795e61c9900d60ccfe5f2011df",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2689,
+      "path": "qa-recovery-20261101/run-frozen-native-remaining-pairs.mjs",
+      "sha256": "14bd5df65e6ab2d71080414257589fcb951e4b6712b986e4a564cf3616a63ea3",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2679,
+      "path": "qa-recovery-20261101/run-frozen-native-single-rooms.mjs",
+      "sha256": "821c5ab55005605533f04f17a67d5cafa3ca4b67f78dfe35b89f66bd5b94df39",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2697,
+      "path": "qa-recovery-20261101/run-frozen-native-unpaused-single-rooms.mjs",
+      "sha256": "95d8c68df518ab3d8bed87e3352bfd6ee1f3155cb8ec1adae582091a62e8061c",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 3086,
+      "path": "qa-recovery-20261101/run-native-visual-collector.mjs",
+      "sha256": "316f02d36a01f8aa1aa65ff3171d47ad38da27f458fb463fed8caa83b1fe260e",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 6083,
+      "path": "qa-recovery/derive-generated-blob-inventory.py",
+      "sha256": "711bffca7b3843bcbae29a8ccdd4801607b0517b7d5e6bffc3a8fb4576739945",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 3843,
+      "path": "qa-recovery/native-static-build3-batches-20261101/batch-manifest.json",
+      "sha256": "bd3a8867dc03ff6527cd2e1dd035c9cae3659e69edcd0cf9c640c8c72ac73cd8",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1384,
+      "path": "qa-recovery/native-static-build3-batches-20261101/room30-32/config.json",
+      "sha256": "e69bed5a0d14d5bd9df4b6be99a13549ff986df077a0ef5d209ee5caeaaa34bb",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 32750,
+      "path": "qa-recovery/native-static-build3-batches-20261101/room30-32/controller.mjs",
+      "sha256": "bae96d21967554d615ad39df7b55fccc49268dfa14634c645fe217800c671780",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1384,
+      "path": "qa-recovery/native-static-build3-batches-20261101/room31-34/config.json",
+      "sha256": "109f06f57b5e3ed58976a2778a323d00e4c60b6ed68e8802ec1a3a452aad6195",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 32750,
+      "hardlinkTarget": "qa-recovery/native-static-build3-batches-20261101/room30-32/controller.mjs",
+      "path": "qa-recovery/native-static-build3-batches-20261101/room31-34/controller.mjs",
+      "sha256": "bae96d21967554d615ad39df7b55fccc49268dfa14634c645fe217800c671780",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1396,
+      "path": "qa-recovery/native-static-build3-batches-20261101/room35-40-proposal/config.before-root35-approval.json",
+      "sha256": "a543e113ec0f6e0c603fa773c0fb957625d49a6e41da0b4fddb594fc545ee93d",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1384,
+      "path": "qa-recovery/native-static-build3-batches-20261101/room35-40-proposal/config.json",
+      "sha256": "c30c7ef5bdbb59593cbda05dc0f2e0f94f519f4c3a8dafd3918b25efa9548649",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 432,
+      "path": "qa-recovery/native-static-build3-batches-20261101/room35-40-proposal/config.root35-approval.patch",
+      "sha256": "fbe8b256946a9ddfbb075e06c75ad2590623555fed893481b9e1eaa765f7e3ae",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 32753,
+      "path": "qa-recovery/native-static-build3-batches-20261101/room35-40-proposal/controller.mjs",
+      "sha256": "c655708714dd883f30ad7b583131f80ef73514179bc42b067dfc74c180e83dd0",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 653,
+      "path": "qa-recovery/native-static-build3-batches-20261101/room35-40-proposal/root35-freeze-receipt.json",
+      "sha256": "6005c231b28f1969682e1fc8970a9b4176c987506d460fbc0f3b1928dcb8257b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1384,
+      "path": "qa-recovery/native-static-build3-batches-20261101/room36-37/config.json",
+      "sha256": "a8a81184254de582341eaa27abbd945bbea725584ec00329e5bc993d3ae2cbef",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 32750,
+      "hardlinkTarget": "qa-recovery/native-static-build3-batches-20261101/room30-32/controller.mjs",
+      "path": "qa-recovery/native-static-build3-batches-20261101/room36-37/controller.mjs",
+      "sha256": "bae96d21967554d615ad39df7b55fccc49268dfa14634c645fe217800c671780",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1384,
+      "path": "qa-recovery/native-static-build3-batches-20261101/room38-39/config.json",
+      "sha256": "4829e6908c812e5c17cb3db1ecb34a2b8579968e265bd66c058b36871c3081e9",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 32750,
+      "hardlinkTarget": "qa-recovery/native-static-build3-batches-20261101/room30-32/controller.mjs",
+      "path": "qa-recovery/native-static-build3-batches-20261101/room38-39/controller.mjs",
+      "sha256": "bae96d21967554d615ad39df7b55fccc49268dfa14634c645fe217800c671780",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1376,
+      "path": "qa-recovery/native-static-build3-batches-20261101/room40/config.json",
+      "sha256": "2c550915620f7eb67b66fc8be4dff3d84064d8802bba87a790507314f136286c",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 32750,
+      "hardlinkTarget": "qa-recovery/native-static-build3-batches-20261101/room30-32/controller.mjs",
+      "path": "qa-recovery/native-static-build3-batches-20261101/room40/controller.mjs",
+      "sha256": "bae96d21967554d615ad39df7b55fccc49268dfa14634c645fe217800c671780",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 3678,
+      "path": "qa-recovery/native-static-build4-batches-20261101/batch-manifest.json",
+      "sha256": "42209949f028b043484642ecd47d0dc32e4b2713d57698b83a422fc4eb13940b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1384,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-pairs-review1/room30-32/config-frozen.json",
+      "path": "qa-recovery/native-static-build4-batches-20261101/room30-32/config.json",
+      "sha256": "ec7030fc2c945a83bc03012ecb6fa8b62064b4681e9e9e2c86c086404ca0cb40",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 42580,
+      "path": "qa-recovery/native-static-build4-batches-20261101/room30-32/controller.mjs",
+      "sha256": "2fb34a40c870fe03c43ab38ecdf62820028ec83793b977284395742a932a9208",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1384,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-pairs-review1/room31-34/config-frozen.json",
+      "path": "qa-recovery/native-static-build4-batches-20261101/room31-34/config.json",
+      "sha256": "92c583a63e172a20c298d677a62ae91ad2fa89574ab4f4f06064eaacf73bb7f1",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 42580,
+      "hardlinkTarget": "qa-recovery/native-static-build4-batches-20261101/room30-32/controller.mjs",
+      "path": "qa-recovery/native-static-build4-batches-20261101/room31-34/controller.mjs",
+      "sha256": "2fb34a40c870fe03c43ab38ecdf62820028ec83793b977284395742a932a9208",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1384,
+      "path": "qa-recovery/native-static-build4-batches-20261101/room35-40/config.json",
+      "sha256": "6aebae0ff19711accdf26b2e04c898661e09deed3ed7e78b469e735fa821caf9",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 42583,
+      "path": "qa-recovery/native-static-build4-batches-20261101/room35-40/controller.mjs",
+      "sha256": "cb1d387f77a4dd1f4add6913d48b5878d4120027d3867f6d2d1c1a5bc4a2148f",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1384,
+      "path": "qa-recovery/native-static-build4-batches-20261101/room36-37/config.json",
+      "sha256": "5d53dbd0c76d9df36e43423e086b957f9f8d2802738eba7405af0b45f6bd1c2e",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 42580,
+      "hardlinkTarget": "qa-recovery/native-static-build4-batches-20261101/room30-32/controller.mjs",
+      "path": "qa-recovery/native-static-build4-batches-20261101/room36-37/controller.mjs",
+      "sha256": "2fb34a40c870fe03c43ab38ecdf62820028ec83793b977284395742a932a9208",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1384,
+      "path": "qa-recovery/native-static-build4-batches-20261101/room38-39/config.json",
+      "sha256": "4176f7c71c772c01e31565dfdc32d8f25545c5f76e28cba2ce52605d099a350a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 42580,
+      "hardlinkTarget": "qa-recovery/native-static-build4-batches-20261101/room30-32/controller.mjs",
+      "path": "qa-recovery/native-static-build4-batches-20261101/room38-39/controller.mjs",
+      "sha256": "2fb34a40c870fe03c43ab38ecdf62820028ec83793b977284395742a932a9208",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 7736,
+      "path": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/batch-manifest.json",
+      "sha256": "d920044fd13a8b4e824d59032b0727fa788c590f61ce91080dd395563dab7059",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2295,
+      "path": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/preserved-failure-files.json",
+      "sha256": "48df811533ee2e20ab307004d2d637e9ae29a747eb32359116bcfbe5c3ed4eac",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1376,
+      "path": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room35/config.json",
+      "sha256": "ff56ddf44e973389cdc11da5f269066605e7a25d58ee5d840b4013177f8367ab",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 46918,
+      "path": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room35/controller.mjs",
+      "sha256": "4e19ebaf4a0a911ecbd111f51d632ac05c1b1b797803bc34825c4287fa234055",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/config-frozen.json",
+      "path": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room38/config.json",
+      "sha256": "e106b24d167525726d6a181f68b3af285d4ac746aa382e654d0118788aa1c8dc",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 46915,
+      "path": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room38/controller.mjs",
+      "sha256": "d650a4aa20bd8ae6cce88757daceb9edae21ef741d1ae0849a491d9539b61e9e",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1376,
+      "path": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room39/config.json",
+      "sha256": "92955af9a84bfe72758774558e9927f3eb482dc6a330cf94bd52101199f8252b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 46915,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room39/controller.mjs",
+      "sha256": "d650a4aa20bd8ae6cce88757daceb9edae21ef741d1ae0849a491d9539b61e9e",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1376,
+      "path": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room40/config.json",
+      "sha256": "d2d4e08b94f2eb8cc9ce9fc0ca142136b629b2ac8596cb386f7034fec8ea1011",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 46915,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room40/controller.mjs",
+      "sha256": "d650a4aa20bd8ae6cce88757daceb9edae21ef741d1ae0849a491d9539b61e9e",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 2967,
+      "path": "qa-recovery/native-static-build4-remaining-batches-20261101/batch-manifest.json",
+      "sha256": "4620b88f008710d454ff500905964bcace7932ca5d3d9effd77ef0d7d27a5aa3",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1384,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-pairs-review1/room30-32/config-frozen.json",
+      "path": "qa-recovery/native-static-build4-remaining-batches-20261101/room30-32/config.json",
+      "sha256": "ec7030fc2c945a83bc03012ecb6fa8b62064b4681e9e9e2c86c086404ca0cb40",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 46915,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-static-build4-remaining-batches-20261101/room30-32/controller.mjs",
+      "sha256": "d650a4aa20bd8ae6cce88757daceb9edae21ef741d1ae0849a491d9539b61e9e",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1384,
+      "hardlinkTarget": "qa-recovery/native-static-build4-batches-20261101/room35-40/config.json",
+      "path": "qa-recovery/native-static-build4-remaining-batches-20261101/room35-40/config.json",
+      "sha256": "6aebae0ff19711accdf26b2e04c898661e09deed3ed7e78b469e735fa821caf9",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 46918,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room35/controller.mjs",
+      "path": "qa-recovery/native-static-build4-remaining-batches-20261101/room35-40/controller.mjs",
+      "sha256": "4e19ebaf4a0a911ecbd111f51d632ac05c1b1b797803bc34825c4287fa234055",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1384,
+      "hardlinkTarget": "qa-recovery/native-static-build4-batches-20261101/room36-37/config.json",
+      "path": "qa-recovery/native-static-build4-remaining-batches-20261101/room36-37/config.json",
+      "sha256": "5d53dbd0c76d9df36e43423e086b957f9f8d2802738eba7405af0b45f6bd1c2e",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 46915,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-static-build4-remaining-batches-20261101/room36-37/controller.mjs",
+      "sha256": "d650a4aa20bd8ae6cce88757daceb9edae21ef741d1ae0849a491d9539b61e9e",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1384,
+      "hardlinkTarget": "qa-recovery/native-static-build4-batches-20261101/room38-39/config.json",
+      "path": "qa-recovery/native-static-build4-remaining-batches-20261101/room38-39/config.json",
+      "sha256": "4176f7c71c772c01e31565dfdc32d8f25545c5f76e28cba2ce52605d099a350a",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 46915,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-static-build4-remaining-batches-20261101/room38-39/controller.mjs",
+      "sha256": "d650a4aa20bd8ae6cce88757daceb9edae21ef741d1ae0849a491d9539b61e9e",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 4797,
+      "path": "qa-recovery/native-static-build4-single-rooms-20261101/batch-manifest.json",
+      "sha256": "d863909fc232fcd31831705db3cf420e6ad38b2e377f2eb32f423f238514a577",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-single-rooms-review3/room32/config-frozen.json",
+      "path": "qa-recovery/native-static-build4-single-rooms-20261101/room32/config.json",
+      "sha256": "7d047a0b8d0dbd6613f29ca6110ffee72d0bc79723779a9b3d2c41ab2934527d",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 46915,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-static-build4-single-rooms-20261101/room32/controller.mjs",
+      "sha256": "d650a4aa20bd8ae6cce88757daceb9edae21ef741d1ae0849a491d9539b61e9e",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room35/config.json",
+      "path": "qa-recovery/native-static-build4-single-rooms-20261101/room35/config.json",
+      "sha256": "ff56ddf44e973389cdc11da5f269066605e7a25d58ee5d840b4013177f8367ab",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 46918,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room35/controller.mjs",
+      "path": "qa-recovery/native-static-build4-single-rooms-20261101/room35/controller.mjs",
+      "sha256": "4e19ebaf4a0a911ecbd111f51d632ac05c1b1b797803bc34825c4287fa234055",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-single-rooms-review3/room36/config-frozen.json",
+      "path": "qa-recovery/native-static-build4-single-rooms-20261101/room36/config.json",
+      "sha256": "5c411f4250d4cff70fe85933316f23ea10506ee1b7c1a4f62ab90e84cc0166f8",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 46915,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-static-build4-single-rooms-20261101/room36/controller.mjs",
+      "sha256": "d650a4aa20bd8ae6cce88757daceb9edae21ef741d1ae0849a491d9539b61e9e",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-single-rooms-review3/room37/config-frozen.json",
+      "path": "qa-recovery/native-static-build4-single-rooms-20261101/room37/config.json",
+      "sha256": "ebba114acbed081336d69633698716266116ad9fe46de3106b062417ed4f888a",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 46915,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-static-build4-single-rooms-20261101/room37/controller.mjs",
+      "sha256": "d650a4aa20bd8ae6cce88757daceb9edae21ef741d1ae0849a491d9539b61e9e",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/config-frozen.json",
+      "path": "qa-recovery/native-static-build4-single-rooms-20261101/room38/config.json",
+      "sha256": "e106b24d167525726d6a181f68b3af285d4ac746aa382e654d0118788aa1c8dc",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 46915,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-static-build4-single-rooms-20261101/room38/controller.mjs",
+      "sha256": "d650a4aa20bd8ae6cce88757daceb9edae21ef741d1ae0849a491d9539b61e9e",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room39/config.json",
+      "path": "qa-recovery/native-static-build4-single-rooms-20261101/room39/config.json",
+      "sha256": "92955af9a84bfe72758774558e9927f3eb482dc6a330cf94bd52101199f8252b",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 46915,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-static-build4-single-rooms-20261101/room39/controller.mjs",
+      "sha256": "d650a4aa20bd8ae6cce88757daceb9edae21ef741d1ae0849a491d9539b61e9e",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room40/config.json",
+      "path": "qa-recovery/native-static-build4-single-rooms-20261101/room40/config.json",
+      "sha256": "d2d4e08b94f2eb8cc9ce9fc0ca142136b629b2ac8596cb386f7034fec8ea1011",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 46915,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-static-build4-single-rooms-20261101/room40/controller.mjs",
+      "sha256": "d650a4aa20bd8ae6cce88757daceb9edae21ef741d1ae0849a491d9539b61e9e",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 3335,
+      "path": "qa-recovery/native-static-build4-unpaused-single-rooms-20261101/batch-manifest.json",
+      "sha256": "16f92d5dd5996e662c0153b9b8cb0ab966db89cdace335adc878e3798a6aa25a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room35/config.json",
+      "path": "qa-recovery/native-static-build4-unpaused-single-rooms-20261101/room35/config.json",
+      "sha256": "ff56ddf44e973389cdc11da5f269066605e7a25d58ee5d840b4013177f8367ab",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 37739,
+      "path": "qa-recovery/native-static-build4-unpaused-single-rooms-20261101/room35/controller.mjs",
+      "sha256": "8eb21c1e80acff17554885781974fc858024ebb546fe6d0e9941c12dfa64b777",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/config-frozen.json",
+      "path": "qa-recovery/native-static-build4-unpaused-single-rooms-20261101/room38/config.json",
+      "sha256": "e106b24d167525726d6a181f68b3af285d4ac746aa382e654d0118788aa1c8dc",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 37736,
+      "path": "qa-recovery/native-static-build4-unpaused-single-rooms-20261101/room38/controller.mjs",
+      "sha256": "23c1957b187d196ee32c7ea5f3026f24abcb6e2d15b36a1096ac65729b19fd29",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room39/config.json",
+      "path": "qa-recovery/native-static-build4-unpaused-single-rooms-20261101/room39/config.json",
+      "sha256": "92955af9a84bfe72758774558e9927f3eb482dc6a330cf94bd52101199f8252b",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 37736,
+      "hardlinkTarget": "qa-recovery/native-static-build4-unpaused-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-static-build4-unpaused-single-rooms-20261101/room39/controller.mjs",
+      "sha256": "23c1957b187d196ee32c7ea5f3026f24abcb6e2d15b36a1096ac65729b19fd29",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room40/config.json",
+      "path": "qa-recovery/native-static-build4-unpaused-single-rooms-20261101/room40/config.json",
+      "sha256": "d2d4e08b94f2eb8cc9ce9fc0ca142136b629b2ac8596cb386f7034fec8ea1011",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 37736,
+      "hardlinkTarget": "qa-recovery/native-static-build4-unpaused-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-static-build4-unpaused-single-rooms-20261101/room40/controller.mjs",
+      "sha256": "23c1957b187d196ee32c7ea5f3026f24abcb6e2d15b36a1096ac65729b19fd29",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 894,
+      "path": "qa-recovery/native-static-headless-shell-prepared2-20261101/config-from-frozen1.patch",
+      "sha256": "33b41ecaee4c52a2abc3b1c3dcfb6232c5e8bda43d3e738f4a4f2649923684ef",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1121,
+      "hardlinkTarget": "qa-recovery-20261101/native-room33-shell-review2/config-frozen.json",
+      "path": "qa-recovery/native-static-headless-shell-prepared2-20261101/config.json",
+      "sha256": "e50ad7a105bd8adf0f9e01eed5ead86e4ff8b27987d8154ac65f6bfa59aa5889",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 21738,
+      "path": "qa-recovery/native-static-headless-shell-prepared2-20261101/controller.mjs",
+      "sha256": "e0bfce7b1d29b8c1c3bd3866369d24d166b75180245f868b984e80d5a2546160",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1529,
+      "path": "qa-recovery/native-static-headless-shell-prepared2-20261101/freeze-receipt.json",
+      "sha256": "9e1798f731fa0f7a4ad6518eb7731b7ae4e1ec04b24686a9e29a1e808c71cff6",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery-20261101/native-room33-shell-review3/config-frozen.json",
+      "path": "qa-recovery/native-static-headless-shell-prepared3-20261101/config.json",
+      "sha256": "e9e697a7762fe3443d05b200a3e41d4bce9cab762232519c19a4b260f37f3809",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 385,
+      "path": "qa-recovery/native-static-headless-shell-prepared3-20261101/config.json.from-prepared2.patch",
+      "sha256": "acd01c27cd6037e23c848146c14ba3c9162fb7198a8be9bce4ef74c463a82cbc",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 23949,
+      "path": "qa-recovery/native-static-headless-shell-prepared3-20261101/controller.mjs",
+      "sha256": "a0e899f007f9fa903328d3bedc5379d1ca7addb13b5b2a1e03c8311c93275f19",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 15078,
+      "path": "qa-recovery/native-static-headless-shell-prepared3-20261101/controller.mjs.from-prepared2.patch",
+      "sha256": "c049249495aa21443ad4a34e921720af657485e0c7246eb452e0b2990eba8f95",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1718,
+      "path": "qa-recovery/native-static-headless-shell-prepared3-20261101/freeze-receipt.json",
+      "sha256": "f3252ac314fd6c36f481215c16ca41e2e7fd9e36b2ba6a8bae9be1d1d058cc2b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 16217,
+      "path": "qa-recovery/native-static-headless-shell-prepared3-20261101/generated-blob-inventory.json",
+      "sha256": "9dcc1a071b0342716b1276c338d3ba5e32bcbe1df2fa102735368d00f6b986c5",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1166,
+      "path": "qa-recovery/native-static-headless-shell-prepared3-20261101/independent-source-review.json",
+      "sha256": "377c09925635852a60db3923c57ef157ecd73aa5911378e5813a8175e8e32acd",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 846,
+      "path": "qa-recovery/native-static-headless-shell-prepared4-20261101/cleanup-hardening-receipt.json",
+      "sha256": "ca98813f1128f0a0d91bffca6e47882ce535831a467398334bc1e5114a760bd3",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery-20261101/native-room33-shell-review3/config-frozen.json",
+      "path": "qa-recovery/native-static-headless-shell-prepared4-20261101/config.json",
+      "sha256": "e9e697a7762fe3443d05b200a3e41d4bce9cab762232519c19a4b260f37f3809",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 0,
+      "path": "qa-recovery/native-static-headless-shell-prepared4-20261101/config.json.from-prepared3.patch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 32695,
+      "path": "qa-recovery/native-static-headless-shell-prepared4-20261101/controller.before-cleanup-hardening-b940fca6.mjs",
+      "sha256": "b940fca6c39c3a39a2bb6278cb7838ba320656398a7328a54c2ade271f8d4e05",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1090,
+      "path": "qa-recovery/native-static-headless-shell-prepared4-20261101/controller.cleanup-hardening.patch",
+      "sha256": "13c2631a870f749bcbe31014be64dc871b71ce83a14274955521efef7542bc1c",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 32750,
+      "hardlinkTarget": "qa-recovery/native-static-build3-batches-20261101/room30-32/controller.mjs",
+      "path": "qa-recovery/native-static-headless-shell-prepared4-20261101/controller.mjs",
+      "sha256": "bae96d21967554d615ad39df7b55fccc49268dfa14634c645fe217800c671780",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 24459,
+      "path": "qa-recovery/native-static-headless-shell-prepared4-20261101/controller.mjs.from-prepared3.patch",
+      "sha256": "9e01d6e8835cce4aeb41fb19fb78b17dcdf4ad75180fba43b1ef8c5f2de82fb3",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2161,
+      "path": "qa-recovery/native-static-headless-shell-prepared4-20261101/freeze-receipt.json",
+      "sha256": "f9e23ab2d290882d27c0dc34d6a16ec79a722367e2983b0126536171666bda84",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1655,
+      "path": "qa-recovery/native-static-headless-shell-prepared4-20261101/independent-source-review.json",
+      "sha256": "79e673ec02bbf4d826dcd283c4ea52e0e03aa0bfbce82045bc6ed9ad2a28699f",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1739,
+      "path": "qa-recovery/native-static-headless-shell-prepared5-20261101/REUSE-BUILD-POLICY.md",
+      "sha256": "a831579c8417a74a4147641e6cb6ae0063abb74ee8c3f69d35a042a9b3dc02df",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2426,
+      "path": "qa-recovery/native-static-headless-shell-prepared5-20261101/config.from-stale-build2.patch",
+      "sha256": "5424d2e4a076d94145d422d5ad5b2879e022130690855d13ce00d89a914fc58c",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery-20261101/native-room33-build3-review5/config-frozen.json",
+      "path": "qa-recovery/native-static-headless-shell-prepared5-20261101/config.json",
+      "sha256": "36c87816dca27d4309e4eb60ecda232a7a8f934694190cea502d9e4a158d286e",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 32753,
+      "hardlinkTarget": "qa-recovery/native-static-build3-batches-20261101/room35-40-proposal/controller.mjs",
+      "path": "qa-recovery/native-static-headless-shell-prepared5-20261101/controller.allow35-proposal.mjs",
+      "sha256": "c655708714dd883f30ad7b583131f80ef73514179bc42b067dfc74c180e83dd0",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1121,
+      "path": "qa-recovery/native-static-headless-shell-prepared5-20261101/controller.allow35-proposal.patch",
+      "sha256": "008a352e34a0425ab6c8f26e8ac27aa02979878a6a2fbf6a258693b6ded959bf",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 32750,
+      "hardlinkTarget": "qa-recovery/native-static-build3-batches-20261101/room30-32/controller.mjs",
+      "path": "qa-recovery/native-static-headless-shell-prepared5-20261101/controller.mjs",
+      "sha256": "bae96d21967554d615ad39df7b55fccc49268dfa14634c645fe217800c671780",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1132,
+      "path": "qa-recovery/native-static-headless-shell-prepared5-20261101/freeze-receipt.json",
+      "sha256": "ff7d31b458038dc802c4c76daaa0ee99fcd891c0bf354db5e6f73459a2299ff6",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 16300,
+      "path": "qa-recovery/native-static-headless-shell-prepared5-20261101/generated-blob-inventory.json",
+      "sha256": "80df48b37844bcf621b5391b08f8cb66277bcdaa7ace9709342b1ac592256bef",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1300,
+      "path": "qa-recovery/native-static-headless-shell-prepared5-20261101/independent-source-data-review.json",
+      "sha256": "bdef9e9cf5e43415bba45b2aa274e8eeed16e131d054c6fdfaf44809c69bba15",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1401,
+      "path": "qa-recovery/native-static-headless-shell-prepared6-20261101/config.json",
+      "sha256": "b335f2ca6d9345b21eb7a9abacde446dc0f23c3d157f11f14db927644cfd5ad2",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery-20261101/native-room33-build3-review5/config-frozen.json",
+      "path": "qa-recovery/native-static-headless-shell-prepared6-20261101/config.stale-build3-36c87816.json",
+      "sha256": "36c87816dca27d4309e4eb60ecda232a7a8f934694190cea502d9e4a158d286e",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 41533,
+      "path": "qa-recovery/native-static-headless-shell-prepared6-20261101/controller.before-network-totality-6c501fb1.mjs",
+      "sha256": "6c501fb1b9828c59b160b44fd6289f1c743ea895a914caf6694785c5f3f22869",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 31034,
+      "path": "qa-recovery/native-static-headless-shell-prepared6-20261101/controller.from-prepared5.patch",
+      "sha256": "0bd53461591caff57e4a59cf067415d0ea67f88de5a724813bd5ea86803e031f",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 42580,
+      "hardlinkTarget": "qa-recovery/native-static-build4-batches-20261101/room30-32/controller.mjs",
+      "path": "qa-recovery/native-static-headless-shell-prepared6-20261101/controller.mjs",
+      "sha256": "2fb34a40c870fe03c43ab38ecdf62820028ec83793b977284395742a932a9208",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 15660,
+      "path": "qa-recovery/native-static-headless-shell-prepared6-20261101/controller.network-totality-precision.patch",
+      "sha256": "a716ddc10d71290ea1a60efe9e18fd113d6c45cddc746140e402473d9c23d471",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 3453,
+      "path": "qa-recovery/native-static-headless-shell-prepared6-20261101/freeze-receipt.json",
+      "sha256": "db95e0afa4b76b732d67d740c8a8b40a6d4ba2c4f7f93f0a5d764696343568a9",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1757,
+      "path": "qa-recovery/native-static-headless-shell-prepared6-20261101/independent-source-review.json",
+      "sha256": "e0fa1b4a5814be5f4ffa07c2e34e57d350e1f83be36f586d579e655578330cc5",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1250,
+      "path": "qa-recovery/native-static-headless-shell-prepared7-20261101/REUSE-BUILD-POLICY.md",
+      "sha256": "a191df2e195e305116e1d1a0c6c6ef6ba32c336cfd3571517a527059e26d5e62",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2489,
+      "path": "qa-recovery/native-static-headless-shell-prepared7-20261101/config.from-stale6-build3.patch",
+      "sha256": "eb6aedcee50c780f34ad167a8f00bd229dac789bad78e12826bd79bfdfaa9df5",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery-20261101/native-room33-build4-review7/config-frozen.json",
+      "path": "qa-recovery/native-static-headless-shell-prepared7-20261101/config.json",
+      "sha256": "1307fd98130a7e20f2f75a3d0e797dba1146e0a1ad4b2a6ce68999e72d276af6",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 42583,
+      "hardlinkTarget": "qa-recovery/native-static-build4-batches-20261101/room35-40/controller.mjs",
+      "path": "qa-recovery/native-static-headless-shell-prepared7-20261101/controller.allow35.mjs",
+      "sha256": "cb1d387f77a4dd1f4add6913d48b5878d4120027d3867f6d2d1c1a5bc4a2148f",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1135,
+      "path": "qa-recovery/native-static-headless-shell-prepared7-20261101/controller.allow35.patch",
+      "sha256": "8c8de9d500633e9fc7f1a6a8aaf9afe80cc5be905501a969abe68311d094ac37",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 42580,
+      "hardlinkTarget": "qa-recovery/native-static-build4-batches-20261101/room30-32/controller.mjs",
+      "path": "qa-recovery/native-static-headless-shell-prepared7-20261101/controller.mjs",
+      "sha256": "2fb34a40c870fe03c43ab38ecdf62820028ec83793b977284395742a932a9208",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1188,
+      "path": "qa-recovery/native-static-headless-shell-prepared7-20261101/freeze-receipt.json",
+      "sha256": "f2acc76781634c27e4fb736278bf1da70c61b6dfc2d75967418762595d17c281",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 16300,
+      "path": "qa-recovery/native-static-headless-shell-prepared7-20261101/generated-blob-inventory.json",
+      "sha256": "202ee58fee1ce33dd7368b5c2e2c2634d3001cf5c0eb23e79f9282f1f3cd7ac1",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1354,
+      "path": "qa-recovery/native-static-headless-shell-prepared7-20261101/independent-source-data-review.json",
+      "sha256": "f07bc7bfee1693604bda2779f5c9d96992555b769378d82285e8bbc546db9cdd",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1322,
+      "path": "qa-recovery/native-static-headless-shell-prepared8-20261101/REUSE-BUILD-POLICY.md",
+      "sha256": "8b49515de82cc88ad4332d7a0bd5df83732abe56144ae473348623c973354f17",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1407,
+      "path": "qa-recovery/native-static-headless-shell-prepared8-20261101/config.before-root-code-ack.json",
+      "sha256": "e30477207fc5fac667c33d359fc68f8121dba4d308b2e5f46c7e893fdf064db3",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1384,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-pairs-review1/room30-32/config-frozen.json",
+      "path": "qa-recovery/native-static-headless-shell-prepared8-20261101/config.json",
+      "sha256": "ec7030fc2c945a83bc03012ecb6fa8b62064b4681e9e9e2c86c086404ca0cb40",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 46918,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room35/controller.mjs",
+      "path": "qa-recovery/native-static-headless-shell-prepared8-20261101/controller.allow35.mjs",
+      "sha256": "4e19ebaf4a0a911ecbd111f51d632ac05c1b1b797803bc34825c4287fa234055",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1135,
+      "path": "qa-recovery/native-static-headless-shell-prepared8-20261101/controller.allow35.patch",
+      "sha256": "c24f58609b47540f0b1a9fb25ba8d20a8607635528036fda0b0f025a74a941f1",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 46771,
+      "path": "qa-recovery/native-static-headless-shell-prepared8-20261101/controller.before-path-uniqueness-3dae3e2d.mjs",
+      "sha256": "3dae3e2da5382e32379f7669ef6e43414f124087bd79b2f892e93f4423447a4e",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 21323,
+      "path": "qa-recovery/native-static-headless-shell-prepared8-20261101/controller.from-reviewed7.patch",
+      "sha256": "c05cc9c218de0b84181e439222e8d7c4762449af4f63413f147ee8dc096b1159",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 46915,
+      "hardlinkTarget": "qa-recovery/native-static-build4-one-retry8-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-static-headless-shell-prepared8-20261101/controller.mjs",
+      "sha256": "d650a4aa20bd8ae6cce88757daceb9edae21ef741d1ae0849a491d9539b61e9e",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1780,
+      "path": "qa-recovery/native-static-headless-shell-prepared8-20261101/controller.path-uniqueness.patch",
+      "sha256": "a924ec183fa948c295315e9fdce7b5e7accb1c9e5df0fe413a47ffcee6280cfe",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 4934,
+      "path": "qa-recovery/native-static-headless-shell-prepared8-20261101/final-freeze-receipt.json",
+      "sha256": "aa3122feb4e67b2b1544ab0725f90cbb20b6b3dc8f435d1ccc39d0732ef2dfd6",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 3389,
+      "path": "qa-recovery/native-static-headless-shell-prepared8-20261101/freeze-receipt.json",
+      "sha256": "0d0b88ec4d5b9e988aa5d39ad8086ef437c15e87cde5e1671c03fde576bc06a9",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1763,
+      "path": "qa-recovery/native-static-headless-shell-prepared8-20261101/independent-source-data-review.json",
+      "sha256": "85e7302ac27ffef10bebd2a6fe0f845af4884a4b500b23c10028b15fa4c891bd",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1395,
+      "path": "qa-recovery/native-static-headless-shell-prepared9-20261101/config.before-root-normal-http-ack.json",
+      "sha256": "402c2495c80637017250a51f662c6aa76da6fbd7fedbc52bf0a0a6936720fb12",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1376,
+      "hardlinkTarget": "qa-recovery-20261101/native-build4-one-retry8-single-rooms-review5/room38/config-frozen.json",
+      "path": "qa-recovery/native-static-headless-shell-prepared9-20261101/config.json",
+      "sha256": "e106b24d167525726d6a181f68b3af285d4ac746aa382e654d0118788aa1c8dc",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 37739,
+      "hardlinkTarget": "qa-recovery/native-static-build4-unpaused-single-rooms-20261101/room35/controller.mjs",
+      "path": "qa-recovery/native-static-headless-shell-prepared9-20261101/controller.allow35.mjs",
+      "sha256": "8eb21c1e80acff17554885781974fc858024ebb546fe6d0e9941c12dfa64b777",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1135,
+      "path": "qa-recovery/native-static-headless-shell-prepared9-20261101/controller.allow35.patch",
+      "sha256": "cf24ffaa9861f6473d30d52e2e4383c1b9e6da64784886fb39598f4053e40ab1",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 34814,
+      "path": "qa-recovery/native-static-headless-shell-prepared9-20261101/controller.from-reviewed8.patch",
+      "sha256": "249b5b15e34c8f714a78c0cc292c288b487ddf872811a1b6a2eebdd525cbbd2d",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 37736,
+      "hardlinkTarget": "qa-recovery/native-static-build4-unpaused-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-static-headless-shell-prepared9-20261101/controller.mjs",
+      "sha256": "23c1957b187d196ee32c7ea5f3026f24abcb6e2d15b36a1096ac65729b19fd29",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 2465,
+      "path": "qa-recovery/native-static-headless-shell-prepared9-20261101/freeze-receipt.json",
+      "sha256": "301408c25a24b3a0e4b021bdcd1bceec67ef72a01df7b5644c6ce88bcdd43f32",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 2129,
+      "path": "qa-recovery/native-static-headless-shell-prepared9-20261101/independent-new9-source-data-review.json",
+      "sha256": "d4b5ed66e779407bb343a40ebffeb4b688a5e896a9920167f1dd4b631d22854b",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 441,
+      "path": "qa-recovery/native-static-prepared-20261101/config-template.json",
+      "sha256": "27dc902564926ccb0da261e8518fa5f03c984dd6608e585c3fca016cea4b0a32",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1084,
+      "hardlinkTarget": "qa-recovery-20261101/native-room33-review1/config-frozen.json",
+      "path": "qa-recovery/native-static-prepared-20261101/config.json",
+      "sha256": "aa2060266267b0ab95bf6da045ceb1d07a97c96b220d28efb78262f8e42356a0",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 21738,
+      "hardlinkTarget": "qa-recovery/native-static-headless-shell-prepared2-20261101/controller.mjs",
+      "path": "qa-recovery/native-static-prepared-20261101/controller.mjs",
+      "sha256": "e0bfce7b1d29b8c1c3bd3866369d24d166b75180245f868b984e80d5a2546160",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1684,
+      "path": "qa-recovery/native-static-prepared-20261101/source-review.json",
+      "sha256": "c9b4af328dc133d903c89da45fb7f9149a34874e4747a7968d063f99f70329bc",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 3687,
+      "path": "qa-recovery/native-visual-entry-build4-single-rooms-20261101/batch-manifest.json",
+      "sha256": "ec69517410e55e13549f84f0f1b91ef8532359b80f3ee5640e1d7a9d3966af06",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1454,
+      "hardlinkTarget": "qa-recovery-20261101/native-visual-entry-collector-review6/room35/config-frozen.json",
+      "path": "qa-recovery/native-visual-entry-build4-single-rooms-20261101/room35/config.json",
+      "sha256": "2252c79fd3cfe252da4822233157af187a8a3a69e1b33672a8063f66568bce19",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 48599,
+      "path": "qa-recovery/native-visual-entry-build4-single-rooms-20261101/room35/controller.mjs",
+      "sha256": "4ce93e98313e72cac0a0a754373c96863710cdb4f0737a552ed5f935e25c1326",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1454,
+      "hardlinkTarget": "qa-recovery-20261101/native-visual-entry-collector-review6/room38/config-frozen.json",
+      "path": "qa-recovery/native-visual-entry-build4-single-rooms-20261101/room38/config.json",
+      "sha256": "fc20891f21c0cd20669c793e4c5b4f63d38b4cbb167a6e8e7eafc37548b2f005",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 48596,
+      "path": "qa-recovery/native-visual-entry-build4-single-rooms-20261101/room38/controller.mjs",
+      "sha256": "21698b3e2993ad77e7473e51709418b376f14cf40a79d78e4f8e42f6fd3f1910",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1454,
+      "hardlinkTarget": "qa-recovery-20261101/native-visual-entry-collector-review6/room39/config-frozen.json",
+      "path": "qa-recovery/native-visual-entry-build4-single-rooms-20261101/room39/config.json",
+      "sha256": "db37eb603872c26e10b9be2ebebcfd539fd8873b7912608cf77e9ad74739a757",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 48596,
+      "hardlinkTarget": "qa-recovery/native-visual-entry-build4-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-visual-entry-build4-single-rooms-20261101/room39/controller.mjs",
+      "sha256": "21698b3e2993ad77e7473e51709418b376f14cf40a79d78e4f8e42f6fd3f1910",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1454,
+      "hardlinkTarget": "qa-recovery-20261101/native-visual-entry-collector-review6/room40/config-frozen.json",
+      "path": "qa-recovery/native-visual-entry-build4-single-rooms-20261101/room40/config.json",
+      "sha256": "7e71ceaed639a80877dae4abe8f6c53899a53ade2a0ba37fa5b0de3250a473a6",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 48596,
+      "hardlinkTarget": "qa-recovery/native-visual-entry-build4-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-visual-entry-build4-single-rooms-20261101/room40/controller.mjs",
+      "sha256": "21698b3e2993ad77e7473e51709418b376f14cf40a79d78e4f8e42f6fd3f1910",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1449,
+      "hardlinkTarget": "qa-recovery-20261101/native-build5-room32-material-review1/config-frozen.json",
+      "path": "qa-recovery/native-visual-entry-build5-room32-20261101/config.json",
+      "sha256": "ae90b3f1e034b618e60daf8167896984a00081d10ef1cb9b5cef41f7e629ede9",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 48596,
+      "hardlinkTarget": "qa-recovery/native-visual-entry-build4-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-visual-entry-build5-room32-20261101/controller.mjs",
+      "sha256": "21698b3e2993ad77e7473e51709418b376f14cf40a79d78e4f8e42f6fd3f1910",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1449,
+      "path": "qa-recovery/native-visual-entry-build5-room32-20261101/derivation-config.json",
+      "sha256": "bb99081d2b8675253e116cf64504026192ad44c8f74af7c74c0a6902b1f786db",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 795,
+      "path": "qa-recovery/native-visual-entry-build5-room32-20261101/freeze-receipt.json",
+      "sha256": "b29190c9271f3897a575fdd0db745438216399ec81c4abb12774378e74986724",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 16300,
+      "path": "qa-recovery/native-visual-entry-build5-room32-20261101/generated-blob-inventory.json",
+      "sha256": "ac49c71d104f8a65d95eb312f170933df48798fd9a6bd25b00b3c50364a97c6a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1454,
+      "hardlinkTarget": "qa-recovery-20261101/native-visual-entry-collector-review6/room38/config-frozen.json",
+      "path": "qa-recovery/native-visual-entry-collector-prepared10-20261101/config.json",
+      "sha256": "fc20891f21c0cd20669c793e4c5b4f63d38b4cbb167a6e8e7eafc37548b2f005",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 48599,
+      "hardlinkTarget": "qa-recovery/native-visual-entry-build4-single-rooms-20261101/room35/controller.mjs",
+      "path": "qa-recovery/native-visual-entry-collector-prepared10-20261101/controller.allow35.mjs",
+      "sha256": "4ce93e98313e72cac0a0a754373c96863710cdb4f0737a552ed5f935e25c1326",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 1333,
+      "path": "qa-recovery/native-visual-entry-collector-prepared10-20261101/controller.allow35.patch",
+      "sha256": "ca29ad283d639a93434bc10c76d8569b3c86ef3f05fcb5c492081a176a30356a",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 19548,
+      "path": "qa-recovery/native-visual-entry-collector-prepared10-20261101/controller.from-reviewed8.patch",
+      "sha256": "43d0edc16d8a445bfd8ea4920ba4b70ed118e4d1f017fd3dd96b2eac1aeb9b9d",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 48596,
+      "hardlinkTarget": "qa-recovery/native-visual-entry-build4-single-rooms-20261101/room38/controller.mjs",
+      "path": "qa-recovery/native-visual-entry-collector-prepared10-20261101/controller.mjs",
+      "sha256": "21698b3e2993ad77e7473e51709418b376f14cf40a79d78e4f8e42f6fd3f1910",
+      "tarKind": "hardlink"
+    },
+    {
+      "bytes": 973,
+      "path": "qa-recovery/native-visual-entry-collector-prepared10-20261101/freeze-receipt.json",
+      "sha256": "108225fbfe61b0a594aeb70237f4e8781af41cbe97e7ece940800d0063f6a1b2",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1453,
+      "path": "qa-recovery/native-visual-entry-collector-prepared10-20261101/independent-source-data-review-room44.json",
+      "sha256": "45a7e3290356ff1a6e03dd5b1907e03852a2d1e76c668ec6e7f87d0a5485b5fe",
+      "tarKind": "regular"
+    },
+    {
+      "bytes": 1198,
+      "path": "qa-recovery/native-visual-entry-collector-prepared10-20261101/ready-state-after-independent-ack.json",
+      "sha256": "ed35614ca1cf64ca410740e5680e30730ea70f581bf4ecaf1214be40a7ccf5d4",
+      "tarKind": "regular"
+    }
+  ],
+  "hardlinkedWholeFileDuplicates": 117,
+  "kind": "EXACT_ORIGINAL_QA_FILE_INVENTORY",
+  "logicalFileBytes": 155073699,
+  "logicalFiles": 532,
+  "storedRegularBytes": 113416101,
+  "storedRegularFiles": 415
+}

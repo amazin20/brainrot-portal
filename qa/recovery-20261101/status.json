@@ -1,10 +1,10 @@
 {
   "kind": "CURRENT_DEVELOPMENT_RECOVERY_STATUS",
-  "updatedAt": "2026-11-01T10:34:54.599248+00:00",
+  "updatedAt": "2026-11-01T10:53:09.847050+00:00",
   "repository": "amazin20/brainrot-portal",
   "publishedDemoCommit": "372089aae69ae49bae49c1ce4bb9c1dbd4c7f09e",
   "backupBranch": "checkpoint/recovery-20261101",
-  "lastVerifiedBackupCommit": "cf3f72e9a76b9de71a9fa92cf8053c7782443d0b",
+  "lastVerifiedBackupCommit": "1c3a221c21fbc6e7e346aab541b31c29a3377941",
   "releaseAccepted": false,
   "all51UniqueAndExcellentAccepted": false,
   "freshTargetedChecks": {
@@ -171,9 +171,9 @@
     "public48 repeats mirror-weight core",
     "remaining castle core overlaps",
     "large undecorated observatory floors and shared ceiling language",
-    "remaining native entry batch and broader all51 visual/exploit review"
+    "broader all51 visual/exploit review and actual whole-route GPU views"
   ],
-  "backupScope": "Current code/source, full current38 fixture, room44 prototype, phase source/empty evidence and compact build5 room32 evidence. Larger baseline proof archive and positive/return delta currently being prepared for durable backup. No deployment.",
+  "backupScope": "Current production source and current38 fixture; exact build5 room32 material-only evidence; full historical/current evidence and original failures in lossless archive parts; phase source/empty and loaded/return component evidence. Active source-only44/48/new spatial-field candidates are not accepted production work. No deployment.",
   "evidenceIndexSha256": "160c8ee730790d7be742e65263069b29176b085406705ecbc89ec80dbedd67cb",
   "room48Prototype": {
     "sourceOnly": false,
@@ -237,5 +237,16 @@
     "rootRawPixelComparison": "Only cover bounds changed; outside pixels identical",
     "receipt": "qa/recovery-20261101/native32-build5/receipt.json",
     "freshAll51NativeAccepted": false
+  },
+  "baselineEvidenceArchive": {
+    "partsManifest": "qa/recovery-20261101/evidence-v1/ordered-parts-manifest.json",
+    "archiveSha256": "de758140deb682c5b937a5dbd1379efb9f763eaf5612bd1a05efb466b5dc6850",
+    "logicalFiles": 532,
+    "logicalBytes": 155073699,
+    "originalFailedReportsPreserved": 19,
+    "rawPngFiles": 66,
+    "allMembersRoundtripVerified": true,
+    "secondSerializationByteExact": true,
+    "scope": "Historical and closed current build4/build5 targeted/ordinary/native/art-isolation evidence. Network FAIL and other original failures remain unchanged. Active44/48 source candidates excluded. No all51 or whole-room quality acceptance."
   }
 }
