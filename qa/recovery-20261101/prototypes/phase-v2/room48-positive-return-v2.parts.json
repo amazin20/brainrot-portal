@@ -1,0 +1,62 @@
+{
+  "kind": "lossless ordered archive parts",
+  "archiveName": "room48-phase-positive-and-return-evidence-delta-v2.tar.gz",
+  "archiveBytes": 15730061,
+  "archiveSha256": "53ed8a5738c8eb373a94d29c1c11222f53f8ce1e2a823c0166f72481d6a18c98",
+  "parts": [
+    {
+      "path": "qa/recovery-20261101/prototypes/phase-v2/room48-positive-return-v2.part-01",
+      "bytes": 2097152,
+      "sha256": "ce46c215696d662567658166a9b3d26b15979cbde3b5bbdca7ec800b520e5eea",
+      "gitBlobSha": "f48085ddef4ed7ba9433f48376b8a46b396fb8e3"
+    },
+    {
+      "path": "qa/recovery-20261101/prototypes/phase-v2/room48-positive-return-v2.part-02",
+      "bytes": 2097152,
+      "sha256": "5288da0e32dae69c9c0dc13c45c1c383dfbf3ac4a7ed6be703287024ef024d47",
+      "gitBlobSha": "79aac6ebaa538bf87981febbed61e82ce062069c"
+    },
+    {
+      "path": "qa/recovery-20261101/prototypes/phase-v2/room48-positive-return-v2.part-03",
+      "bytes": 2097152,
+      "sha256": "c268df7f07203ec28cf0f1a4b5cb3f06c7467aa30697552dfec02142d5c9f208",
+      "gitBlobSha": "3972649822db3c30e921b3b1eaded3dccdba7cf0"
+    },
+    {
+      "path": "qa/recovery-20261101/prototypes/phase-v2/room48-positive-return-v2.part-04",
+      "bytes": 2097152,
+      "sha256": "67842ef6b3816683b26be3ee4719e2c61919f22ce5d7b2c80ec9935ae5549225",
+      "gitBlobSha": "91fc79047526e4967d4a94347516f6eb40ec6ff8"
+    },
+    {
+      "path": "qa/recovery-20261101/prototypes/phase-v2/room48-positive-return-v2.part-05",
+      "bytes": 2097152,
+      "sha256": "c1fdd3af405622678de9e5e2d657e1c2ba75a68eecbedbb423b2b36d30d75faa",
+      "gitBlobSha": "6d659494b16c6c717b6f196388d1df3492f8b214"
+    },
+    {
+      "path": "qa/recovery-20261101/prototypes/phase-v2/room48-positive-return-v2.part-06",
+      "bytes": 2097152,
+      "sha256": "3f097b3222e1676cc5027ed49f13f644c012bb140f9cb712582cba6c901ef524",
+      "gitBlobSha": "5253fd88656d3e5577ecfb71f7939680b3ccf21d"
+    },
+    {
+      "path": "qa/recovery-20261101/prototypes/phase-v2/room48-positive-return-v2.part-07",
+      "bytes": 2097152,
+      "sha256": "d7422d03e9107095b774da90ddd1226cb5d9e8998cad14d035272b06ece32920",
+      "gitBlobSha": "8e8d9b0f7da94d14912a6694266257302680e1a5"
+    },
+    {
+      "path": "qa/recovery-20261101/prototypes/phase-v2/room48-positive-return-v2.part-08",
+      "bytes": 1049997,
+      "sha256": "298fe7cc0a8f63fb9bb2c23dbb444fe689625474eee40abfc78e6ca1d837d4b6",
+      "gitBlobSha": "6ca6a18ee26c92814e94a91816fbacd0c7e19285"
+    }
+  ],
+  "restoreCommand": "cat room48-positive-return-v2.part-* > room48-phase-positive-and-return-evidence-delta-v2.tar.gz",
+  "scope": "Selected standalone Cannon loaded/hold/return checks and complete raw observations. Complete mechanism/contact-quality/production LabPhysics/actual-ray/live-room acceptance remain FALSE. See exact unmodified evidence manifest.",
+  "v1EmptySourceArchiveSha256": "20ad5e9e5405d9cbd256698466bde8f515012d74c1801ed8dce256ce817fcab4",
+  "v1BackedAtCommit": "baf5f75138658c224f805c00968aca1b4df767d4",
+  "wholeRoomAccepted": false,
+  "published": false
+}

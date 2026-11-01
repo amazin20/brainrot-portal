@@ -1,0 +1,161 @@
+{
+  "archive": "/workspace/scratch/c17b1f9ac2be/qa-recovery-20261101/room48-phase-proof-archive/room48-phase-positive-and-return-evidence-delta-v2.tar.gz",
+  "archiveBytes": 15730061,
+  "archiveSha256": "53ed8a5738c8eb373a94d29c1c11222f53f8ce1e2a823c0166f72481d6a18c98",
+  "payloadFiles": 23,
+  "archiveEntries": 24,
+  "uncompressedPayloadBytes": 335484858,
+  "scope": {
+    "status": "TWO_SELECTED_NATIVE_COMPONENT_CASES_ONLY",
+    "cases": [
+      "loaded-120",
+      "return-120"
+    ],
+    "actualNativeSteps": [
+      4200,
+      7800
+    ],
+    "fullOriginalLoadedRawBytes": 114645635,
+    "fullOriginalReturnRawBytes": 220611156,
+    "bothFullOriginalRawFilesPreserved": true,
+    "commonPrefixCompletedRecords": 4200,
+    "commonPrefixDeduplicatedOrDropped": false,
+    "emptyRawCopied": false,
+    "componentSha256": "73fc8dc55b288e8f693b8935f6d390e1ab94b7f28e853f013124a85384ec793a",
+    "checksSha256": "38d9b5e478d4c5cd70f1a35672ff0008a802875db5ed9daf9a1666ea4e8ec693",
+    "baseArchiveSha256": "20ad5e9e5405d9cbd256698466bde8f515012d74c1801ed8dce256ce817fcab4",
+    "baseManifestSha256": "a9702c08fe3219bfad6d06db7d56cbca3315f26277b79b01099bac8bb8a84f79",
+    "baseDurableGitCommitReportedByParent": "baf5f75138658c224f805c00968aca1b4df767d4",
+    "wholeRoomAccepted": false,
+    "actualPortalRayGeometryAccepted": false,
+    "visualAcceptance": false,
+    "globalConservationOrPassivity": false,
+    "completeMechanismAccepted": false,
+    "contactQualityAccepted": false,
+    "contactQualityStatus": "OPEN: rotated cargo/tray contact overlap and native stop compliance exceed desired few-mm production target; selected prior case passes are not rewritten.",
+    "productionLabPhysicsAccepted": false,
+    "cannonModuleScope": "One canonical direct ESM distribution in standalone fixture. Production bare cannon-es may resolve a distinct CJS constructor identity underNode; no cross-identity production world acceptance.",
+    "limits": "Only original120Hz lift/poweroffhold/paidreturn component cases. No further native runs by archiver, no240Hz, initially-closed missingarm/untuned, held/proximity or live-room integration accepted."
+  },
+  "files": [
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/POSITIVE_RETURN_SCOPE.md",
+      "bytes": 5498,
+      "sha256": "72c5cbd729cba6303896964e254c3390979ba8b7373b616de2d93c35e5d370b3"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-loaded-120-full/actual-steps.jsonl",
+      "bytes": 114645635,
+      "sha256": "ea93a8b0877655df0130a335687b23bcfc55c5c60a1f19dc7bbc6db89fda320d"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-loaded-120-full/receipt.json",
+      "bytes": 4976,
+      "sha256": "e0fd5469bc51015297a1e1d685fdb20c73bf271404c2d8b1dfaeb448b0d53022"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-loaded-120-full/stderr.txt",
+      "bytes": 350,
+      "sha256": "7ca8ba252a2aaa7866c3e16f8aa554dcb5a1409d0d8bb11057b817d016e63729"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-loaded-120-full/stdout.json",
+      "bytes": 8266,
+      "sha256": "0c104728914ff68532b00b27ac858f9f01c44be681f478294f8ecc2ffe05c61c"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-native-contact-compliance-note.json",
+      "bytes": 82767,
+      "sha256": "9d5661a9cbf2731398fa122e497783428ecc7d1b505e46e6f634112cf932bdfc"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-positive-cases-summary.json",
+      "bytes": 5589,
+      "sha256": "f45646a73f3929a3cfe944e3fc312b1a1a86a5de74dcacc97b27c191439034d1"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-return-120-full/actual-steps.jsonl",
+      "bytes": 220611156,
+      "sha256": "fca39ac6122a64802516fd110d04403d826e28b537d9295cb242b0cc455cbdaa"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-return-120-full/receipt.json",
+      "bytes": 9051,
+      "sha256": "72e2c0b8c84e63b6e29bcb467450e757b2a52639102042d63d3ecd2f59958d02"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-return-120-full/stderr.txt",
+      "bytes": 350,
+      "sha256": "7ca8ba252a2aaa7866c3e16f8aa554dcb5a1409d0d8bb11057b817d016e63729"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-return-120-full/stdout.json",
+      "bytes": 12220,
+      "sha256": "ced90461288177d6ff78001bfe7d52858810e8d47b382bf77bb39c80936366b4"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/analyze-actual-positive-cases.py",
+      "bytes": 9945,
+      "sha256": "f5896bf92a9558025c72214747d882dc6c3b76070dc9198cfb2ddcddfbd5ad6e"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/archive-positive-and-return-evidence-delta.py",
+      "bytes": 5439,
+      "sha256": "a06b0d7397a692877766c1cac40d1d397215d8d2cf0956085220813ed7f56891"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/independent-actual-loaded-120-review.json",
+      "bytes": 18785,
+      "sha256": "f5221948674ff04306d811690cc11f512c6d098e4b1d966d967af93b2565a7f9"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/independent-actual-return-120-review.json",
+      "bytes": 11760,
+      "sha256": "49526cc76431571cd6e251f676d8861b4489ea29de1453560b42224434554711"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/independent-loaded-120-wrapper-source-review.json",
+      "bytes": 6545,
+      "sha256": "b8f27026366808599669b88ac4f0a5166082a5b0b43209a3a1400c0ad9a15474"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/loaded-120-source-only.diff",
+      "bytes": 8810,
+      "sha256": "f9e4de86bf13432c70bcf67aa41d8cfe313a7fdd3e7541a177461b444ff62347"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/observe-loaded-120-once.mjs",
+      "bytes": 7523,
+      "sha256": "16ee50813b06217e9c333fc8eab57fbdc7334171f19b70818d2e862926796674"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/observe-return-120-once.mjs",
+      "bytes": 7581,
+      "sha256": "6b9eb2c98ba6affc57b9ca6eb70d47cd8a5b9461ebdc558113b3f3fac436d8c5"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/return-120-source-only.diff",
+      "bytes": 5815,
+      "sha256": "d95f113b2821ecd0a139a0edcf6336fa5d60578fab3ccc30ec77c391349a4ebf"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/return-120-source-readiness.json",
+      "bytes": 3304,
+      "sha256": "61e0742de5ba89987247d6711d2791408859f35b67316ab27453a97ef22b7d20"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/run-loaded-120-once.py",
+      "bytes": 3396,
+      "sha256": "6f368a5e42b160493b89c560d62680cb5b144a4d68b4032d0794cc5f3cc43f06"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/run-return-120-once.py",
+      "bytes": 3396,
+      "sha256": "1e92d4b634c6d6c107ef42f8a8e7096eff9a2e7c44accced3a9b44ac9e59233b"
+    }
+  ],
+  "allEntriesVerifiedAfterDecompression": true,
+  "repeatSerializationSameSha256": true,
+  "nativeRuntimeDuringArchival": false,
+  "qaOnlyOutsideMain": true
+}

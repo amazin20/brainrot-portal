@@ -1,10 +1,10 @@
 {
   "kind": "CURRENT_DEVELOPMENT_RECOVERY_STATUS",
-  "updatedAt": "2026-11-01T10:25:28.280329+00:00",
+  "updatedAt": "2026-11-01T10:34:54.599248+00:00",
   "repository": "amazin20/brainrot-portal",
   "publishedDemoCommit": "372089aae69ae49bae49c1ce4bb9c1dbd4c7f09e",
   "backupBranch": "checkpoint/recovery-20261101",
-  "lastVerifiedBackupCommit": "baf5f75138658c224f805c00968aca1b4df767d4",
+  "lastVerifiedBackupCommit": "cf3f72e9a76b9de71a9fa92cf8053c7782443d0b",
   "releaseAccepted": false,
   "all51UniqueAndExcellentAccepted": false,
   "freshTargetedChecks": {
@@ -181,7 +181,7 @@
     "componentSha256": "73fc8dc55b288e8f693b8935f6d390e1ab94b7f28e853f013124a85384ec793a",
     "nativeExecution": true,
     "knownSourceCorrection": "Five catch faces reversed to outward winding before any execution",
-    "scope": "Isolated native EMPTY negative and three selected tiny checks only. Loaded contact, lift, catch/return, actual portal rays, GLBs and live room remain open. Native origin-boundary roundoff warning and all full raw records preserved.",
+    "scope": "Isolated canonical-ESM Cannon component: three selected tiny checks plus3600empty,4200loaded/hold and7800return steps. All raw observations preserved. Contact/stop-quality, production18-GS LabPhysics identity/sleep/CCD, real portal-ray paths, GLBs and actual room remain open.",
     "selectedTinyCasesPass": [
       "math",
       "metric",
@@ -217,9 +217,11 @@
     "productionLabPhysicsAccepted": false,
     "knownContactQualityOpen": "Actual rotated cargo/tray overlap reaches11.05mm; catch/stop transients up to15.38mm. New coupled/contact-quality candidate and120/240 checks required.",
     "positiveReturnDeltaArchiveSha256": "53ed8a5738c8eb373a94d29c1c11222f53f8ce1e2a823c0166f72481d6a18c98",
-    "positiveReturnDeltaBackupPending": true,
     "productionLoadedLiftAccepted": false,
-    "productionCatchReturnAccepted": false
+    "productionCatchReturnAccepted": false,
+    "positiveReturnDeltaPartsManifest": "qa/recovery-20261101/prototypes/phase-v2/room48-positive-return-v2.parts.json",
+    "selectedCaseTotalNativeSteps": 15601,
+    "actualPortalRaysAccepted": false
   },
   "build5": {
     "pass": true,
