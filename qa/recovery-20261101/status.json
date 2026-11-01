@@ -1,10 +1,10 @@
 {
   "kind": "CURRENT_DEVELOPMENT_RECOVERY_STATUS",
-  "updatedAt": "2026-11-01T09:22:25.252122+00:00",
+  "updatedAt": "2026-11-01T09:43:43.978098+00:00",
   "repository": "amazin20/brainrot-portal",
   "publishedDemoCommit": "372089aae69ae49bae49c1ce4bb9c1dbd4c7f09e",
   "backupBranch": "checkpoint/recovery-20261101",
-  "lastVerifiedBackupCommit": "7ddfdb2ebb0418a154e3cac2804bf61cc0feee98",
+  "lastVerifiedBackupCommit": "e30cb87c3a63afd74d7132fcc150f39ae9ae9285",
   "releaseAccepted": false,
   "all51UniqueAndExcellentAccepted": false,
   "freshTargetedChecks": {
@@ -66,41 +66,47 @@
     "receiptSha256": "42f5ab95a93b9601c41929bce734a70833e57ff68b9a2fa932a3c214338bd410"
   },
   "nativeBuild4": {
-    "technicalCasesPass": 10,
+    "technicalCasesPass": 14,
     "stableRooms": [
       30,
       31,
       32,
       33,
-      34
+      34,
+      36,
+      37
     ],
     "formats": [
       "wide",
       "portrait"
     ],
-    "remainingCasesPending": 12,
+    "remainingCasesPending": 8,
     "pendingStableRooms": [
       35,
-      36,
-      37,
       38,
       39,
       40
     ],
-    "pendingBatch": "Fresh single-room180s configs; ROOT owns completion and final refresh",
+    "pendingBatch": "One bounded fresh unchanged reviewed8 execution per remaining room; strict earlier WASM/NoData failures retained, audit remains open until actual results.",
     "scope": "Normal zero-step entry captures and exact served-package/model guards. No continuous route, physical-device benchmark or whole-room visual approval.",
     "completeReceiptIndex": "accepted-evidence-index.json",
     "receiptFiles": [
       "native-room33-build4-review7/report.json",
       "native-build4-pairs-review1/room31-34/report.json",
       "native-build4-remaining-pairs-review2/room30-case-aggregation-post-inventory.json",
-      "native-build4-single-rooms-review3/room32/report.json"
+      "native-build4-single-rooms-review3/room32/report.json",
+      "native-build4-single-rooms-review3/room36/report.json",
+      "native-build4-single-rooms-review3/room37/report.json"
     ],
     "failedAggregateRetained": {
       "path": "native-build4-remaining-pairs-review2/room30-32/report.json",
       "pass": false,
       "reason": "180s while loading32; only two completed30cases accepted after exactsource/dist postcheck"
-    }
+    },
+    "additionalFailedReceiptsRetained": [
+      "native-build4-single-rooms-review3/room38/report.json",
+      "native-build4-unpaused-single-rooms-review4/room38/report.json"
+    ]
   },
   "entryVisualReview": {
     "reviewedStableRooms": [
@@ -139,11 +145,29 @@
   "backupScope": "Code, current physical fixture and room44 component evidence backup only. Native runs continue; final raw entry/route evidence archive and status refresh remain pending. No deployment.",
   "evidenceIndexSha256": "160c8ee730790d7be742e65263069b29176b085406705ecbc89ec80dbedd67cb",
   "room48Prototype": {
-    "sourceOnly": true,
+    "sourceOnly": false,
     "mainIntegrated": false,
     "componentSha256": "73fc8dc55b288e8f693b8935f6d390e1ab94b7f28e853f013124a85384ec793a",
-    "nativeExecution": false,
+    "nativeExecution": true,
     "knownSourceCorrection": "Five catch faces reversed to outward winding before any execution",
-    "scope": "Prepared isolated component; actual rays, GLBs, held/proximity, native tests and live room remain open"
+    "scope": "Isolated native EMPTY negative and three selected tiny checks only. Loaded contact, lift, catch/return, actual portal rays, GLBs and live room remain open. Native origin-boundary roundoff warning and all full raw records preserved.",
+    "selectedTinyCasesPass": [
+      "math",
+      "metric",
+      "one-step"
+    ],
+    "emptyNegative": {
+      "pass": true,
+      "steps": 3600,
+      "hz": 120,
+      "seconds": 30,
+      "maxDoorMetres": 0.00025051150916044485,
+      "actualCargoTrayContactSteps": 0,
+      "actualLoadBearingCatchSteps": 0
+    },
+    "loadedLiftAccepted": false,
+    "catchReturnAccepted": false,
+    "archive": "qa/recovery-20261101/prototypes/room48-phase-source-and-empty-evidence-v1.tar.gz",
+    "archiveSha256": "20ad5e9e5405d9cbd256698466bde8f515012d74c1801ed8dce256ce817fcab4"
   }
 }

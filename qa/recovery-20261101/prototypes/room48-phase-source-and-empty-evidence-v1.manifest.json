@@ -1,0 +1,199 @@
+{
+  "archive": "/workspace/scratch/c17b1f9ac2be/qa-recovery-20261101/room48-phase-proof-archive/room48-phase-source-and-empty-evidence-v1.tar.gz",
+  "archiveBytes": 2305034,
+  "archiveSha256": "20ad5e9e5405d9cbd256698466bde8f515012d74c1801ed8dce256ce817fcab4",
+  "sourcePayloadFiles": 32,
+  "archiveEntries": 33,
+  "uncompressedPayloadBytes": 49896115,
+  "scope": {
+    "status": "SOURCE_AND_FOUR_SELECTED_CASES_ONLY",
+    "acceptedActualCases": [
+      "math",
+      "metric",
+      "one-step",
+      "empty-negative"
+    ],
+    "emptyNegativeActualSteps": 3600,
+    "emptyNegativeHz": 120,
+    "emptyNegativeSimulatedSeconds": 30,
+    "fullRawJsonlPreserved": true,
+    "originalStderrPreserved": true,
+    "componentSha256": "73fc8dc55b288e8f693b8935f6d390e1ab94b7f28e853f013124a85384ec793a",
+    "checksSha256": "38d9b5e478d4c5cd70f1a35672ff0008a802875db5ed9daf9a1666ea4e8ec693",
+    "wholeRoomAccepted": false,
+    "loadedLiftAccepted": false,
+    "catchAccepted": false,
+    "realRayGeometryAccepted": false,
+    "visualAcceptance": false,
+    "globalConservationOrPassivity": false,
+    "note": "Initial SOURCE_ONLY docs/reviews are historical preparation snapshots. Actual receipts, EVIDENCE_SCOPE and independent actual review define current runtime evidence. Superseded winding review remains explicitly marked. Archive stores exact native Cannon reference and original relative paths; no production integration."
+  },
+  "files": [
+    {
+      "path": "brainrot-portal/node_modules/cannon-es/dist/cannon-es.js",
+      "bytes": 346256,
+      "sha256": "f0700cbd3a482954949b9d58c1b0f76dcc74767750297647a39d8c40dd63d37c"
+    },
+    {
+      "path": "brainrot-portal/node_modules/cannon-es/package.json",
+      "bytes": 2031,
+      "sha256": "82a4915fedad350872f2b5cf8a84ea326c73f4eeea841d941fe267f41ac7e453"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/EVIDENCE_SCOPE.md",
+      "bytes": 3530,
+      "sha256": "43342cfb92b7f370cfdaf801ecb9fcb3f8248b642358e81199e954799593cc82"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/MATH.md",
+      "bytes": 9183,
+      "sha256": "b9df9316a75d35a6773349a44d6bb8c09117079e361b1d9ebfb1215ab695e760"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/README.md",
+      "bytes": 5439,
+      "sha256": "6648352c6762d6f686c752b4483d92740ce6fd746aa4d72bd5c23db9f76139ea"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/Room48PhaseCell.mjs",
+      "bytes": 30282,
+      "sha256": "73fc8dc55b288e8f693b8935f6d390e1ab94b7f28e853f013124a85384ec793a"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-empty-negative-120-full/actual-steps.jsonl",
+      "bytes": 49399176,
+      "sha256": "42e446a3f08c29aba7f97ea044f23506202443342cbd8d0086682ab7dd71b2f7"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-empty-negative-120-full/receipt.json",
+      "bytes": 3554,
+      "sha256": "60f15371935c523195de9fab5be5696e857669e59e0367b22e32c4392054fd6c"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-empty-negative-120-full/stderr.txt",
+      "bytes": 350,
+      "sha256": "7ca8ba252a2aaa7866c3e16f8aa554dcb5a1409d0d8bb11057b817d016e63729"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-empty-negative-120-full/stdout.json",
+      "bytes": 3714,
+      "sha256": "f4033fe060c0f8a0876d5f6b6b372871e89baad666c3abc24c44d0c08bbf58ba"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-empty-negative-analysis.json",
+      "bytes": 2707,
+      "sha256": "01ad76aeaeacae11c66e9e9ed654de80caeae7499debc694609c76cd594b30cd"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-first-math/receipt.json",
+      "bytes": 354,
+      "sha256": "fb4971001b873bf948e6c66a74a3db9ccfac43fc11923db60fd3dbdcb432f122"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-first-math/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-first-math/stdout.json",
+      "bytes": 412,
+      "sha256": "b20d180f7e2fbb502ecf2cdcceae5720eea6c9aaf3a92c8f3dab87050a36e630"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-first-metric/receipt.json",
+      "bytes": 356,
+      "sha256": "1941b80df78ee5645c247111d8a38566b701d11295acce00607d31021064e256"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-first-metric/stderr.txt",
+      "bytes": 350,
+      "sha256": "7ca8ba252a2aaa7866c3e16f8aa554dcb5a1409d0d8bb11057b817d016e63729"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-first-metric/stdout.json",
+      "bytes": 330,
+      "sha256": "9190d6584da772359541a6300d16a2f644de3d3876e52ff407990f9365b5da1f"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-first-one-step/receipt.json",
+      "bytes": 358,
+      "sha256": "5e7154cdec7759f51654799936ea56b99e6b57e3f711a540ecb271be0973deb2"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-first-one-step/stderr.txt",
+      "bytes": 350,
+      "sha256": "7ca8ba252a2aaa7866c3e16f8aa554dcb5a1409d0d8bb11057b817d016e63729"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/actual-first-one-step/stdout.json",
+      "bytes": 4208,
+      "sha256": "130d81216b93329ed522b2d42e1fedcaf7008cd9948ad1b8080a626dea05425a"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/analyze-actual-empty-negative.py",
+      "bytes": 7607,
+      "sha256": "d419da6513f24aa210f7c8b4592051521068c37c0385f1c1ab9facad0f121d4b"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/archive-source-and-empty-evidence.py",
+      "bytes": 4577,
+      "sha256": "0ef9b2e43a36d743f4521f4b33e61663eb31f5f6ef4f16ed4049782ad05ee8fa"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/independent-actual-empty-negative-review.json",
+      "bytes": 8515,
+      "sha256": "0db509d072e90f9d56c766959fe5f2e98e05d6759be8890feeb7ce5a2e9317b0"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/independent-prepared-checks-review.json",
+      "bytes": 5781,
+      "sha256": "331a78a901295b88fdaa51916af7fa970cd011670cffef566dddab58ba2fb18c"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/independent-source-review-superseded-811ac2d4.json",
+      "bytes": 8505,
+      "sha256": "dc777d8b5ce9ab0f35aa18e8f50f758a85ab22724cec6939b4f146204642bd02"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/independent-source-review.json",
+      "bytes": 11235,
+      "sha256": "7a2bd4bd4fbcb629338eb55be2c76352554660e555f22f8a1ad0f366558936fe"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/observe-empty-negative-once.mjs",
+      "bytes": 5902,
+      "sha256": "f93a8f8b56760d286194492034613950f6e0d1b5baecbb0107f8e95059a752bd"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/prepared-checks.mjs",
+      "bytes": 14369,
+      "sha256": "38d9b5e478d4c5cd70f1a35672ff0008a802875db5ed9daf9a1666ea4e8ec693"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/run-empty-negative-once.py",
+      "bytes": 3416,
+      "sha256": "880d531d6609f23279f4406ec691035857de3e575e1776a4372dc849e27c1856"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/run-selected-once.py",
+      "bytes": 1673,
+      "sha256": "fbee734fc6955551ed105e0b02d5d4874f2aa98cd843b221ebcb2cdc37277d28"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/source-only-manifest.json",
+      "bytes": 2842,
+      "sha256": "8c3f99cb2727f2a9f0485853fc744ecb87cd1a360ee01b96b761907d847b94bf"
+    },
+    {
+      "path": "qa-recovery-20261101/room48-phase-proposal/source-pin-history.json",
+      "bytes": 1025,
+      "sha256": "a04d089f6b335599caec8f7df293baa85b45ef5819405cb91e2442793da7c663"
+    }
+  ],
+  "nativeCannonReferenceIncluded": true,
+  "allEntriesVerifiedAfterDecompression": true,
+  "repeatSerializationSameSha256": true,
+  "qaOnlyOutsideMain": true,
+  "nativeExecutionDuringArchival": false,
+  "productionMutationsDuringArchival": false
+}
