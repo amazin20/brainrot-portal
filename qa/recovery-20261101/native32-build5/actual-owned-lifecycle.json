@@ -1,0 +1,13 @@
+{
+  "pass": true,
+  "scope": "Declared headless room32 setup, owned material restoration/disposal only; no ordinary route or GPU aesthetic acceptance",
+  "ownedDisposals": 1,
+  "originalDisposalsAfterWorldTeardown": 2,
+  "originalMaterialRestored": true,
+  "sharedRegistryUnchanged": true,
+  "originalCargoBodyShapeRetained": true,
+  "physicsCameraAimPortalInteractionContractUnchanged": true,
+  "geometryUnchanged": true,
+  "all51ExcellentAccepted": false,
+  "sourceSha256": "f3de98359b16993f98298d824b14cbd8c4d2cef0facdeb1810ccfdfacef32aa5"
+}

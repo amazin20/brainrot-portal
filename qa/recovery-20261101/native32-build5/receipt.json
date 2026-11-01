@@ -1,0 +1,30 @@
+{
+  "scope": "Fresh build5 ordinary zero-step room32 wide+portrait; original actors/bodies/shapes/query/clocks/buffers and exact served package guards, plus ROOT individual actual RAW review. No whole-room/all51 beauty acceptance.",
+  "entryCaptureGuardsPass": true,
+  "strictNetworkAuditPassInThisReport": true,
+  "reportPass": true,
+  "sourceSha256": "f3de98359b16993f98298d824b14cbd8c4d2cef0facdeb1810ccfdfacef32aa5",
+  "reportSha256": "5126f8b1956ac5db20d926c2e298f16c6d1288e5b8cfabc8d0785c4da7c509c9",
+  "controllerSha256": "21698b3e2993ad77e7473e51709418b376f14cf40a79d78e4f8e42f6fd3f1910",
+  "configSha256": "ae90b3f1e034b618e60daf8167896984a00081d10ef1cb9b5cef41f7e629ede9",
+  "sourceManifestSha256": "6740a831f72f8e34dc765414e4f8785c6d24c25ae6b6d069ce205ae2a12a4636",
+  "distManifestSha256": "ede79a7dac9630e58879ee2e04f50533ad1b5e06616623c979c0a29ad6a259cc",
+  "globalPeakBytes": 4597301248,
+  "allOwnedChromeClosed": true,
+  "images": [
+    {
+      "path": "entry-wide.png",
+      "bytes": 223972,
+      "sha256": "1f64976948f2335dd2d360ba76ad9133df56b08636fbf9a7bf9bb08d4d3c2a93"
+    },
+    {
+      "path": "entry-portrait.png",
+      "bytes": 106029,
+      "sha256": "92af9b555d36944308aecc439ddbbbe8be50a6f7e8a1fd9c6a034f94726a2287"
+    }
+  ],
+  "finding": "Closed rear cover now reads as matte plum-gray rather than near-black. Actual pixel changes are confined exactly to that cover; all outside pixels identical. Large empty foreground and shared ceiling remain open.",
+  "otherStrictNetworkAuditStatus": "OPEN; four build4 collector reports remain FAIL. This successful room32 report does not resolve them.",
+  "all51ExcellentAccepted": false,
+  "published": false
+}

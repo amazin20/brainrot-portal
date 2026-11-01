@@ -1,10 +1,10 @@
 {
   "kind": "CURRENT_DEVELOPMENT_RECOVERY_STATUS",
-  "updatedAt": "2026-11-01T09:43:43.978098+00:00",
+  "updatedAt": "2026-11-01T10:25:28.280329+00:00",
   "repository": "amazin20/brainrot-portal",
   "publishedDemoCommit": "372089aae69ae49bae49c1ce4bb9c1dbd4c7f09e",
   "backupBranch": "checkpoint/recovery-20261101",
-  "lastVerifiedBackupCommit": "e30cb87c3a63afd74d7132fcc150f39ae9ae9285",
+  "lastVerifiedBackupCommit": "baf5f75138658c224f805c00968aca1b4df767d4",
   "releaseAccepted": false,
   "all51UniqueAndExcellentAccepted": false,
   "freshTargetedChecks": {
@@ -80,14 +80,9 @@
       "wide",
       "portrait"
     ],
-    "remainingCasesPending": 8,
-    "pendingStableRooms": [
-      35,
-      38,
-      39,
-      40
-    ],
-    "pendingBatch": "One bounded fresh unchanged reviewed8 execution per remaining room; strict earlier WASM/NoData failures retained, audit remains open until actual results.",
+    "remainingCasesPending": 0,
+    "pendingStableRooms": [],
+    "pendingBatch": "No remaining entry capture; broader all51 beauty/gameplay/network review remains open.",
     "scope": "Normal zero-step entry captures and exact served-package/model guards. No continuous route, physical-device benchmark or whole-room visual approval.",
     "completeReceiptIndex": "accepted-evidence-index.json",
     "receiptFiles": [
@@ -106,21 +101,57 @@
     "additionalFailedReceiptsRetained": [
       "native-build4-single-rooms-review3/room38/report.json",
       "native-build4-unpaused-single-rooms-review4/room38/report.json"
+    ],
+    "additionalEntryCaptureGuardCases": 8,
+    "additionalEntryStableRooms": [
+      35,
+      38,
+      39,
+      40
+    ],
+    "strictNetworkAuditAccepted": false,
+    "strictNetworkAuditStatus": "OPEN: four collector reports retain false full pass, one strict network failure each",
+    "entryCaptureGuardsCompleteForRooms": [
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40
     ]
   },
   "entryVisualReview": {
     "reviewedStableRooms": [
+      30,
       31,
-      34
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40
     ],
-    "individualImages": 5,
+    "individualImages": 25,
     "receipt": "native-root-entry-review-31-34.json",
     "receiptSha256": "dde48d74d15d36846a4546bc6ba6ae7f8cff838c2540eadbc96000827c5eea9e",
     "wholeRoomVisualAccepted": false,
     "findings": {
       "31": "Hero and companion are fully visible and separate in both formats. Paired wall rails and panel are legible. Portrait full-page badge is intact; canvas crop alone does not establish a UI defect. Large undecorated floor remains open.",
       "34": "Hero and companion are fully visible and separate; pressure gauge and rounded wall profiles are visible in wide and portrait. Entry composition does not show all machine details. Large undecorated floor and shared ceiling language remain open."
-    }
+    },
+    "additionalReceipts": [
+      "native-root-entry-review-30-32-33-36-37.json",
+      "native-root-entry-review-35-38-39-40.json"
+    ],
+    "scope": "23 individually reviewed build4 RAWs plus two fresh build5 room32 RAWs; no all-room beauty approval"
   },
   "room44Prototype": {
     "pureElectricalChecks": 10,
@@ -142,7 +173,7 @@
     "large undecorated observatory floors and shared ceiling language",
     "remaining native entry batch and broader all51 visual/exploit review"
   ],
-  "backupScope": "Code, current physical fixture and room44 component evidence backup only. Native runs continue; final raw entry/route evidence archive and status refresh remain pending. No deployment.",
+  "backupScope": "Current code/source, full current38 fixture, room44 prototype, phase source/empty evidence and compact build5 room32 evidence. Larger baseline proof archive and positive/return delta currently being prepared for durable backup. No deployment.",
   "evidenceIndexSha256": "160c8ee730790d7be742e65263069b29176b085406705ecbc89ec80dbedd67cb",
   "room48Prototype": {
     "sourceOnly": false,
@@ -165,9 +196,44 @@
       "actualCargoTrayContactSteps": 0,
       "actualLoadBearingCatchSteps": 0
     },
-    "loadedLiftAccepted": false,
-    "catchReturnAccepted": false,
     "archive": "qa/recovery-20261101/prototypes/room48-phase-source-and-empty-evidence-v1.tar.gz",
-    "archiveSha256": "20ad5e9e5405d9cbd256698466bde8f515012d74c1801ed8dce256ce817fcab4"
+    "archiveSha256": "20ad5e9e5405d9cbd256698466bde8f515012d74c1801ed8dce256ce817fcab4",
+    "selectedLoaded120": {
+      "pass": true,
+      "steps": 4200,
+      "liftAndHoldSeconds": 35,
+      "actualFinalHoldCatchSupportSteps": 120,
+      "finalHoldDoorClearance": 2.999672553
+    },
+    "selectedReturn120": {
+      "pass": true,
+      "steps": 7800,
+      "seconds": 65,
+      "finalDoorClearance": -2.220446049250313e-16,
+      "catchManualNetWorkJ": 3.40200155
+    },
+    "completeMechanismAccepted": false,
+    "contactQualityAccepted": false,
+    "productionLabPhysicsAccepted": false,
+    "knownContactQualityOpen": "Actual rotated cargo/tray overlap reaches11.05mm; catch/stop transients up to15.38mm. New coupled/contact-quality candidate and120/240 checks required.",
+    "positiveReturnDeltaArchiveSha256": "53ed8a5738c8eb373a94d29c1c11222f53f8ce1e2a823c0166f72481d6a18c98",
+    "positiveReturnDeltaBackupPending": true,
+    "productionLoadedLiftAccepted": false,
+    "productionCatchReturnAccepted": false
+  },
+  "build5": {
+    "pass": true,
+    "onlyProductionChange": "Room32 drawing-only rear cover owned material",
+    "sourceManifestSha256": "6740a831f72f8e34dc765414e4f8785c6d24c25ae6b6d069ce205ae2a12a4636",
+    "sourceCount": 393,
+    "distManifestSha256": "ede79a7dac9630e58879ee2e04f50533ad1b5e06616623c979c0a29ad6a259cc",
+    "distFiles": 77,
+    "originalCampaignGlbs14Exact": true,
+    "selectedRoom32ContractPass": true,
+    "ownedMaterialLifecyclePass": true,
+    "nativeRoom32WidePortraitEntryAndNetworkPass": true,
+    "rootRawPixelComparison": "Only cover bounds changed; outside pixels identical",
+    "receipt": "qa/recovery-20261101/native32-build5/receipt.json",
+    "freshAll51NativeAccepted": false
   }
 }

@@ -1,0 +1,50 @@
+{
+  "scope": "Analysis of original RAW PNGs; no image edits, crops, rescaling or regenerated screenshots",
+  "rows": [
+    {
+      "format": "wide",
+      "changedPixels": 4802,
+      "boundsXYInclusive": [
+        703,
+        239,
+        796,
+        293
+      ],
+      "beforeChangedPixelMeanRGB": [
+        5.5374843815077055,
+        9.497084548104956,
+        23.089962515618492
+      ],
+      "afterChangedPixelMeanRGB": [
+        45.994377342773845,
+        41.1740941274469,
+        55.57371928363182
+      ],
+      "beforeSha256": "4f370eb7d4dc3c81616a442515c38d5cde22f5c1436fb341035d0293addc14eb",
+      "afterSha256": "1f64976948f2335dd2d360ba76ad9133df56b08636fbf9a7bf9bb08d4d3c2a93"
+    },
+    {
+      "format": "portrait",
+      "changedPixels": 2632,
+      "boundsXYInclusive": [
+        243,
+        334,
+        311,
+        373
+      ],
+      "beforeChangedPixelMeanRGB": [
+        5.773176291793313,
+        9.86740121580547,
+        23.674392097264437
+      ],
+      "afterChangedPixelMeanRGB": [
+        45.63981762917933,
+        41.01139817629179,
+        55.68655015197568
+      ],
+      "beforeSha256": "a153bf5a7b6fc0ec9537542a0cb57a8a0beb0ab4f3225ab05c0c9e8affe51b56",
+      "afterSha256": "92af9b555d36944308aecc439ddbbbe8be50a6f7e8a1fd9c6a034f94726a2287"
+    }
+  ],
+  "all51ExcellentAccepted": false
+}

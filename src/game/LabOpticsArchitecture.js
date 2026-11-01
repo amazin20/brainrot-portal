@@ -24,7 +24,7 @@ export function installOpticsArchitecture(game,level){
  const make=(name,roughness,metalness)=>new THREE.MeshStandardMaterial({name,color:0xffffff,roughness,metalness});
  const materials={enamel:make('Observatory / indigo vitreous enamel',.56,.22),silver:make('Observatory / brushed silver frames',.38,.72),recess:make('Observatory / sealed dark optical cavities',.84,.08),glass:make('Observatory / opaque blue instrument glass',.24,.4)};
  materials.enamel.vertexColors=true;
- const banks=new Map(),panels=[],changed=[],lights=[],sourceVisibility=sources.map(m=>[m,m.visible]);
+ const banks=new Map(),panels=[],changed=[],lights=[],isolatedMaterials=[],sourceVisibility=sources.map(m=>[m,m.visible]);
  const stats={revision:OPTICS_ARCHITECTURE_REVISION,profile:profile.name,rimAreaRatio:profile.rimAreaRatio,panels:0,parts:0,batches:0,triangles:0,newColliders:0,newLights:0};
  let envelope;
  function part(frame,kind,p,size,color,shape='box',angle=0){
@@ -105,6 +105,30 @@ export function installOpticsArchitecture(game,level){
   }
   changed.push({mesh,original,replacement:clones.get(original)});mesh.material=clones.get(original);
  });
+ // Only room32's closed drawing faces the entry camera. Its actual porcelain
+ // front, portal master and measured frame retain their original materials.
+ if(level.index===31){
+  const intakes=k.world.surfaces.filter(surface=>surface.name==='double-ray-intake');
+  if(intakes.length!==1)throw new Error('Optical intake requires one authored surface');
+  const covers=intakes[0].group.children.filter(mesh=>{
+   const p=mesh.geometry?.parameters;
+   return mesh.isMesh&&mesh.visible&&p&&Math.abs(mesh.position.x)<1e-6&&Math.abs(mesh.position.y)<1e-6&&Math.abs(mesh.position.z+.19)<1e-6
+    &&Math.abs(p.width-4)<1e-6&&Math.abs(p.height-2.14)<1e-6&&Math.abs(p.depth-.22)<1e-6;
+  });
+  if(covers.length!==1)throw new Error('Optical intake requires one closed rear drawing');
+  const mesh=covers[0],original=mesh.material;
+  if(!original?.isMeshStandardMaterial||Array.isArray(original)||original.transparent||original.visible===false
+   ||mesh.userData.collisionProxy||mesh.userData.portalable||mesh.userData.portalTile
+   ||game.colliders.some(c=>c.mesh===mesh)||game.floors.some(f=>f.mesh===mesh)
+   ||game.cameraBlockers.includes(mesh)||game.aimBlockers.includes(mesh)||game.portalPanels.includes(mesh))
+   throw new Error('Refusing to finish an optical gameplay owner');
+  if(original!==k.m.dark||original.name!=='Dark anodised load frame'||clones.has(original)||changed.some(record=>record.mesh===mesh))
+   throw new Error('Optical rear drawing requires one untouched load-frame material');
+  const replacement=original.clone();replacement.name='Optical intake / closed rear service cover';
+  replacement.onBeforeCompile=original.onBeforeCompile;replacement.customProgramCacheKey=original.customProgramCacheKey;
+  replacement.color.setHex(0x7a6f7d);replacement.roughness=.82;replacement.metalness=.08;replacement.needsUpdate=true;
+  mesh.material=replacement;changed.push({mesh,original,replacement});isolatedMaterials.push(replacement);
+ }
  // Instruments and moving decks resolve the same floor through the kit's
  // registries. Keep those references on the actual rendered finish, and
  // restore them before the original world disposes its owned materials.
@@ -129,7 +153,7 @@ export function installOpticsArchitecture(game,level){
   for(const {mesh,original,replacement}of changed)if(mesh.material===replacement)mesh.material=original;
   for(const {registry,key,original,replacement}of bindings)if(registry[key]===replacement)registry[key]=original;
   for(const {light,intensity,color,ground}of lights){light.intensity=intensity;light.color.copy(color);if(ground)light.groundColor.copy(ground);}
-  root.removeFromParent();root.children.forEach(m=>m.dispose());root.clear();Object.values(geometry).forEach(g=>g.dispose());Object.values(materials).forEach(m=>m.dispose());clones.forEach(m=>m.dispose());
+  root.removeFromParent();root.children.forEach(m=>m.dispose());root.clear();Object.values(geometry).forEach(g=>g.dispose());Object.values(materials).forEach(m=>m.dispose());clones.forEach(m=>m.dispose());isolatedMaterials.forEach(m=>m.dispose());
   if(level.renderUpdate===render)level.renderUpdate=oldRender;
  }
  level.dispose=function(...args){release();return oldDispose?.apply(this,args);};
