@@ -1,0 +1,353 @@
+{
+  "kind": "ROOT_STATUS_PROPOSAL_NOT_NEW_PUBLICATION",
+  "updatedAt": "2026-11-01T09:20:43.144454+00:00",
+  "repository": "amazin20/brainrot-portal",
+  "publishedDemoCommit": "372089aae69ae49bae49c1ce4bb9c1dbd4c7f09e",
+  "backupBranch": "checkpoint/recovery-20261101",
+  "lastVerifiedBackupCommit": "7ddfdb2ebb0418a154e3cac2804bf61cc0feee98",
+  "releaseAccepted": false,
+  "all51UniqueAndExcellentAccepted": false,
+  "freshTargetedChecks": {
+    "pass": 66,
+    "fail": 0,
+    "skip": 0,
+    "cancelled": 0,
+    "elapsedSeconds": 221.30093411300186,
+    "sourceInputsUnchanged": true,
+    "receipt": "integrated-targeted-tests2/receipt.json",
+    "receiptSha256": "fb6869256f52dcd56a2fd379da88c1b983fc30cc9cb0e518fc8735f97a1efb7b",
+    "scope": "Selected current regressions, including real room38 routes/attacks. This is not the complete active suite or all51 ordinary routes."
+  },
+  "freshOrdinaryResults": {
+    "acceptedCases": 18,
+    "rooms": [
+      30,
+      31,
+      32,
+      33,
+      34,
+      36,
+      37,
+      39,
+      40
+    ],
+    "allZeroResets": true,
+    "scope": "Accepted actual ordinary-input headless WIN receipts across two frozen input snapshots (batch3 first4 + batch4 fourteen). Original owners/buffer guards passed in those receipts; this is not native rendered route or aesthetic approval.",
+    "cases": [
+      {
+        "room": 31,
+        "variant": "canonical",
+        "pass": true,
+        "physicsSteps": 7061,
+        "zeroResets": true,
+        "receipt": "ordinary-batch3/room31-canonical/report.json",
+        "receiptSha256": "1c524d72adde3234b5bac1b1c7091c373a28d4c4250db584c2dd287aad5c53fb",
+        "inputManifestSha256": "ecf758721f5306f792ec30ea009e34c8768193cfe2fe42ae735d1416e78df0be"
+      },
+      {
+        "room": 31,
+        "variant": "alternate",
+        "pass": true,
+        "physicsSteps": 14073,
+        "zeroResets": true,
+        "receipt": "ordinary-batch3/room31-alternate/report.json",
+        "receiptSha256": "89e827fd96000f6fe20bedc33c5cc5b7ae129bbf0eb11b242817c7e49e0c0f12",
+        "inputManifestSha256": "ecf758721f5306f792ec30ea009e34c8768193cfe2fe42ae735d1416e78df0be"
+      },
+      {
+        "room": 33,
+        "variant": "canonical",
+        "pass": true,
+        "physicsSteps": 9686,
+        "zeroResets": true,
+        "receipt": "ordinary-batch3/room33-canonical/report.json",
+        "receiptSha256": "8413c9d79e99e7990292ad30861a8166e77cf50b296b5b13befe00b962574a16",
+        "inputManifestSha256": "ecf758721f5306f792ec30ea009e34c8768193cfe2fe42ae735d1416e78df0be"
+      },
+      {
+        "room": 33,
+        "variant": "alternate",
+        "pass": true,
+        "physicsSteps": 11346,
+        "zeroResets": true,
+        "receipt": "ordinary-batch3/room33-alternate/report.json",
+        "receiptSha256": "11cc4160c9c2793a33d2ccb574ec88192a45b49f6148c1a375fc3b7746641364",
+        "inputManifestSha256": "ecf758721f5306f792ec30ea009e34c8768193cfe2fe42ae735d1416e78df0be"
+      },
+      {
+        "room": 30,
+        "variant": "canonical",
+        "pass": true,
+        "physicsSteps": 5409,
+        "zeroResets": true,
+        "receipt": "ordinary-batch4/room30-canonical/report.json",
+        "receiptSha256": "10f893ac43e60364a4ace7e28841e704be49baa1fb61f7cf30275225e2a0c73e",
+        "inputManifestSha256": "76c4af8b288ff15b704c02a2ce474438d7be59be1d02a93755069590b883be0e"
+      },
+      {
+        "room": 30,
+        "variant": "alternate",
+        "pass": true,
+        "physicsSteps": 9756,
+        "zeroResets": true,
+        "receipt": "ordinary-batch4/room30-alternate/report.json",
+        "receiptSha256": "2753a78ae5e52fd401bd0f137f3dfada250ef3849c01b97fbfb3b25039400bd6",
+        "inputManifestSha256": "76c4af8b288ff15b704c02a2ce474438d7be59be1d02a93755069590b883be0e"
+      },
+      {
+        "room": 32,
+        "variant": "canonical",
+        "pass": true,
+        "physicsSteps": 4970,
+        "zeroResets": true,
+        "receipt": "ordinary-batch4/room32-canonical/report.json",
+        "receiptSha256": "4dade20a6400f0e64d2b33a465f18ed087bc9f0c0e680ea59361ace5b654aca7",
+        "inputManifestSha256": "76c4af8b288ff15b704c02a2ce474438d7be59be1d02a93755069590b883be0e"
+      },
+      {
+        "room": 32,
+        "variant": "alternate",
+        "pass": true,
+        "physicsSteps": 6650,
+        "zeroResets": true,
+        "receipt": "ordinary-batch4/room32-alternate/report.json",
+        "receiptSha256": "f35695b6488c9eff2318e332f76776a22a2d3e1ed41a16c3998f9db54992670c",
+        "inputManifestSha256": "76c4af8b288ff15b704c02a2ce474438d7be59be1d02a93755069590b883be0e"
+      },
+      {
+        "room": 34,
+        "variant": "canonical",
+        "pass": true,
+        "physicsSteps": 4173,
+        "zeroResets": true,
+        "receipt": "ordinary-batch4/room34-canonical/report.json",
+        "receiptSha256": "1be7625ccf948e89007e5a9a461ac336a487d9086b1554bd559e6dbf35b789ce",
+        "inputManifestSha256": "76c4af8b288ff15b704c02a2ce474438d7be59be1d02a93755069590b883be0e"
+      },
+      {
+        "room": 34,
+        "variant": "alternate",
+        "pass": true,
+        "physicsSteps": 5331,
+        "zeroResets": true,
+        "receipt": "ordinary-batch4/room34-alternate/report.json",
+        "receiptSha256": "505d1f180eaa585e9a48469863db0401a5816d881a2d3202a1511d033175e166",
+        "inputManifestSha256": "76c4af8b288ff15b704c02a2ce474438d7be59be1d02a93755069590b883be0e"
+      },
+      {
+        "room": 36,
+        "variant": "canonical",
+        "pass": true,
+        "physicsSteps": 9484,
+        "zeroResets": true,
+        "receipt": "ordinary-batch4/room36-canonical/report.json",
+        "receiptSha256": "89957ee1544f463ecbd0160bef4c10bc764f423186b454958e1e8c1f4fdcfbfd",
+        "inputManifestSha256": "76c4af8b288ff15b704c02a2ce474438d7be59be1d02a93755069590b883be0e"
+      },
+      {
+        "room": 36,
+        "variant": "alternate",
+        "pass": true,
+        "physicsSteps": 9550,
+        "zeroResets": true,
+        "receipt": "ordinary-batch4/room36-alternate/report.json",
+        "receiptSha256": "017e02d0235eac4980ab22749f94cc72bc2d5bff9520917de1247d1c02853920",
+        "inputManifestSha256": "76c4af8b288ff15b704c02a2ce474438d7be59be1d02a93755069590b883be0e"
+      },
+      {
+        "room": 37,
+        "variant": "canonical",
+        "pass": true,
+        "physicsSteps": 5526,
+        "zeroResets": true,
+        "receipt": "ordinary-batch4/room37-canonical/report.json",
+        "receiptSha256": "4147915fdec61c73d3645389f4301c48fb66d4750eec962c64bac7b997607fc0",
+        "inputManifestSha256": "76c4af8b288ff15b704c02a2ce474438d7be59be1d02a93755069590b883be0e"
+      },
+      {
+        "room": 37,
+        "variant": "alternate",
+        "pass": true,
+        "physicsSteps": 5586,
+        "zeroResets": true,
+        "receipt": "ordinary-batch4/room37-alternate/report.json",
+        "receiptSha256": "970e2d8828d04b3a7d267fd5ddc4bc1f3f50de1c69f5af676d95ae8eded84071",
+        "inputManifestSha256": "76c4af8b288ff15b704c02a2ce474438d7be59be1d02a93755069590b883be0e"
+      },
+      {
+        "room": 39,
+        "variant": "canonical",
+        "pass": true,
+        "physicsSteps": 3786,
+        "zeroResets": true,
+        "receipt": "ordinary-batch4/room39-canonical/report.json",
+        "receiptSha256": "12f5108be7809be414a77dc50bf468703df20e84ed1f2b0fefd75530af72964a",
+        "inputManifestSha256": "76c4af8b288ff15b704c02a2ce474438d7be59be1d02a93755069590b883be0e"
+      },
+      {
+        "room": 39,
+        "variant": "alternate",
+        "pass": true,
+        "physicsSteps": 3424,
+        "zeroResets": true,
+        "receipt": "ordinary-batch4/room39-alternate/report.json",
+        "receiptSha256": "0c3acaf2c66b9ae58f2e5a5c9824f5d205478ffbdcddfebe3ee8446a6f34d6b1",
+        "inputManifestSha256": "76c4af8b288ff15b704c02a2ce474438d7be59be1d02a93755069590b883be0e"
+      },
+      {
+        "room": 40,
+        "variant": "canonical",
+        "pass": true,
+        "physicsSteps": 5346,
+        "zeroResets": true,
+        "receipt": "ordinary-batch4/room40-canonical/report.json",
+        "receiptSha256": "68aff2e515fb5b89daa12a66d6baf650a0acd6cc044c4c8b778417fffa4069c4",
+        "inputManifestSha256": "76c4af8b288ff15b704c02a2ce474438d7be59be1d02a93755069590b883be0e"
+      },
+      {
+        "room": 40,
+        "variant": "alternate",
+        "pass": true,
+        "physicsSteps": 6040,
+        "zeroResets": true,
+        "receipt": "ordinary-batch4/room40-alternate/report.json",
+        "receiptSha256": "7c792cf768481699a86ed14ba7ea0f8429883e205b0a6a9c64feacb397f30873",
+        "inputManifestSha256": "76c4af8b288ff15b704c02a2ce474438d7be59be1d02a93755069590b883be0e"
+      }
+    ]
+  },
+  "build4": {
+    "pass": true,
+    "sourceCount": 393,
+    "sourceManifestSha256": "cb5a3781b8f01c39dc5b12c56e2fffedba7f19f55a3ad3e251ef7364ded0b859",
+    "distFiles": 77,
+    "distBytesBeforeZip": 7380971,
+    "distManifestSha256": "cdbc512ea65415cfadbe4310e84666617a42cf2b21e73d30450336deb3e37c13",
+    "originalCampaignGlbs14Exact": true,
+    "receiptSha256": "42f5ab95a93b9601c41929bce734a70833e57ff68b9a2fa932a3c214338bd410"
+  },
+  "nativeBuild4": {
+    "technicalCasesPass": 8,
+    "stableRooms": [
+      30,
+      31,
+      33,
+      34
+    ],
+    "formats": [
+      "wide",
+      "portrait"
+    ],
+    "receipts": [
+      {
+        "receipt": "native-room33-build4-review7/report.json",
+        "receiptSha256": "a66760f0f8393ba01bf308cd0ac1a8ac0b4993969b505736f443b5c986819dbf",
+        "cases": [
+          {
+            "stableRoom": 33,
+            "format": "wide",
+            "pass": true
+          },
+          {
+            "stableRoom": 33,
+            "format": "portrait",
+            "pass": true
+          }
+        ]
+      },
+      {
+        "receipt": "native-build4-pairs-review1/room31-34/report.json",
+        "receiptSha256": "1c50416b6f97eee1759e9ab17df0f4834530648d32f88a89f2596a9b121ac5d1",
+        "cases": [
+          {
+            "stableRoom": 31,
+            "format": "wide",
+            "pass": true
+          },
+          {
+            "stableRoom": 31,
+            "format": "portrait",
+            "pass": true
+          },
+          {
+            "stableRoom": 34,
+            "format": "wide",
+            "pass": true
+          },
+          {
+            "stableRoom": 34,
+            "format": "portrait",
+            "pass": true
+          }
+        ]
+      },
+      {
+        "receipt": "native-build4-remaining-pairs-review2/room30-case-aggregation-post-inventory.json",
+        "receiptSha256": "048946734ac1a14435d60347794b86c0045796a6f0ba18c721567a5bf414c0d8",
+        "scope": "Only two completed room30 cases plus exact393/77 post-inventory; the parent batch remains FAILED on180s loading32",
+        "parentReport": "native-build4-remaining-pairs-review2/room30-32/report.json",
+        "parentReportPass": false,
+        "parentReportSha256": "6a6bd74366c205b1c67b3496a36ddce450ca857dbaf884ec12439e45bbb87a81",
+        "cases": [
+          {
+            "stableRoom": 30,
+            "format": "wide",
+            "pass": true
+          },
+          {
+            "stableRoom": 30,
+            "format": "portrait",
+            "pass": true
+          }
+        ]
+      }
+    ],
+    "remainingCasesPending": 14,
+    "pendingStableRooms": [
+      32,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40
+    ],
+    "pendingBatch": "Fresh single-room180s configs; ROOT owns completion and final refresh",
+    "scope": "Normal zero-step entry captures and exact served-package/model guards. No continuous route, physical-device benchmark or whole-room visual approval."
+  },
+  "entryVisualReview": {
+    "reviewedStableRooms": [
+      31,
+      34
+    ],
+    "individualImages": 5,
+    "receipt": "native-root-entry-review-31-34.json",
+    "receiptSha256": "dde48d74d15d36846a4546bc6ba6ae7f8cff838c2540eadbc96000827c5eea9e",
+    "wholeRoomVisualAccepted": false,
+    "findings": {
+      "31": "Hero and companion are fully visible and separate in both formats. Paired wall rails and panel are legible. Portrait full-page badge is intact; canvas crop alone does not establish a UI defect. Large undecorated floor remains open.",
+      "34": "Hero and companion are fully visible and separate; pressure gauge and rounded wall profiles are visible in wide and portrait. Entry composition does not show all machine details. Large undecorated floor and shared ceiling language remain open."
+    }
+  },
+  "room44Prototype": {
+    "pureElectricalChecks": 10,
+    "nativeCannonComponentChecks": 16,
+    "normalCannonSteps": 1686,
+    "negativePartialWorldCalls": 1,
+    "nativeFixtureWorldAllowSleep": false,
+    "mainIntegrated": false,
+    "archive": "qa/recovery-20261101/prototypes/room44-signed-bridge-and-prestep-evidence-v1.tar.gz",
+    "archiveSha256": "dbb85258032fd8789984dd00d17df2769302f3af53eb8e427af45013d70d16b1",
+    "scope": "Post-solver centre-force component only. Actual room, fully coupled contact/constraint solve, production sleep/CCD boundary, portal/carry/actuator/visual gates remain open."
+  },
+  "knownOpen": [
+    "room35 repeated two-air-gate core",
+    "public43 repeats early light bridge",
+    "public44 reverse airflow replacement is a component prototype, not integrated",
+    "public48 repeats mirror-weight core",
+    "remaining castle core overlaps",
+    "large undecorated observatory floors and shared ceiling language",
+    "remaining native entry batch and broader all51 visual/exploit review"
+  ],
+  "backupScope": "Child prepared QA-only current hashes and readonly metadata delta. ROOT must refresh status/current native completion and final QA hashes before saving the next backup; no deployment is authorized by this proposal."
+}

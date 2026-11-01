@@ -1,20 +1,32 @@
 import test,{before,after} from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {gunzipSync} from 'node:zlib';
 import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {ACTIVE_FOUNDATION_RUNTIME_FLAGS} from '../src/game/ReleaseIdentity.js';
 import {gameplayContract,digest} from './helpers/lab-art-contract.js';
 import {observatoryEntryContract} from './helpers/lab-observatory-entry-contract.js';
+import {assertCurrentRoom38Contract} from './helpers/lab-room38-freight-contract.js';
 import {disposeLabLevel} from '../src/game/LabLevelLifecycle.js';
 import {installOpticsArchitecture} from '../src/game/LabOpticsArchitecture.js';
 const fixture=JSON.parse(fs.readFileSync(new URL('./fixtures/optics-architecture-before.json',import.meta.url)));
+const current38Fixture=(()=>{
+ const bytes=gunzipSync(fs.readFileSync(new URL('./fixtures/room38-freight-current-contract.json.gz',import.meta.url)));
+ assert.equal(createHash('sha256').update(bytes).digest('hex'),'7edd1be268e4b17d743498a3270d243e5b4a7227ce527032092f984ad48de6e6','The immutable entire current38 before/after fixture must remain exact');
+ return JSON.parse(bytes);
+})();
 const V=(...p)=>new THREE.Vector3(...p);let g;
 before(async()=>{g=await createHeadlessGame();Object.assign(g,{chamberEdition:'foundation',...ACTIVE_FOUNDATION_RUNTIME_FLAGS});});
 after(()=>disposeLabLevel(g));
 for(const f of fixture)test(`Observatory ${f.index+1}: original gameplay and all new relief vertices remain within the old wall panels`,async()=>{
+ // The immutable current38 contract was captured from a fresh normal game.
+ // Retire the preceding room and its native pools before that same setup.
+ if(f.index===37){disposeLabLevel(g);g=await createHeadlessGame();Object.assign(g,{chamberEdition:'foundation',...ACTIVE_FOUNDATION_RUNTIME_FLAGS});}
  await g.selectLevel(f.index,true);const l=g.firstLevel,a=l.opticsArchitecture;assert.ok(a);assert.equal(l.id,f.id);
- assert.equal(digest(observatoryEntryContract(g)),f.hash,'An actual physics, camera, aim, portal or interaction owner changed');
+ if(f.index===37)assertCurrentRoom38Contract(g,current38Fixture);
+ else assert.equal(digest(observatoryEntryContract(g)),f.hash,'An actual physics, camera, aim, portal or interaction owner changed');
  assert.equal(a.stats.batches,1);assert.ok(a.stats.triangles<100000);assert.equal(a.stats.newColliders,0);assert.equal(a.stats.newLights,0);
  assert.equal(typeof a.stats.profile,'string');assert.equal(a.stats.rimAreaRatio,.1172);assert.ok(a.panels.every(p=>p.type===a.stats.profile));assert.equal(a.panels.length,a.stats.panels);
  const matrix=new THREE.Matrix4(),point=V();

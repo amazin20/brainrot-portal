@@ -1,0 +1,149 @@
+{
+  "kind": "CURRENT_DEVELOPMENT_RECOVERY_STATUS",
+  "updatedAt": "2026-11-01T09:22:25.252122+00:00",
+  "repository": "amazin20/brainrot-portal",
+  "publishedDemoCommit": "372089aae69ae49bae49c1ce4bb9c1dbd4c7f09e",
+  "backupBranch": "checkpoint/recovery-20261101",
+  "lastVerifiedBackupCommit": "7ddfdb2ebb0418a154e3cac2804bf61cc0feee98",
+  "releaseAccepted": false,
+  "all51UniqueAndExcellentAccepted": false,
+  "freshTargetedChecks": {
+    "pass": 66,
+    "fail": 0,
+    "skip": 0,
+    "cancelled": 0,
+    "elapsedSeconds": 221.30093411300186,
+    "sourceInputsUnchanged": true,
+    "receipt": "integrated-targeted-tests2/receipt.json",
+    "receiptSha256": "fb6869256f52dcd56a2fd379da88c1b983fc30cc9cb0e518fc8735f97a1efb7b",
+    "scope": "Selected current regressions, including real room38 routes/attacks. This is not the complete active suite or all51 ordinary routes."
+  },
+  "freshOrdinaryResults": {
+    "acceptedCases": 18,
+    "rooms": [
+      30,
+      31,
+      32,
+      33,
+      34,
+      36,
+      37,
+      39,
+      40
+    ],
+    "allZeroResets": true,
+    "scope": "Accepted actual ordinary-input headless WIN receipts across two frozen input snapshots (batch3 first4 + batch4 fourteen). Original owners/buffer guards passed in those receipts; this is not native rendered route or aesthetic approval.",
+    "caseSteps": {
+      "31-canonical": 7061,
+      "31-alternate": 14073,
+      "33-canonical": 9686,
+      "33-alternate": 11346,
+      "30-canonical": 5409,
+      "30-alternate": 9756,
+      "32-canonical": 4970,
+      "32-alternate": 6650,
+      "34-canonical": 4173,
+      "34-alternate": 5331,
+      "36-canonical": 9484,
+      "36-alternate": 9550,
+      "37-canonical": 5526,
+      "37-alternate": 5586,
+      "39-canonical": 3786,
+      "39-alternate": 3424,
+      "40-canonical": 5346,
+      "40-alternate": 6040
+    },
+    "completeReceiptIndex": "accepted-evidence-index.json"
+  },
+  "build4": {
+    "pass": true,
+    "sourceCount": 393,
+    "sourceManifestSha256": "cb5a3781b8f01c39dc5b12c56e2fffedba7f19f55a3ad3e251ef7364ded0b859",
+    "distFiles": 77,
+    "distBytesBeforeZip": 7380971,
+    "distManifestSha256": "cdbc512ea65415cfadbe4310e84666617a42cf2b21e73d30450336deb3e37c13",
+    "originalCampaignGlbs14Exact": true,
+    "receiptSha256": "42f5ab95a93b9601c41929bce734a70833e57ff68b9a2fa932a3c214338bd410"
+  },
+  "nativeBuild4": {
+    "technicalCasesPass": 10,
+    "stableRooms": [
+      30,
+      31,
+      32,
+      33,
+      34
+    ],
+    "formats": [
+      "wide",
+      "portrait"
+    ],
+    "remainingCasesPending": 12,
+    "pendingStableRooms": [
+      35,
+      36,
+      37,
+      38,
+      39,
+      40
+    ],
+    "pendingBatch": "Fresh single-room180s configs; ROOT owns completion and final refresh",
+    "scope": "Normal zero-step entry captures and exact served-package/model guards. No continuous route, physical-device benchmark or whole-room visual approval.",
+    "completeReceiptIndex": "accepted-evidence-index.json",
+    "receiptFiles": [
+      "native-room33-build4-review7/report.json",
+      "native-build4-pairs-review1/room31-34/report.json",
+      "native-build4-remaining-pairs-review2/room30-case-aggregation-post-inventory.json",
+      "native-build4-single-rooms-review3/room32/report.json"
+    ],
+    "failedAggregateRetained": {
+      "path": "native-build4-remaining-pairs-review2/room30-32/report.json",
+      "pass": false,
+      "reason": "180s while loading32; only two completed30cases accepted after exactsource/dist postcheck"
+    }
+  },
+  "entryVisualReview": {
+    "reviewedStableRooms": [
+      31,
+      34
+    ],
+    "individualImages": 5,
+    "receipt": "native-root-entry-review-31-34.json",
+    "receiptSha256": "dde48d74d15d36846a4546bc6ba6ae7f8cff838c2540eadbc96000827c5eea9e",
+    "wholeRoomVisualAccepted": false,
+    "findings": {
+      "31": "Hero and companion are fully visible and separate in both formats. Paired wall rails and panel are legible. Portrait full-page badge is intact; canvas crop alone does not establish a UI defect. Large undecorated floor remains open.",
+      "34": "Hero and companion are fully visible and separate; pressure gauge and rounded wall profiles are visible in wide and portrait. Entry composition does not show all machine details. Large undecorated floor and shared ceiling language remain open."
+    }
+  },
+  "room44Prototype": {
+    "pureElectricalChecks": 10,
+    "nativeCannonComponentChecks": 16,
+    "normalCannonSteps": 1686,
+    "negativePartialWorldCalls": 1,
+    "nativeFixtureWorldAllowSleep": false,
+    "mainIntegrated": false,
+    "archive": "qa/recovery-20261101/prototypes/room44-signed-bridge-and-prestep-evidence-v1.tar.gz",
+    "archiveSha256": "dbb85258032fd8789984dd00d17df2769302f3af53eb8e427af45013d70d16b1",
+    "scope": "Post-solver centre-force component only. Actual room, fully coupled contact/constraint solve, production sleep/CCD boundary, portal/carry/actuator/visual gates remain open."
+  },
+  "knownOpen": [
+    "room35 repeated two-air-gate core",
+    "public43 repeats early light bridge",
+    "public44 reverse airflow replacement is a component prototype, not integrated",
+    "public48 repeats mirror-weight core",
+    "remaining castle core overlaps",
+    "large undecorated observatory floors and shared ceiling language",
+    "remaining native entry batch and broader all51 visual/exploit review"
+  ],
+  "backupScope": "Code, current physical fixture and room44 component evidence backup only. Native runs continue; final raw entry/route evidence archive and status refresh remain pending. No deployment.",
+  "evidenceIndexSha256": "160c8ee730790d7be742e65263069b29176b085406705ecbc89ec80dbedd67cb",
+  "room48Prototype": {
+    "sourceOnly": true,
+    "mainIntegrated": false,
+    "componentSha256": "73fc8dc55b288e8f693b8935f6d390e1ab94b7f28e853f013124a85384ec793a",
+    "nativeExecution": false,
+    "knownSourceCorrection": "Five catch faces reversed to outward winding before any execution",
+    "scope": "Prepared isolated component; actual rays, GLBs, held/proximity, native tests and live room remain open"
+  }
+}

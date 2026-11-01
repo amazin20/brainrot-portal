@@ -1,0 +1,49 @@
+{
+  "acceptedScope": {
+    "allRoomsExcellent": false,
+    "mainGameIntegration": false,
+    "nativeComponentTests": 16,
+    "nativeFixtureWorldAllowSleep": false,
+    "negativePartialWorldCalls": 1,
+    "normalCannonSteps": 1686,
+    "publication": false,
+    "pureElectricalTests": 10
+  },
+  "archive": {
+    "bytes": 1208880,
+    "filename": "room44-signed-bridge-and-prestep-evidence-v1.tar.gz",
+    "sha256": "dbb85258032fd8789984dd00d17df2769302f3af53eb8e427af45013d70d16b1"
+  },
+  "createdAt": "2026-11-01T08:53:53.536069+00:00",
+  "kind": "deterministic-project-Git-backup-not-deployment",
+  "manifest": {
+    "bytes": 8678,
+    "fileCount": 39,
+    "filename": "room44-prototypes-manifest-v1.json",
+    "sha256": "4d16c23bed03ba97eb6ecd33e495f36869e743bc3c313cdd1ef8ee923aa90c28",
+    "uncompressedFileBytes": 10619779
+  },
+  "noGitOrNetworkActionPerformed": true,
+  "originalPrototypeFoldersModified": false,
+  "portability": {
+    "absoluteProvenancePaths": "Saved input manifests/receipts retain original absolute /workspace/scratch/c17b1f9ac2be paths. They are provenance, not a portable run configuration. Do not claim a fresh validation merely by extracting this archive.",
+    "archiveContainsDependencies": false,
+    "fixtureImportLayout": "Extract both room44-* roots side by side under a workspace QA directory beside the existing game repository. The native adapter module file must resolve its ../../brainrot-portal/package.json and the tests their ../../brainrot-portal/src/game/LabPhysics.js to the pinned existing repository. For example the validated original layout was /workspace/scratch/c17b1f9ac2be/qa-recovery-20261101/room44-native-prestep-proposal/ beside /workspace/scratch/c17b1f9ac2be/brainrot-portal/.",
+    "futureRerun": "A changed workspace layout needs explicit reviewed import/config adaptation and fresh validation; this backup preserves the exact previously validated source bytes.",
+    "pureKernel": "The pure bridge module/tests use local relative imports and Node built-ins; the native adapter additionally needs the fixture import layout.",
+    "requirements": "Matching pinned cannon-es 0.20.0 CJS/ESM and game source dependencies are required externally; node_modules, browser binaries and full repository are deliberately excluded.",
+    "validatedSourceRewritten": false
+  },
+  "schemaVersion": 1,
+  "verification": {
+    "allMtimesZero": true,
+    "allOriginalFilesUnchanged": true,
+    "allRoundtripMembersByteExact": true,
+    "gzipMtimeZero": true,
+    "membersSorted": true,
+    "noAbsoluteArchivePathsOrSymlinks": true,
+    "roundtripMemberCount": 39,
+    "secondSerializationByteHashEqual": true
+  },
+  "writtenOnlyProjectQaBackupDirectory": true
+}

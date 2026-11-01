@@ -98,7 +98,7 @@ export function runPost32(d,{route='freight-before-light',stopBeforeRatchet=fals
  walk(0,4);walk(0,-12);walk(5.5,-13);check(g.interact()&&l.optics.latched,'The diaphragm ratchet must be reached on its far side');
  mark('A downstream physical ratchet retains the diaphragm before cargo retrieval');
  until(()=>l.access.progress>.94,5,'The physical inspection cover did not lift');
- walk(0,-12);walk(0,-4);walk(-13,4);walk(g.cargo.position.x,.85);check(g.interact()&&g.heldCube,'Original cargo cannot be collected across the low hood edge');
+ walk(0,-12);walk(0,-4);walk(-13,4);walk(g.cargo.position.x,g.cargo.position.z+1.2);check(g.interact()&&g.heldCube,'Original cargo cannot be collected across the low hood edge');
  d.wait(.5);check(l.diaphragm.progress>.9,'Retrieving the occluder must not clear the mechanical ratchet');
  walk(-13,4);walk(0,4);walk(0,-19);until(()=>g.state==='won',3,'The original pair did not cross the retained diaphragm');
  mark('The light circuit is borrowed again after the original cargo returns');

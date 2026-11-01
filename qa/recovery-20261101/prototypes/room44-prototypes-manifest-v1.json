@@ -1,0 +1,230 @@
+{
+  "excludes": [
+    "node_modules and browser dependencies",
+    "game repository source dependencies",
+    "deployment artifacts"
+  ],
+  "fileCount": 39,
+  "files": [
+    {
+      "bytes": 5781,
+      "path": "room44-native-prestep-proposal/MATH.md",
+      "sha256": "140c541a3d96b7958997c7fc64f70f7ddfbaf498bb58013d7583f544b4ed9661"
+    },
+    {
+      "bytes": 24435,
+      "path": "room44-native-prestep-proposal/NativePreStepBridgeAdapter.mjs",
+      "sha256": "212c6f31657016e317f84f0d540965354ba7f19a0a1b87b154cf68839177fd30"
+    },
+    {
+      "bytes": 4607,
+      "path": "room44-native-prestep-proposal/independent-fixed-native-prestep-source-review.json",
+      "sha256": "cda036abd6fc0b2878ba11ce49c5f7a784ca7d2705a44a5af49dd56b230ee8b4"
+    },
+    {
+      "bytes": 5165,
+      "path": "room44-native-prestep-proposal/independent-native-execution-review.json",
+      "sha256": "6e3f10177f26c10de09afddfc2e621992553eb8ff58ff25f017d8a58516f959c"
+    },
+    {
+      "bytes": 3350,
+      "path": "room44-native-prestep-proposal/independent-native-prestep-source-review.json",
+      "sha256": "9c7038ee8b0280dfd5b769c34679b3a7eb23fbffda7da3460f1b0c03bc9c5345"
+    },
+    {
+      "bytes": 3122,
+      "path": "room44-native-prestep-proposal/independent-prestep-math-review.json",
+      "sha256": "dce4d3474470fd85f1977982212374e7b89d3ec39b2ad6bc3d47603acbfd9bf4"
+    },
+    {
+      "bytes": 1429,
+      "path": "room44-native-prestep-proposal/native-attempt1/memory-samples.json",
+      "sha256": "395919ef7fbe2cd96a9100647838a994d99a5557ebcd8785355ad15f10a0b1ab"
+    },
+    {
+      "bytes": 6668,
+      "path": "room44-native-prestep-proposal/native-attempt1/raw-attribution.json",
+      "sha256": "2a647f580302dd374c4afa22d3143ba1ee6f2732c4954d01ca5de04b93e358b8"
+    },
+    {
+      "bytes": 10396076,
+      "path": "room44-native-prestep-proposal/native-attempt1/raw-native-steps.jsonl",
+      "sha256": "be7c8d584d5ea28e4b230d04132e5f85c0999ca279137f52400916f5d5c27490"
+    },
+    {
+      "bytes": 2855,
+      "path": "room44-native-prestep-proposal/native-attempt1/raw-summary.json",
+      "sha256": "92eb8e5b7c7daab6243bcd3d6bee3529c5d012ce92b22c3061b94c98333a70be"
+    },
+    {
+      "bytes": 4020,
+      "path": "room44-native-prestep-proposal/native-attempt1/report.json",
+      "sha256": "8727fdfa41a1cd4553e316eb966fe0dbaf734b6442d55ec1f6f4088440a668e3"
+    },
+    {
+      "bytes": 2574,
+      "path": "room44-native-prestep-proposal/native-attempt1/source-after.json",
+      "sha256": "1d21913e3049e607b246425712577ec0d7a8f1b9508069c09a577a823021565a"
+    },
+    {
+      "bytes": 2574,
+      "path": "room44-native-prestep-proposal/native-attempt1/source-before.json",
+      "sha256": "1d21913e3049e607b246425712577ec0d7a8f1b9508069c09a577a823021565a"
+    },
+    {
+      "bytes": 1606,
+      "path": "room44-native-prestep-proposal/native-attempt1/tests.tap",
+      "sha256": "4e0a2b4371330d4c75a95c9994fcd60e77f51971119774e33d311d2cb2afd8f0"
+    },
+    {
+      "bytes": 17934,
+      "path": "room44-native-prestep-proposal/native-prestep-proofs.mjs",
+      "sha256": "48ba9326c0123238a15e154bca5707a1fefb40b04e9f950bafef675e7a8c1bfd"
+    },
+    {
+      "bytes": 213,
+      "path": "room44-native-prestep-proposal/raw-logging-only-review/before.json",
+      "sha256": "7a94250e8a56fda70f4904bfb518f00aac841b4e20ade677ef563ab9d469c6cc"
+    },
+    {
+      "bytes": 5577,
+      "path": "room44-native-prestep-proposal/raw-logging-only-review/logging-only.patch",
+      "sha256": "038f22ff60de4e87be697cf2a9b89579c392e43b115b19bcb2975a3c64e3ac0d"
+    },
+    {
+      "bytes": 15580,
+      "path": "room44-native-prestep-proposal/raw-logging-only-review/native-prestep-proofs.mjs",
+      "sha256": "0b5b48c8a7682f2d60f3c18b104107ed254a54a4cfcfb88bb04c62554eb01666"
+    },
+    {
+      "bytes": 4023,
+      "path": "room44-native-prestep-proposal/source-only-receipt.json",
+      "sha256": "6ee95c78331452371ead0db9ed32401c3982ce7ac2821c68a65e2d8a491cb120"
+    },
+    {
+      "bytes": 5781,
+      "path": "room44-native-prestep-proposal/source-review-attempt1/MATH.md",
+      "sha256": "140c541a3d96b7958997c7fc64f70f7ddfbaf498bb58013d7583f544b4ed9661"
+    },
+    {
+      "bytes": 23725,
+      "path": "room44-native-prestep-proposal/source-review-attempt1/NativePreStepBridgeAdapter.mjs",
+      "sha256": "c5807c7df586ea846d10b8e81b2639bddc55e951583c997f7aa1e598c304f673"
+    },
+    {
+      "bytes": 326,
+      "path": "room44-native-prestep-proposal/source-review-attempt1/blockers.json",
+      "sha256": "ca571b9eb16b82c85dfe94f2120832ccbc7cf1082425b811aaf2b83aec99462f"
+    },
+    {
+      "bytes": 14706,
+      "path": "room44-native-prestep-proposal/source-review-attempt1/native-prestep-proofs.mjs",
+      "sha256": "e4fc79ddc012bb9bbc847ef86b685bff0f17f873ebfcee621e9a9a9830b8713e"
+    },
+    {
+      "bytes": 3303,
+      "path": "room44-native-prestep-proposal/source-review-attempt1/source-only-receipt.json",
+      "sha256": "f1fa65f799c98cbdea8d9a2c4f4269f8ab92bbbd325fdd56cb581e787e0c48bd"
+    },
+    {
+      "bytes": 2579,
+      "path": "room44-native-prestep-proposal/status.json",
+      "sha256": "9b2c7f2cb98ea2e51b3bb51210b66729dd991eb6abad0675222eda28a248b7cf"
+    },
+    {
+      "bytes": 3986,
+      "path": "room44-signed-bridge-proposal/MATH.md",
+      "sha256": "91a58ad7f43df68833b189fe2facdc78649b1e1225ad4d427a9647a5d4b3af80"
+    },
+    {
+      "bytes": 13260,
+      "path": "room44-signed-bridge-proposal/Room44SignedBridgeCircuit.mjs",
+      "sha256": "7aaba1f203729dc9ae379f7a45070d53694a7837dd23a20c1a1446d8dd4018fe"
+    },
+    {
+      "bytes": 8247,
+      "path": "room44-signed-bridge-proposal/circuit-proofs.mjs",
+      "sha256": "c9f368ca9330c701c97d6c7d6e14a56295bdd7648854577b2027d7cf58b1dd2b"
+    },
+    {
+      "bytes": 2547,
+      "path": "room44-signed-bridge-proposal/independent-fixed-source-review.json",
+      "sha256": "ac3038bf4d37508026e13cc8521bdb5d0b494a296094bfc1082890b1211af9f6"
+    },
+    {
+      "bytes": 3036,
+      "path": "room44-signed-bridge-proposal/independent-source-review.json",
+      "sha256": "65ce7f1b845ad3a2e1475fc6eeb3fc7be89c8e3c932c18b575b8e1dc238c1b09"
+    },
+    {
+      "bytes": 733,
+      "path": "room44-signed-bridge-proposal/pure-attempt1/report.json",
+      "sha256": "e3decc8177115475716ea6833bd7444d2d5d30d14fba7102b840f974b916db89"
+    },
+    {
+      "bytes": 1091,
+      "path": "room44-signed-bridge-proposal/pure-attempt1/tests.tap",
+      "sha256": "0300658dff0572f7f350d512c7f50859f639e0731d8b972e2d52033db4c76521"
+    },
+    {
+      "bytes": 929,
+      "path": "room44-signed-bridge-proposal/source-only-receipt.json",
+      "sha256": "85533bd2a3654e1d2279192d66f6bdd71749013dd9ee438d740fea8a188d160b"
+    },
+    {
+      "bytes": 3986,
+      "path": "room44-signed-bridge-proposal/source-review-attempt1/MATH.md",
+      "sha256": "91a58ad7f43df68833b189fe2facdc78649b1e1225ad4d427a9647a5d4b3af80"
+    },
+    {
+      "bytes": 13148,
+      "path": "room44-signed-bridge-proposal/source-review-attempt1/Room44SignedBridgeCircuit.mjs",
+      "sha256": "af4771b8b99fe29907746514e938be5db3a93dfb80ca74983b99591a0cedc248"
+    },
+    {
+      "bytes": 270,
+      "path": "room44-signed-bridge-proposal/source-review-attempt1/blocker.json",
+      "sha256": "f49431fce237f51fd9392daae0d89d7161eab6c18fe137e540e1cb31ff109e37"
+    },
+    {
+      "bytes": 7740,
+      "path": "room44-signed-bridge-proposal/source-review-attempt1/circuit-proofs.mjs",
+      "sha256": "a6ae8b622bcc0497477fa084f87b46a588a8f50ddbd37b59b06f38b36fc5bdf1"
+    },
+    {
+      "bytes": 929,
+      "path": "room44-signed-bridge-proposal/source-review-attempt1/source-only-receipt.json",
+      "sha256": "85533bd2a3654e1d2279192d66f6bdd71749013dd9ee438d740fea8a188d160b"
+    },
+    {
+      "bytes": 1868,
+      "path": "room44-signed-bridge-proposal/status.json",
+      "sha256": "b2a8e8fbbade2da4210772ade13062931975a17e3666bebd9a0776e41db9a1ea"
+    }
+  ],
+  "includes": [
+    "pure electrical source/math/tests and all receipts",
+    "post-solver native force adapter source/math/tests",
+    "complete raw 1686-step JSONL evidence",
+    "all preserved blocked/intermediate source reviews and snapshots",
+    "current component statuses and independent reviews"
+  ],
+  "kind": "room44-original-prototype-source-and-complete-evidence-inventory",
+  "roots": [
+    "room44-native-prestep-proposal",
+    "room44-signed-bridge-proposal"
+  ],
+  "schemaVersion": 1,
+  "tarMetadata": {
+    "fileModeOctal": "0644",
+    "gid": 0,
+    "gname": "",
+    "gzipFilename": "",
+    "gzipMtime": 0,
+    "memberOrder": "binary lexicographic path",
+    "mtime": 0,
+    "uid": 0,
+    "uname": ""
+  },
+  "uncompressedFileBytes": 10619779
+}
