@@ -1,6 +1,7 @@
 import {LabStaticAwareSAP} from './LabStaticAwareSAP.js';
 import { sweepBox } from './LabSweep.js';
 import {resolveCompoundCargoSweep} from './LabCompoundCargoSweep.js';
+import {resolveExactBoxPortalTransit} from './LabExactBoxTransit.js';
 import { Body, Box, ConvexPolyhedron, Material, Quaternion, Sphere, Vec3, World } from 'cannon-es';
 
 const SOLID = 1, CARGO = 2, PLAYER = 4;
@@ -175,6 +176,8 @@ export class LabPhysics {
     this.impact = 0;
     this.steps = 0;
     this.portalTransports = 0;
+    this.lastPortalVelocityTransfer = null;
+    this.usedPortalVelocityTransfers = new WeakSet();
     this._force = new Vec3();
     this._error = new Vec3();
     this._angularError = new Quaternion();
@@ -420,11 +423,41 @@ export class LabPhysics {
    * `rotation` is the world-space delta, not the final cargo orientation.
    * The held spring and all momentum are transformed with the same frame.
    */
-  teleportCargo({ position, rotation: deltaRotation } = {}) {
+  teleportCargo({ position, rotation: deltaRotation, velocityTransfer = null } = {}) {
     const body = this.cargoBody;
     if (!body) return null;
     if (!position) throw new TypeError('A portal destination position is required');
     const destination = vector(position), delta = rotation(deltaRotation);
+    // A level may opt one real free-body crossing into a finite-mass local
+    // operator. The plan is declarative: every stale/malformed value is
+    // rejected before any pose, carry target, velocity or impulse changes.
+    let transfer = null;
+    if (velocityTransfer !== null) {
+      const p = velocityTransfer, r = p?.reaction, other = r?.body;
+      const sameVector = (a,b) => finiteXYZ(a) && vectorError(a,b) < 1e-8;
+      if (!p || typeof p !== 'object' || this.usedPortalVelocityTransfers.has(p)
+        || !finiteQuaternion(delta) || !Number.isFinite(body.mass) || !(body.mass > 0)
+        || this.carryTarget || p.sourceBody !== body || p.sourceShape !== body.shapes[0]
+        || p.world !== this.world || p.worldStep !== this.world.stepnumber
+        || p.portalTransports !== this.portalTransports || body.world !== this.world
+        || !this.world.bodies.includes(body) || body.type !== Body.DYNAMIC
+        || p.sourceMass !== body.mass || !sameVector(p.sourcePosition,body.position)
+        || !finiteQuaternion(p.sourceQuaternion) || quaternionError(p.sourceQuaternion,body.quaternion) > 1e-8
+        || !sameVector(p.sourceVelocity,body.velocity)
+        || !finiteXYZ(p.velocity) || !finiteXYZ(r?.impulse) || !finiteXYZ(r?.point)
+        || typeof p.entrySurfaceId !== 'string' || !p.entrySurfaceId
+        || typeof p.exitSurfaceId !== 'string' || !p.exitSurfaceId || p.entrySurfaceId === p.exitSurfaceId
+        || !(other instanceof Body) || other === body || other.type !== Body.DYNAMIC || !Number.isFinite(other.mass) || !(other.mass > 0)
+        || other.world !== this.world || !this.world.bodies.includes(other)
+        || r.mass !== other.mass || !sameVector(r.position,other.position)
+        || !finiteQuaternion(r.quaternion) || quaternionError(r.quaternion,other.quaternion) > 1e-8
+        || !sameVector(r.velocity,other.velocity)) throw new TypeError('Invalid or stale local cargo velocity transfer');
+      const velocity=vector(p.velocity),impulse=vector(r.impulse),relativePoint=vector(r.point).vsub(other.position),
+        nextReactionVelocity=other.velocity.vadd(impulse.scale(1/other.mass));
+      if (![.5*body.mass*velocity.lengthSquared(),.5*other.mass*nextReactionVelocity.lengthSquared(),relativePoint.lengthSquared()].every(Number.isFinite))
+        throw new TypeError('Local cargo velocity transfer overflows its finite energy or reaction point');
+      transfer = {plan:p,velocity,body:other,impulse,relativePoint};
+    }
     const origin = body.position.clone();
     if (this.carryTarget) {
       const target = this.carryTarget;
@@ -437,7 +470,8 @@ export class LabPhysics {
     }
     body.position.copy(destination);
     delta.mult(body.quaternion, body.quaternion); body.quaternion.normalize();
-    delta.vmult(body.velocity, body.velocity);
+    if (transfer) body.velocity.copy(transfer.velocity);
+    else delta.vmult(body.velocity, body.velocity);
     delta.vmult(body.angularVelocity, body.angularVelocity);
     body.force.setZero(); body.torque.setZero();
     body.previousPosition.copy(body.position); body.interpolatedPosition.copy(body.position);
@@ -446,6 +480,12 @@ export class LabPhysics {
     this.world.broadphase.dirty = true;
     this.grounded = false; this.impact = 0;
     this.portalTransports++;
+    if (transfer) {
+      transfer.body.applyImpulse(transfer.impulse,transfer.relativePoint);
+      this.usedPortalVelocityTransfers.add(transfer.plan);
+      this.lastPortalVelocityTransfer = Object.freeze({plan:transfer.plan,worldStep:this.world.stepnumber,
+        portalTransports:this.portalTransports,cargoBodyId:body.id,reactionBodyId:transfer.body.id});
+    }
     return body;
   }
 
@@ -454,7 +494,11 @@ export class LabPhysics {
    * box needs its full rotated extent here: the small inscribed guard cannot
    * protect corners before the destination world's first contact step. Portal
    * callers exempt only the actually opened entry/exit backing colliders. */
-  resolveCargoTransit(from, { ignoreIds = [] } = {}) {
+  resolveCargoTransit(from, { ignoreIds = [], mode = null } = {}) {
+    if (mode === 'oriented-sat-v1') {
+      const exact = resolveExactBoxPortalTransit(this, Array.isArray(from) ? new Vec3(...from) : from, {ignoreIds});
+      if (exact !== null) return exact;
+    }
     const body = this.cargoBody;
     if (!body) return null;
     if (!from) throw new TypeError('A portal crossing segment start is required');

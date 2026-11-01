@@ -14,6 +14,7 @@ import {buildRoom15} from '../src/game/LabPortalRoom15.js';
 import {installSecondChapterArt,SECOND_CHAPTER_ART_REVISION} from '../src/game/LabSecondChapterArt.js';
 import {gameplayContract} from './helpers/lab-art-contract.js';
 import {originalSecondChapterContract} from './helpers/lab-second-chapter-mount-contract.js';
+import {assertRoom14DeflectorGeometry,assertRoom14FieldOwnership,assertRoom14ProjectorSupport} from './helpers/lab-room14-deflector-contract.js';
 
 const game=await createHeadlessGame();game.chamberEdition='foundation';
 after(()=>{game.firstLevel?.dispose?.();game.physics?.dispose();game.portals?.dispose();});
@@ -63,9 +64,14 @@ for(let index=10;index<20;index++)test(`room ${index+1}: manufactured models pre
  for(const collider of game.colliders){geometry.set(collider.mesh,collider.mesh.geometry);children.set(collider.mesh,collider.mesh.children.slice());raycasts.set(collider.mesh,rayDistances(collider.mesh));}
  installSecondChapterArt(game,l);const art=l.secondChapterArt;
  assert.ok(art);assert.equal(art.userData.revision,SECOND_CHAPTER_ART_REVISION);
- assert.equal(art.userData.stats.extraColliders,index===12?14:index===13?10:0);assert.equal(art.userData.stats.extraLights,0);assert.equal(art.userData.stats.independentClocks,0);
- assert.ok(art.userData.stats.chassis+art.userData.stats.pedestals>=1);
- assert.ok(art.userData.stats.parts>=12&&art.userData.stats.parts<=320);assert.equal(art.userData.stats.batches,3);
+ assert.equal(art.userData.stats.extraColliders,index===12?14:0);assert.equal(art.userData.stats.extraLights,0);assert.equal(art.userData.stats.independentClocks,0);
+ if(index===13&&l.deflectorRoom){
+  assert.equal(art.userData.stats.chassis+art.userData.stats.pedestals,0);assert.equal(art.userData.stats.parts,0);assert.equal(art.userData.stats.batches,0);
+  assertRoom14DeflectorGeometry(game);assertRoom14FieldOwnership(game);assertRoom14ProjectorSupport(game);
+ }else{
+  assert.ok(art.userData.stats.chassis+art.userData.stats.pedestals>=1);
+  assert.ok(art.userData.stats.parts>=12&&art.userData.stats.parts<=320);assert.equal(art.userData.stats.batches,3);
+ }
  assert.deepEqual(originalSecondChapterContract(game),before,'Manufactured coat changed physical registry, current state, ray target or interaction frame');
  const supportBodies=new Set(art.mounting.meshes.map(m=>game.physics.solids.get(m.uuid)?.body));assert.deepEqual(game.physics.world.bodies.filter(body=>!supportBodies.has(body)),bodies);
  for(let n=0;n<bodies.length;n++)assert.deepEqual(bodies[n].shapes,shapes[n]);
@@ -141,13 +147,13 @@ function stimulate(g,room,frame){
  if(frame===0){
   if(room===12)routePair(g,'shared-drop','final');
   if(room===13)routePair(g,'light-intake','light-output');
-  if(room===14)routePair(g,'light-source','weave-west');
+  if(room===14)for(const [index,name]of ['contact-intake','contact-turn'].entries()){const panel=l.panels[name],at=panel.getFrame().center.clone().setY(1.25);assert.equal(g.placeOnPanel(index,panel.mesh,at),true);}
   if(room===15)routePair(g,'intake','freight');
  }
  // Explicit equal fixtures exercise the real weight/beam/field mechanisms;
  // these are physics regression probes, not ordinary-player movie evidence.
  if(room===13)g.cargo.position.copy(frame<100?l.panels['mirror-cradle'].getFrame().center.clone().add(V(0,.39,0)):V(100,100,100));
- if(room===14){const at=l.state.counterweightStair.island.center;g.cargo.position.copy(frame<100?at.clone().add(V(0,.39,0)):V(100,100,100));if(frame===100)routePair(g,'light-source','weave-north');}
+ if(room===14){l.readability.fan.enabled=frame>=80&&frame<190;if(frame===100)routePair(g,'contact-intake','passenger-arrival');}
  if(room===15){l.state.funnel.reversed=frame>=80;l.state.funnel.enabled=frame<190;if(frame===140)routePair(g,'intake','lift');}
  l.update(1/60);l.renderUpdate((frame%5)/4);
 }
@@ -160,7 +166,7 @@ for(const room of [12,13,14,15])test(`liked room ${room}: actual mirror, lift, s
    stimulate(baseline,room,frame);stimulate(upgraded,room,frame);
    if(frame%30===0||frame===239)assert.deepEqual(originalSecondChapterContract(upgraded),gameplayContract(baseline),`Mechanics diverged at frame ${frame}`);
    if(room===13)observedMotion ||= baseline.firstLevel.state['north-cage'].progress>0||baseline.firstLevel.state['south-cage'].progress>0;
-   if(room===14)observedMotion ||= baseline.firstLevel.state.counterweightStair.offset> -7.1;
+   if(room===14)observedMotion ||= baseline.firstLevel.state.lightContact.segments.length>1;
    if(room===15)observedMotion ||= baseline.firstLevel.state.funnel.segments.length>1;
   }
   if(room>12)assert.ok(observedMotion,'Must exercise the actual powered/moving mechanism');

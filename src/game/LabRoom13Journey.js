@@ -23,7 +23,7 @@ function room13NorthCompanion(d){
 }
 export function room13Access(d,{carry=true}={}){
  const {game,level,walk,aim,pickup,enter,until,mark}=d,p=level.panels;
- walk(-15.5,16);aim(0,p['access-low'].getFrame().center);walk(-8.5,16);walk(-8.5,-18);walk(4,-18);aim(1,p['access-high'].getFrame().center.clone().add({x:0,y:1.7,z:0}));walk(-8.5,-18);walk(-8.5,16);
+ walk(-15.5,16);aim(0,p['access-low'].getFrame().center.clone().setY(1.8));walk(-8.5,16);walk(-8.5,-18);walk(4,-18);aim(1,p['access-high'].getFrame().center.clone().add({x:0,y:1.7,z:0}));walk(-8.5,-18);walk(-8.5,16);
  if(carry){walk(game.cargo.position.x-1,game.cargo.position.z);pickup();walk(-15.5,16);}
  enter(p['access-low']);until(()=>game.playerGrounded,4,'Optical shelf landing');mark('optical shelf arrival');
 }

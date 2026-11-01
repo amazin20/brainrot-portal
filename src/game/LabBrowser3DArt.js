@@ -275,7 +275,7 @@ function addRoomMechanisms(level,m){
     addLightProjector(level.world,{position:[14,8,-12],direction:[1,0,0],radius:.44,accent:level.spec?.accent});
     for(const z of [-11,11])for(const x of [-12.3,-7.7])addGuideTower(level.world.root,{x,z,height:7,baseY:5.5});
   }
-  if(level.index===13){
+  if(level.index===13&&!level.deflectorRoom){
     // The machined projector replaces the original flat source cover in
     // rendering only. Keep the original body and blocker registrations intact.
     level.world.root.traverse(node=>{
@@ -323,7 +323,7 @@ export function upgradeBrowser3DArt(level){
   // The industrial diagonals read as stray wires beneath their open walkways.
   const chapter=getChapterVisualProfile(level);
   const deck=chapter?{braces:0,lamps:0}:addDeckEngineering(level,root,m),portalFrames=addPortalFrames(level,root,m),conduits=chapter?0:addShellConduits(level,root,m);
-  if(level.index===13)addLightProjector(level.world,{position:[-10,5.1,-7],direction:[0,0,-1],radius:1.1,accent:level.spec?.accent});
+  if(level.index===13&&!level.deflectorRoom)addLightProjector(level.world,{position:[-10,5.1,-7],direction:[0,0,-1],radius:1.1,accent:level.spec?.accent});
   addRoomMechanisms(level,m);
   if(level.index<11)applyEarlyMechanismArt(level);
   if(level.index>=15)applyAdvancedMechanismArt(level);

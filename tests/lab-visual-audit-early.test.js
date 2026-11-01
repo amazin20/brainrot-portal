@@ -2,6 +2,7 @@ import test,{after} from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
+import {LabPhysics} from '../src/game/LabPhysics.js';
 import {disposeLabLevel} from '../src/game/LabLevelLifecycle.js';
 import {FOUNDATION_BUILDERS} from '../src/game/LabFoundationChambers.js';
 import {buildExtendedCampaign} from '../src/game/LabExtendedCampaign.js';
@@ -19,6 +20,7 @@ import {finishVisualAudit} from '../src/game/LabVisualAuditFinish.js';
 import {serviceMassGeometry,treadChassisGeometry} from '../src/game/LabEarlyMachineConstruction.js';
 import {gameplayContract} from './helpers/lab-art-contract.js';
 import {originalRoom9Contract,originalRoom11Contract} from './helpers/lab-early-construction-contract.js';
+import {loadRoom14DeflectorFixture,assertRoom14DeflectorGeometry,assertRoom14FieldOwnership,assertRoom14ProjectorSupport} from './helpers/lab-room14-deflector-contract.js';
 
 const game=await createHeadlessGame();game.chamberEdition='foundation';
 after(()=>disposeLabLevel(game));
@@ -29,7 +31,17 @@ function bare(index){
  const l=index<5?FOUNDATION_BUILDERS[index](game,index):index<8?finishBrowserArt(buildExtendedCampaign(game,index)):
   index<10?finishBrowserArt(buildWorkshopCampaign(game,index)):index===10?finishBrowserArt(buildReadableWindRoom(game,CAMPAIGN[index])):
   index<16?finishBrowserArt(late[index-11](game,index)):buildCreative17(game,index);
- game.firstLevel=l;game.levelRoots=game.scene.children.filter(n=>!before.has(n));return l;
+ game.firstLevel=l;game.levelRoots=game.scene.children.filter(n=>!before.has(n));
+ if(index===13&&l.deflectorRoom){
+  // This raw-art fixture needs the replacement's real finite contact owners
+  // before checking its bodyBox/CCD geometry. Other layouts retain their
+  // existing render-only fixture setup verbatim.
+  game.playerPosition.fromArray(l.spawn);game.previousPlayerPosition.copy(game.playerPosition);game.cargo.position.fromArray(l.cargoSpawn);game.playerGrounded=false;
+  game.physics=new LabPhysics({fixedStep:1/120});
+  for(const c of game.colliders)game.physics.addStaticBox(c.mesh.uuid,c.box,{kinematic:!!c.kinematic,enabled:c.enabled!==false});
+  game.physics.createCargo({position:game.cargo.position,size:.78,mass:3.2});l.reset();
+ }
+ return l;
 }
 
 test('rolled supports retain the exact closed source extents with finite hard normals',()=>{
@@ -104,10 +116,16 @@ test('all seventeen real layouts preserve physical owners, portal frames and ray
    drawingOwners.set(id,mesh);
   });
   const stairs=[];l.world.root.traverse(mesh=>{if(mesh.userData.earlyAuditStair)stairs.push(mesh);});
-  assert.equal(stairs.length,({6:48,13:20,15:22})[index]??0,`Room ${index+1}: the complete authored stair flight must be checked`);
+  const stairCount=index===13&&l.deflectorRoom?loadRoom14DeflectorFixture().current.visual.stairSourceCount:({6:48,13:20,15:22})[index]??0;
+  assert.equal(stairs.length,stairCount,`Room ${index+1}: the complete authored stair flight must be checked`);
   for(const stair of stairs)assert.ok(drawingOwners.has(stair.uuid),`Room ${index+1}: a real stair source lost its tailored drawing`);
   assert.equal(l.visualAuditEarly.stats.extraColliders,0);assert.equal(l.visualAuditEarly.stats.extraLights,0);
-  if([5,7,8,9,10,11,12,13,14,15].includes(index))assert.ok(l.visualAuditEarly.stats.floorFieldTiles>0,`Room ${index+1}: the visible finished floor must receive the actual work-bay pigment`);
+  if(index===13&&l.deflectorRoom){
+   // The old y6/7.4/12 pigment zones describe the retired island room.
+   // Actual current supports/axis are checked here; native appearance and
+   // any new work-bay zones require the new room's separate visual review.
+   assertRoom14DeflectorGeometry(game);assertRoom14FieldOwnership(game);assertRoom14ProjectorSupport(game);
+  }else if([5,7,8,9,10,11,12,13,14,15].includes(index))assert.ok(l.visualAuditEarly.stats.floorFieldTiles>0,`Room ${index+1}: the visible finished floor must receive the actual work-bay pigment`);
   const art=l.visualAuditEarly,render=l.renderUpdate;finishVisualAuditEarly(game,l,index);
   assert.equal(l.visualAuditEarly,art);assert.equal(l.renderUpdate,render);
  }

@@ -1,45 +1,32 @@
-import test,{after} from 'node:test';
+import test,{before,after} from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
-import {runV8Journey} from '../src/game/LabV8Journey.js';
-import {runRoom14} from '../src/game/LabRoom14Journey.js';
-import {installRoom21Aim} from '../src/game/LabRoom21Journey.js';
+import {disposeLabLevel} from '../src/game/LabLevelLifecycle.js';
 import {makePortalFrame,orientedBoxFitsPortal,uprightCapsuleFitsPortal} from '../src/game/LabPortals.js';
-const g=await createHeadlessGame();g.chamberEdition='foundation';
-after(()=>{g.physics.dispose();g.portals.dispose();});
+import {assertRoom14DeflectorGeometry} from './helpers/lab-room14-deflector-contract.js';
 
-test('room14 manufactured island aperture admits the original cube but excludes the full upright player',async()=>{
- await g.selectLevel(13,false);const p=g.firstLevel.panels['island-receiver'],f=p.getFrame();
- const portal=makePortalFrame(f.center,f.normal,f.up,p.mesh.userData.portalSize);
- assert.ok(orientedBoxFitsPortal(portal,portal.position,new THREE.Quaternion(),.39),'The manufactured aperture still physically admits the 78 cm cargo');
- assert.equal(uprightCapsuleFitsPortal(portal,2.4,.43),false,'The complete upright player cannot replace the first light crossing');
+// The retired cube-only island address is preserved in the372089a history.
+// Current14 has a light-only aperture: neither actor can replace that field.
+// Actual ordinary carried/charged attacks are in the current journey suite.
+let g;
+before(async()=>{g=await createHeadlessGame();g.chamberEdition='foundation';await g.selectLevel(13,false);});
+after(()=>{if(g)disposeLabLevel(g);});
+test('current14 optical half-sizes0.30×1.10m mean a full0.60×2.20m aperture, excluding every complete original cube orientation and the upright player',()=>{
+ assertRoom14DeflectorGeometry(g);
+ for(const name of ['contact-intake','contact-turn']){
+  const panel=g.firstLevel.panels[name],f=panel.getFrame(),portal=makePortalFrame(f.center,f.normal,f.up,panel.mesh.userData.portalSize);
+  assert.equal(portal.width,.3);assert.equal(portal.height,1.1);
+  for(let x=0;x<4;x++)for(let y=0;y<4;y++)for(let z=0;z<4;z++){
+   const q=new THREE.Quaternion().setFromEuler(new THREE.Euler(x*Math.PI/8,y*Math.PI/8,z*Math.PI/8));assert.equal(orientedBoxFitsPortal(portal,portal.position,q,.39),false);
+  }
+  assert.equal(uprightCapsuleFitsPortal(portal,2.4,.44),false);
+ }
 });
-
-test('room14 exact west-address island skip is rejected by physical aperture fit with the same held cargo',async()=>{
- await g.selectLevel(13,false);const original=g.cargo,body=g.physics.cargoBody;
- const report=await runV8Journey(g,{scenario:async d=>{
-  installRoom21Aim(d);const CUT=Symbol('ordinary western landing');let reached=false;
-  try{await runRoom14({...d,mark:name=>{d.mark(name);if(name==='light landing reached'){reached=true;throw CUT;}}});}
-  catch(error){if(error!==CUT)throw error;}
-  assert.ok(reached&&g.heldCube,'Ordinary original companion arrival at the west landing succeeded');
-  g.interact();d.wait(.8);
-  d.aim(1,d.level.panels['island-receiver'].getFrame().center);
-  d.aim(0,d.level.panels['weave-west'].getFrame().center);
-  const actualOutlet=g.portals.portals[1];
-  assert.equal(actualOutlet.width,.8);assert.equal(actualOutlet.height,.8);
-  assert.ok(orientedBoxFitsPortal(actualOutlet,actualOutlet.position,new THREE.Quaternion(),.39));
-  assert.equal(uprightCapsuleFitsPortal(actualOutlet,2.4,.43),false);
-  d.walk(g.cargo.position.x+1.15,g.cargo.position.z);d.pickup();
-  const portalBefore=g.teleportCount,cargoBefore=g.physics.portalTransports;
-  const f=d.level.panels['weave-west'].getFrame();
-  d.walk(f.center.x+f.normal.x*1.35,f.center.z+f.normal.z*1.35);
-  for(let n=0;n<240;n++){d.worldMove(-f.normal.x,-f.normal.z);d.frame();}
-  d.stop();d.wait(.6);
-  assert.equal(g.teleportCount,portalBefore,'The exact formerly winning entry no longer transports the player');
-  assert.equal(g.physics.portalTransports,cargoBefore,'The held original body remains on its owner side');
-  assert.ok(g.heldCube&&g.playerPosition.x< -13&&Math.abs(g.playerPosition.y-6)<.2);
-  assert.equal(g.state,'playing');
- }});
- assert.equal(report.resets+report.respawns,0);assert.equal(g.cargo,original);assert.equal(g.physics.cargoBody,body);
+test('current14 separate passenger apertures retain full human clearance instead of inheriting the optical mouth size',()=>{
+ for(const name of ['passenger-departure','passenger-arrival']){
+  const panel=g.firstLevel.panels[name],f=panel.getFrame(),portal=makePortalFrame(f.center,f.normal,f.up,panel.mesh.userData.portalSize);
+  assert.equal(uprightCapsuleFitsPortal(portal,2.4,.44),true);assert.ok(portal.width>.44&&portal.height>1.2);
+ }
+ assert.equal(g.firstLevel.panels['island-receiver'],undefined,'The retired independent island cargo address must not reappear');
 });

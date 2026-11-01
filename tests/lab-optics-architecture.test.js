@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {ACTIVE_FOUNDATION_RUNTIME_FLAGS} from '../src/game/ReleaseIdentity.js';
 import {gameplayContract,digest} from './helpers/lab-art-contract.js';
+import {observatoryEntryContract} from './helpers/lab-observatory-entry-contract.js';
 import {disposeLabLevel} from '../src/game/LabLevelLifecycle.js';
 import {installOpticsArchitecture} from '../src/game/LabOpticsArchitecture.js';
 const fixture=JSON.parse(fs.readFileSync(new URL('./fixtures/optics-architecture-before.json',import.meta.url)));
@@ -13,9 +14,9 @@ before(async()=>{g=await createHeadlessGame();Object.assign(g,{chamberEdition:'f
 after(()=>disposeLabLevel(g));
 for(const f of fixture)test(`Observatory ${f.index+1}: original gameplay and all new relief vertices remain within the old wall panels`,async()=>{
  await g.selectLevel(f.index,true);const l=g.firstLevel,a=l.opticsArchitecture;assert.ok(a);assert.equal(l.id,f.id);
- assert.equal(digest(gameplayContract(g)),f.hash,'An actual physics, camera, aim, portal or interaction owner changed');
- assert.equal(a.stats.batches,8);assert.ok(a.stats.triangles<100000);assert.equal(a.stats.newColliders,0);assert.equal(a.stats.newLights,0);
- assert.ok(a.stats.irises>0&&a.stats.archives>0);assert.equal(a.panels.length,a.stats.panels);
+ assert.equal(digest(observatoryEntryContract(g)),f.hash,'An actual physics, camera, aim, portal or interaction owner changed');
+ assert.equal(a.stats.batches,1);assert.ok(a.stats.triangles<100000);assert.equal(a.stats.newColliders,0);assert.equal(a.stats.newLights,0);
+ assert.equal(typeof a.stats.profile,'string');assert.equal(a.stats.rimAreaRatio,.1172);assert.ok(a.panels.every(p=>p.type===a.stats.profile));assert.equal(a.panels.length,a.stats.panels);
  const matrix=new THREE.Matrix4(),point=V();
  for(const [key,entries]of a.banks){
   const mesh=a.root.children.find(m=>m.name==='Observatory / '+key);assert.ok(mesh);assert.equal(mesh.count,entries.length);

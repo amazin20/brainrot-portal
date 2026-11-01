@@ -5,6 +5,7 @@ import { LabAirflowVisual } from './LabAirflowVisual.js';
 import { cargoLoadsPlate } from './LabPlateContact.js';
 import { terminalAccessible } from './LabPuzzleMechanics.js';
 import { WindClutchDrive, windDoorParameter } from './LabWindClutchDrive.js';
+import { finishWindGuard } from './LabWindGuardFinish.js';
 
 /** Room 11 only. Existing source meshes, air tracing and door are retained.
  * A mechanically exclusive input/output clutch exposes stored rotation.
@@ -166,7 +167,7 @@ export function buildReadableWindRoom(game, spec) {
   solid('enclosure roof', [-2.65, 2.2, -8.075], [2.25, .16, 1.35]);
   for (const [side, x] of [['left', -3.70], ['right', -1.60]])
     solid('guide rail ' + side, [x, 2.2, -7.25], [.10, 4.4, .20]);
-  const coverMesh = solid('spring-return air shroud', [-2.65, 3.25, -7.25], [1.95, 2.1, .15], w.materials.floor);
+  const coverMesh = finishWindGuard(solid('spring-return air shroud', [-2.65, 3.25, -7.25], [1.95, 2.1, .15], w.materials.floor));
   const coverCollider = game.colliders.find(c => c.mesh === coverMesh); coverCollider.kinematic = true;
   const leverSweepBox = new THREE.Box3(V(-2.92, .70, -7.50), V(-2.38, 1.65, -7.12));
   outputDrive.cover.mesh = coverMesh; outputDrive.cover.collider = coverCollider;
@@ -268,6 +269,7 @@ export function buildReadableWindRoom(game, spec) {
     rotor.rotation.z = 0; syncDriveGeometry(0);
   });
   const level = k.finish([-1, 0, 8], [1.5, .55, 7.5], [0, 0, -16], { workshop: k, readability: { inlet, housing, dust, airflow, pawl, fanControl, clutchControl, coverMesh, rotor, collar } });
+  level.spawnView = { yaw: .4, pitch: -.15 };
   level.hints = [
     'Вращение маховика и ход створок разделены муфтой. Поток прижимает кожух к её рукояти.',
     'У маховика остаётся вращение после прекращения подачи. Друг на пластине поворачивает приёмник к другой стене.',

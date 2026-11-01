@@ -7,6 +7,7 @@ import {ACTIVE_FOUNDATION_RUNTIME_FLAGS} from '../src/game/ReleaseIdentity.js';
 import {disposeLabLevel} from '../src/game/LabLevelLifecycle.js';
 import {gameplayContract,digest} from './helpers/lab-art-contract.js';
 import {originalRoom11Contract} from './helpers/lab-early-construction-contract.js';
+import {assertWindGuard} from './helpers/lab-wind-guard-contract.js';
 const V=(...p)=>new THREE.Vector3(...p),fixtures=JSON.parse(fs.readFileSync(new URL('./fixtures/fixed-equipment-original-contracts.json',import.meta.url)));
 let g;before(async()=>{g=await createHeadlessGame();Object.assign(g,{chamberEdition:'foundation',...ACTIVE_FOUNDATION_RUNTIME_FLAGS});});after(()=>disposeLabLevel(g));
 const mounts=()=>g.colliders.filter(c=>c.mesh.userData.fixedEquipmentMount);
@@ -46,22 +47,28 @@ test('wind output-machine approval rejects altered guards, materials, queries, c
  await g.selectLevel(10,true);const contract=gameplayContract(g),golden=fixtures.rows.find(f=>f.index===10).sha256;
  const retained=c=>digest(originalRoom11Contract(c));assert.equal(retained(contract),golden);
  const drawing=[];g.firstLevel.world.root.traverse(m=>{if(m.isMesh&&m.name.startsWith('Wind clutch / '))drawing.push(m);});
+ const guard=drawing.find(mesh=>mesh.name==='Wind clutch / spring-return air shroud'),guardMaterial=guard.material;
  const palette=g.firstLevel.world.materials,checkDrawing=()=>{
   assert.equal(drawing.length,24,'The audited machine owns exactly its guard, fork, rotor, collar and two springs');
   const uses={trim:0,floor:0,accent:0};
   for(const mesh of drawing){
    assert.equal(mesh.visible,true);for(let p=mesh;p;p=p.parent)assert.equal(p.visible,true);
    assert.equal(mesh.material.visible,true);assert.equal(mesh.material.transparent,false);
-   const key=Object.keys(uses).find(name=>palette[name]===mesh.material);assert.ok(key,'The machine must reuse its three existing opaque palette materials');uses[key]++;
+   if(mesh===guard){assert.equal(mesh.material,guardMaterial);assertWindGuard(mesh);continue;}
+   const key=Object.keys(uses).find(name=>palette[name]===mesh.material);assert.ok(key,'The other 23 machine meshes must retain their three existing opaque palette materials');uses[key]++;
   }
-  assert.deepEqual(uses,{trim:10,floor:2,accent:12});
+  assert.deepEqual(uses,{trim:10,floor:1,accent:12});
  };
  checkDrawing();const first=drawing[0],material=first.material,clone=material.clone();
  try{first.visible=false;assert.throws(checkDrawing);first.visible=true;first.material=clone;assert.throws(checkDrawing);}
  finally{first.visible=true;first.material=material;clone.dispose();}
  checkDrawing();
+ const guardClone=guardMaterial.clone();
+ try{guard.material=guardClone;assert.throws(checkDrawing);}finally{guard.material=guardMaterial;guardClone.dispose();}
+ checkDrawing();
  const shroud=c=>c.colliders.find(r=>r.mesh.name==='Wind clutch / spring-return air shroud');
  const attacks=[
+  c=>{c.room.spawnView.yaw+=.01;},
   c=>{shroud(c).box.min.y+=.01;},
   c=>{shroud(c).kinematic=false;},
   c=>{shroud(c).enabled=false;},
@@ -75,6 +82,12 @@ test('wind output-machine approval rejects altered guards, materials, queries, c
   c=>{c.colliders[0].enabled=false;},
  ];
  for(const mutate of attacks){const bad=structuredClone(contract);mutate(bad);assert.throws(()=>assert.equal(retained(bad),golden));}
+});
+test('level replacement disposes the one owned wind guard geometry and finish exactly once',async()=>{
+ await g.selectLevel(10,true);const mesh=g.firstLevel.readability.coverMesh,geometry=mesh.geometry,material=mesh.material;
+ let geometries=0,materials=0;geometry.addEventListener('dispose',()=>geometries++);material.addEventListener('dispose',()=>materials++);
+ await g.selectLevel(0,true);assert.equal(geometries,1);assert.equal(materials,1);
+ assert.ok(!g.colliders.some(c=>c.mesh===mesh));assert.ok(!g.cameraBlockers.includes(mesh)&&!g.aimBlockers.includes(mesh));assert.ok(!g.physics.solids.has(mesh.uuid));
 });
 test('both launch standards touch finite rendered rim faces and their own real bearing decks',async()=>{
  await g.selectLevel(42,true);const rows=checkRegistries(),p=g.firstLevel.launch;

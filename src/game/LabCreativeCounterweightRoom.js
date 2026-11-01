@@ -109,7 +109,7 @@ export function buildCreative34(g,index=33){
  k.label('УТЕЧКА / КОРПУС ЗАКРЫВАЕТ ОТВЕРСТИЕ',[-14.6,4,2],[1,0,0],10,.65);
  k.label('ГРУЗОВОЙ РУКАВ / ВЫДАЧА',[-17,2.9,-16],[0,0,-1],10,.7);
  installVisualAuditMiddleKit(k,34);
- const l=k.finishResearch([-4,0,20],[-7,.6,18],[0,0,-21],{postCampaign:true,pressureState:state,dispatch,inlet,doorCollider,seat,spawnView:{yaw:.15,pitch:-.05}});
+ const l=k.finishResearch([-4,0,20],[-2.5,.40,18.6],[0,0,-21],{postCampaign:true,pressureState:state,dispatch,inlet,doorCollider,seat,spawnView:{yaw:.15,pitch:-.05}});
  l.puzzleGeometry={noProgressFlags:true,recoveryFloor:0,footprint:52*52,orders:['charge-then-deliver','inspect-unsealed-first','recover-early-discharge'],portalRoles:{'pressure-feed':'free original cargo enters the enclosed tube','pressure-mouth':'cargo-only pressure inlet'},deductions:['cargo closes a geometric leak rather than loading a named receiver','air pressure stores and leaks continuously','one manual distributor switches charge, discharge and reverse plumbing','stored pressure supplies force to a real guided door','released cargo opens its own former seat and exits through a separate low sleeve']};
  const dispose=l.dispose;l.dispose=()=>{if(state.doorBody&&state.owner?.world)state.owner.world.removeBody(state.doorBody);dispose();};
  return l;

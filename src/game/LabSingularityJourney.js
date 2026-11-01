@@ -29,6 +29,19 @@ export async function traverseCrownSpatialRoom(args){
  await dropAt(state.socket);await until(()=>state.loaded,3,'Original free cargo did not load the physical crown socket');mark('Original companion loads crown socket');
  await walk(state.contact);await until(won,3,'Independent crown loads not closed');
 }
+/** Shared ordinary-input freight preparation; the caller arrives holding the
+ * original companion. Used by the full route and genuine adversarial prefixes.
+ * Only walk, E release/pickup and aimed charged shots are supplied here. */
+export async function releaseMigrantRecoilFreight({state:s,P,walk,dropAt,shoot,pickup,wait,release}){
+ await walk(P(-15.6,0));await walk(P(-15.6,21.5));await walk(P(-12,21.5));await dropAt(P(-12,18.5));
+ // Replace the retained passenger exit FIRST. Otherwise walking across the
+ // new floor input could send the traveller into an old lower-storey exit.
+ await walk(P(-15.6,21.5));await walk(P(-15.6,0));await walk(P(-11.75,0));await walk(P(-11.75,-7));await walk(P(-15.8,-7));await shoot(1,s.freightMouth.frame().center,{center:true});
+ await walk(P(-11.75,-7));await walk(P(-11.75,0));await walk(P(-15.6,0));await walk(P(-15.6,14.5));await walk(P(-16.1,14.5));await shoot(0,s.cargoIntake.center,{center:true});
+ await walk(P(-15.6,21.5));await walk(P(-12,18.5));await pickup();
+ await walk(P(-14.2,18));await walk(P(-14.2,-18,5.75));await walk(P(-12.2,-18,5.75));await walk(P(-12.2,18,11.5));
+ await walk(P(-15.9,18,11.5));await walk(P(-15.9,12.8,11.5),{sprint:false,tolerance:.025});await wait(.4);await release();await wait(1);
+}
 export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=null,order=null,onFrame=null,annexVariant='direct',freightReturn='gate',onReadabilityPhase=null}={}){
  check(['gate','portal'].includes(freightReturn),'Unknown freight return plan');
  const level=game.firstLevel;check(level.singularity&&game.state==='playing','Start the new Tower through Play');
@@ -159,7 +172,23 @@ export async function runSingularityJourney(game,{onMilestone=()=>{},stopAfter=n
    await leave('flywheel',[P('flywheel',13,0)]);await travel([0,18,54]);await dropAt([2,18,54]);
   },
   async magnet(){await travel([0,18,54]);await pickup();await travel(level.rooms.get('magnet').door);await walk(P('magnet',-16,0));await dropAt(st('magnet').sender,[1,0]);await walk(P('magnet',-17,-14));await use('magnet:coil-0');await until(()=>game.cargo.position.y>22.2,6,'Magnetic body did not rise');await use('magnet:coil-1');await until(()=>st('magnet').passed&&Math.abs(game.cargo.position.x-P('magnet',0)[0])<.15&&game.cargo.position.z>P('magnet',0,10.9)[2],10,'Cargo did not settle in the physical loading slit');await walk(P('magnet',-19,-9.5));await walk(P('magnet',-19,6.5));await use('magnet:coil-2');await until(()=>Math.hypot(game.cargo.position.x-P('magnet',12)[0],game.cargo.position.z-P('magnet',0,0)[2])<.5,12,'Cargo missed catcher');await use('magnet:coil-2',{approach:false});await until(()=>level.getTowerMetrics().solvedIds.includes('magnet'),6,'Cargo did not settle on real receiver');await until(()=>st('magnet').serviceProgress>.99,3,'Magnetic receiver did not release service door');await walk(P('magnet',-19,6.5));await walk(P('magnet',-19,-14));await walk(P('magnet',20.2,-14));await walk(P('magnet',20.2,18.8));await walk(P('magnet',18,18.8));await walk(P('magnet',18,3,4.2));await walk(P('magnet',13,2,4.2));await pickup();await walk(P('magnet',18,3,4.2));await walk(P('magnet',18,18.8));await walk(P('magnet',20.2,18.8));await walk(P('magnet',20.2,-14));await walk(P('magnet',-17,-14));await leave('magnet',[P('magnet',-17,0)]);await travel([0,36,54]);await dropAt([2,36,54]);},
-  async migrant(){await travel(level.rooms.get('migrant').door);await walk(P('migrant',-12,12));await shoot(0,st('migrant').intake.center);await walk(P('migrant',-13,0));await shoot(1,st('migrant').moving.frame().center);await use('migrant:rail');await walk(P('migrant',-12,12));await until(()=>st('migrant').travel>.99,7,'Carriage did not reach opposite bank');await leave('migrant',[P('migrant',-12,0)]);await travel([0,36,54]);await pickup();await travel(level.rooms.get('migrant').door);await enter(st('migrant').intake);await walk(P('migrant',12,10,3));await until(()=>level.getTowerMetrics().solvedIds.includes('migrant'),2,'Joint carriage delivery');await enter(st('migrant').moving);await leave('migrant',[P('migrant',-12,12),P('migrant',-12,0)]);await travel([0,36,54]);await dropAt([2,36,54]);},
+  async migrant(){
+   const s=st('migrant');await travel([0,36,54]);await pickup();await travel(level.rooms.get('migrant').door);
+   await releaseMigrantRecoilFreight({state:s,P:(...p)=>P('migrant',...p),walk,dropAt,shoot,pickup,wait,
+    release:()=>{check(game.heldCube&&game.interact(),'Original companion migrant gravity release failed');report.interactions++;}});
+   await until(()=>s.travel>.99&&Math.abs(s.carrierBody.velocity.x)<.2,9,'Original freight recoil did not drive the real carrier to its contact stop');
+   mark('Original falling freight recoils the 12 kg portal carrier',{physicsProof:s.diagnostics()});
+   await walk(P('migrant',-15.9,18,11.5));await walk(P('migrant',-12.2,18,11.5));
+   await walk(P('migrant',-12.2,-18,5.75));await walk(P('migrant',-14.2,-18,5.75));await walk(P('migrant',-14.2,18));
+   // The diagonal pair of finite sight windows exposes the far passenger
+   // address. Both shots and the carried crossing are ordinary inputs.
+   await walk(P('migrant',-14,18.75));await shoot(0,s.intake.center);await shoot(1,s.moving.frame().center);
+   await walk(P('migrant',-11.75,18.75));await walk(P('migrant',-11.75,-7));await walk(P('migrant',-12,-7));await pickup();await walk(P('migrant',-11.75,-7));
+   await walk(P('migrant',-11.75,21.5));await walk(P('migrant',-14,21.5));await walk(P('migrant',-14,18.9));await enter(s.intake);await walk(P('migrant',12,10,3));
+   await until(()=>level.getTowerMetrics().solvedIds.includes('migrant'),2,'Joint recoil-carriage delivery');
+   await enter(s.moving);await leave('migrant',[P('migrant',-15.6,21.5),P('migrant',-15.6,0)]);
+   await travel([0,36,54]);await dropAt([2,36,54]);
+  },
   async pendulum(){
    const machine=st('pendulum'),cell=machine.cell;
    await travel([0,36,54]);await pickup();await travel(level.rooms.get('pendulum').door);

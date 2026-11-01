@@ -37,6 +37,15 @@ test('Room25 metal finish stays inside real hosts, preserves white ceramic, and 
    assert.equal(metal.material.color.getHex(),surface===r.freight.surface?C.metal:C.passenger);
    assert.equal(surface.portal,false);assert.equal(surface.mesh.userData.portalable,undefined);
   }
+  for(const deck of [r.freight,...r.passengerDecks]){
+   const {surface,tread}=deck;assert.equal(tread.geometry.index.count,36,'The metal tread must remain a complete closed box');
+   tread.geometry.computeBoundingBox();
+   assert.ok(Math.abs(tread.geometry.boundingBox.max.z+tread.position.z)<1e-8,'The new top must equal the existing physical support plane');
+   assert.equal(tread.material.polygonOffset,false);assert.equal(tread.material.transparent,false);
+   assert.ok(!game.colliders.some(c=>c.mesh===tread)&&!game.cameraBlockers.includes(tread)&&!game.aimBlockers.includes(tread));
+   if(deck.loadLenses)for(const lens of deck.loadLenses)assert.equal(firstPaintHit(game.scene,lens,[lens,tread]),lens,'Actual load indicators must be outside the closed tread');
+   const disposed={count:0};tread.geometry.addEventListener('dispose',()=>disposed.count++);tread.userData.disposeCounter=disposed;
+  }
   for(const panel of Object.values(level.panels))panel.group.traverse(node=>{
    if(node.isInstancedMesh&&node.userData.portalTile)assert.equal(node.material,level.world.materials.ceramic);
   });
@@ -66,7 +75,9 @@ test('Room25 metal finish stays inside real hosts, preserves white ceramic, and 
   assert.deepEqual(world.bodies,bodies);assert.deepEqual(game.colliders,colliders);assert.deepEqual(game.aimBlockers,aim);assert.deepEqual(game.cameraBlockers,camera);assert.deepEqual(game.portalPanels,portals);
   assert.deepEqual(bodies.map(body=>body.position.toArray().concat(body.quaternion.toArray(),body.velocity.toArray())),poses);
   assertOwnedMachineUnchanged(game);
-  r.dispose();assert.deepEqual(world.bodies,bodies);assert.deepEqual(game.colliders,colliders);assertOwnedMachineUnchanged(game);
+  r.dispose();r.dispose();
+  for(const deck of [r.freight,...r.passengerDecks])assert.equal(deck.tread.userData.disposeCounter.count,1);
+  assert.deepEqual(world.bodies,bodies);assert.deepEqual(game.colliders,colliders);assertOwnedMachineUnchanged(game);
  }finally{game.firstLevel?.dispose?.();game.physics.dispose();game.portals.dispose();}
 });
 

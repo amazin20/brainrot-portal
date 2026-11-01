@@ -46,7 +46,9 @@ for(const [name,poison]of [
  ['incomplete terminal milestone',r=>{r.cases[0].milestones.pop();}],
  ['unreviewed powered drive',r=>{const c=r.cases[0];c.final.causes.ratchet=true;c.milestones.at(-1).causes.ratchet=true;}],
  ['mirror release no longer lowers the same cage',r=>{const c=r.cases[4],y=c.milestones.find(m=>m.name==='live southern lift has not completed its ascent').causes.southCage;c.final.causes.southCage=y;c.milestones.at(-1).causes.southCage=y;}],
- ['carried body secretly supports the stair',r=>{const c=r.cases[6];c.final.causes.stairSupported=true;c.milestones.at(-1).causes.stairSupported=true;}],
+ ['carried body secretly reaches the protected freight bay',r=>{const c=r.cases[6];c.final.causes.cargoInFreightTarget=true;c.milestones.at(-1).causes.cargoInFreightTarget=true;}],
+ ['declared field without an actual body owner',r=>{const c=r.cases[7];c.final.causes.contactOwners[0].bodyPresent=false;c.milestones.at(-1).causes.contactOwners[0].bodyPresent=false;}],
+ ['declared oblique field with only an axial normal',r=>{const c=r.cases[7];for(const at of [c.final,c.milestones.at(-1)])for(const o of at.causes.contactOwners)o.normal=[0,0,1];}],
  ['early original-body retrieval',r=>{const c=r.cases[8];c.final.held=true;c.milestones.at(-1).held=true;}],
  ['unrequested elevated transverse field',r=>{const c=r.cases[9],s={a:[0,20,0],b:[10,20,0],direction:[1,0,0]};c.final.causes.funnelSegments.push(s);c.milestones.at(-1).causes.funnelSegments.push(structuredClone(s));}],
 ])test('the raw proof gate rejects '+name,()=>{const poisoned=structuredClone(report);poison(poisoned);assert.throws(()=>assertSecondChapterEarlyAttacks(poisoned));});

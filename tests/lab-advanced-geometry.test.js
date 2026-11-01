@@ -4,7 +4,8 @@ import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {runV8Journey} from '../src/game/LabV8Journey.js';
 import {resolvePortalPlacement} from '../src/game/LabPortals.js';
-import {runRoom14} from '../src/game/LabRoom14Journey.js';
+import {room14InputControls} from '../src/game/LabRoom14Journey.js';
+import {assertRoom14DeflectorGeometry,assertRoom14FieldOwnership} from './helpers/lab-room14-deflector-contract.js';
 
 const game = await createHeadlessGame();
 after(() => { game.physics.dispose(); game.portals.dispose(); });
@@ -86,61 +87,43 @@ test('room13 return ceramic is hidden from sampled lower and optical-shelf viewp
     'The original ceramic remains usable from its actual receiving chamber');
 });
 
-test('the east edge of the room14 arrival court remains solid under ordinary walking', async () => {
-  await game.selectLevel(13, false);
-  const report = await runV8Journey(game, {scenario: async d => {
-    for (let frame = 0; frame < 600; frame++) { d.worldMove(1, 0); d.frame(); }
-    d.wait(1);
-    assert.ok(game.playerPosition.x > 17, 'The route must reach the formerly uncovered eastern strip');
-    assert.ok(game.playerGrounded && game.playerPosition.y >= -.01, 'The lower court reaches its boundary without an invisible fall');
-    d.walk(-15, 12);
-  }});
-  assert.equal(report.resets + report.respawns, 0);
+// The former eastern-strip and folded-stair tests described the retired14.
+// Current recovery attacks are ordinary scenarios in the new journey suite;
+// these independent checks retain founded travel, separation and owner cleanup.
+test('current14 actual service stairs join the founded observation and return courts under ordinary walking',async()=>{
+ await game.selectLevel(13,false);
+ const report=await runV8Journey(game,{scenario:async d=>{
+  const t=room14InputControls(d);t.north();d.walk(12,5);d.wait(.3);
+  assert.ok(game.playerGrounded&&Math.abs(game.playerPosition.y)<.02,'The observation court must have its actual authored support');
+  t.west();d.wait(.3);assert.ok(game.playerGrounded&&Math.abs(game.playerPosition.y+.8)<.02,'The same ordinary stairs return to the real lower service floor');
+ }});
+ assert.equal(report.resets+report.respawns,0);
 });
 
-test('room14 narrow stair requires separating the original carried friend at the stable island', async () => {
-  await game.selectLevel(13, false);
-  const body = game.physics.cargoBody, reached = Symbol('stable island');
-  const report = await runV8Journey(game, {scenario: async d => {
-    let tested = false;
-    try {
-      await runRoom14({...d, mark(name) {
-        d.mark(name);
-        if (name !== 'stable island reached') return;
-        assert.ok(game.heldCube, 'The original friend arrives through the first real bridge');
-        assert.throws(() => d.walk(-1.5, -5, 4), /timed out|Blocked/);
-        assert.ok(game.heldCube && game.playerPosition.z > -3, 'The carried pair cannot skip the physical stair pinch');
-        assert.equal(game.state, 'playing'); tested = true; throw reached;
-      }});
-    } catch (error) { if (error !== reached) throw error; }
-    assert.ok(tested, 'The normal route must reach the intended negative case');
-  }});
-  assert.equal(report.resets + report.respawns, 0);
-  assert.equal(game.physics.cargoBody, body);
+test('current14 independent separation checks reject a hidden gap plank, enlarged optical mouth and disabled glass',async()=>{
+ await game.selectLevel(13,false);assertRoom14DeflectorGeometry(game);
+ const panel=game.firstLevel.panels['contact-intake'],width=panel.mesh.userData.portalSize.width,glass=game.colliders.find(c=>c.mesh===game.firstLevel.readability.window);
+ const poison=[
+  [()=>game.floors.push({minX:-.7,maxX:1.8,minZ:-2.4,maxZ:-.8,y:0,enabled:true}),()=>game.floors.pop()],
+  [()=>panel.mesh.userData.portalSize.width=.6,()=>panel.mesh.userData.portalSize.width=width],
+  [()=>glass.enabled=false,()=>glass.enabled=true],
+ ];
+ for(const [mutate,restore]of poison){try{mutate();assert.throws(()=>assertRoom14DeflectorGeometry(game),assert.AssertionError);}finally{restore();}}
+ assertRoom14DeflectorGeometry(game);
 });
 
-test('switching away from a live light bridge removes its support from every collision and view registry', async () => {
-  for (const nextLevel of [14, 12, 0]) {
-    await game.selectLevel(13, false);
-    const bridge = game.firstLevel.state.lightBridge;
-    bridge.update();
-    assert.ok(bridge.pieces.some(piece => piece.collider.enabled && piece.floor.enabled), 'A real support must be active before disposal');
-    const oldPhysics = game.physics, oldFloors = game.firstLevel.world.floors;
-    const pieces = [...bridge.pieces];
-    await game.selectLevel(nextLevel, false);
-    const counts = [game.colliders.length, game.floors.length, game.cameraBlockers.length, game.aimBlockers.length];
-    bridge.update(); // A retained reference must never resurrect an old support.
-    assert.deepEqual([game.colliders.length, game.floors.length, game.cameraBlockers.length, game.aimBlockers.length], counts);
-    for (const {mesh, collider, floor} of pieces) {
-      assert.equal(collider.enabled, false); assert.equal(floor.enabled, false);
-      assert.equal(mesh.visible, false); assert.equal(mesh.parent, null);
-      assert.equal(oldPhysics.solids.has(mesh.uuid), false);
-      assert.equal(game.physics.solids.has(mesh.uuid), false);
-      assert.equal(oldFloors.includes(floor), false);
-      assert.equal(game.colliders.includes(collider), false);
-      assert.equal(game.floors.includes(floor), false);
-      assert.equal(game.cameraBlockers.includes(mesh), false);
-      assert.equal(game.aimBlockers.includes(mesh), false);
-    }
+test('switching away from current14 removes every light and tilted fixed body/query/CCD owner without resurrection',async()=>{
+ for(const nextLevel of [14,12,0]){
+  await game.selectLevel(13,false);const level=game.firstLevel,field=level.readability.field;
+  for(const [i,name]of ['contact-intake','contact-turn'].entries()){const panel=level.panels[name];assert.equal(game.placeOnPanel(i,panel.mesh,panel.getFrame().center.clone().setY(1.25)),true);}field.update();
+  assert.ok(field.segments.length>1);assertRoom14FieldOwnership(game);
+  const oldPhysics=game.physics,owned=field.owned.map(p=>({mesh:p.mesh,collider:p.collider,body:p.body}));
+  await game.selectLevel(nextLevel,false);
+  const counts=[game.colliders.length,game.floors.length,game.cameraBlockers.length,game.aimBlockers.length,game.physics.bodyBoxes.size,game.physics.cargoSweepBoxes.size];
+  field.update();
+  assert.deepEqual([game.colliders.length,game.floors.length,game.cameraBlockers.length,game.aimBlockers.length,game.physics.bodyBoxes.size,game.physics.cargoSweepBoxes.size],counts);
+  for(const {mesh,collider,body}of owned){
+   assert.equal(mesh.parent,null);assert.equal(oldPhysics.world.bodies.includes(body),false);assert.equal(oldPhysics.bodyBoxes.has(mesh.uuid),false);assert.equal(oldPhysics.cargoSweepBoxes.has(mesh.uuid),false);assert.equal(game.physics.bodyBoxes.has(mesh.uuid),false);assert.equal(game.physics.cargoSweepBoxes.has(mesh.uuid),false);assert.equal(game.colliders.includes(collider),false);assert.equal(game.cameraBlockers.includes(mesh),false);assert.equal(game.aimBlockers.includes(mesh),false);assert.equal(game.portalPanels.includes(mesh),false);
   }
+ }
 });

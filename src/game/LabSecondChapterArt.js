@@ -144,6 +144,7 @@ export function installSecondChapterArt(game,level){
    }
    break;
   case 13:
+   if(level.deflectorRoom)break;
    coat(boxAt(w.root,[-10,5.1,-6.75],[2.4,.45,.5]),'14 / closed light-sheet projector chassis',{paint:COPPER,vents:false});
    for(const n of [2,7,12])coat(level.state.counterweightStair.parts[n].casing,`14 / counterweighted tread ${n+1} closed casing`,{axis:1,paint:ENAMEL,vents:false,walkingTop:true});
    break;

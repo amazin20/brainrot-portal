@@ -38,11 +38,11 @@ export function finishAdvancedRoom(level){
  const spawn=level.spawn.toArray?.()??level.spawn;
  // Arrival views look along the real shared courts, with room behind the
  // camera boom, instead of pressing it against the southern boundary wall.
- if(level.index===12)level.spawnView={yaw:1.55,pitch:.12};
+ if(level.index===12)level.spawnView={yaw:1.25,pitch:-.15};
  if(level.index===14)level.spawnView={yaw:1.45,pitch:.10};
  if(level.index<15)level.conceptLesson=[
   {position:level.panels['mirror-cradle']?.getFrame().center.toArray()??spawn,key:'↔',text:'Луч проходит через порталы и отражается от зеркала. Вес меняет угол отражения.'},
-  {position:spawn,range:13,key:'↔',text:'Твёрдый свет держит вес. Переставляя портал, ты переносишь и опору.'},
+  {position:spawn,range:13,key:'↔',text:level.deflectorRoom?'Направленный порталами свет становится настоящей гранью, которая меняет движение свободного друга.':'Твёрдый свет держит вес. Переставляя портал, ты переносишь и опору.'},
   {position:spawn,range:13,key:'↔',text:'Поток удерживает вес и проходит через порталы. Обратное направление тянет предметы назад.'},
  ][level.index-12];
  const root=new THREE.Group();root.name='Interlaced chamber architectural finishes';root.userData.visualOnly=true;world.root.add(root);

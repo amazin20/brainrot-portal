@@ -34,7 +34,8 @@ test('The actual first puzzle, whole-attempt reset and disposal retain the origi
  try{
   assert.equal(level.singularity,true);assert.equal(level.id,'tower-singularity');
   assert.equal(level.getTowerMetrics().checkpoints,false);
-  for(const id of ['archive:slide-a','migrant:rail','pendulum:catch-a'])assert.equal(level.terminals.find(t=>t.id===id).action(),false);
+  for(const id of ['archive:slide-a','pendulum:catch-a'])assert.equal(level.terminals.find(t=>t.id===id).action(),false);
+  assert.equal(level.terminals.some(t=>t.id==='migrant:rail'),false,'The freight-recoil carrier has no dispatch motor');
   const report=await runSingularityJourney(game,{order:['freight'],stopAfter:'freight'});
   assert.equal(report.partial,true);assert.deepEqual(report.metrics.solvedIds,['freight']);assert.equal(report.resets,0);assert.equal(report.respawns,0);
   game.resetRun();assert.deepEqual(level.getTowerMetrics().solvedIds,[]);assert.equal(level.getTowerMetrics().won,false);

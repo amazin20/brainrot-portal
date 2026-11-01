@@ -18,6 +18,8 @@ import {originalRoom8Contract} from './helpers/lab-room8-gallery-contract.js';
 import {originalRoom15Contract} from './helpers/lab-room15-observation-sill-contract.js';
 import {originalRoom6Contract,originalRoom9Contract,originalRoom11Contract} from './helpers/lab-early-construction-contract.js';
 import {originalRoom10Contract} from './helpers/lab-room10-rigid-deck-contract.js';
+import {loadRoom14DeflectorFixture,room14DeflectorContract,assertRoom14DeflectorSnapshot} from './helpers/lab-room14-deflector-contract.js';
+import {originalRoom13EntryContract} from './helpers/lab-room13-entry-view-contract.js';
 
 const baseline=JSON.parse(fs.readFileSync(new URL('./fixtures/early-art-v35-contract.json',import.meta.url)));
 const assets=await createHeadlessGame();
@@ -30,23 +32,27 @@ for(const expected of baseline.rooms)test(`room ${expected.level} matches the au
  const contract=gameplayContract(assets);
  // Preserve both original goldens: subtract only room eight's exact gallery,
  // or normalize room fifteen's exact independently audited observation sill.
- const retained=expected.level===6?originalRoom6Contract(contract):expected.level===8?originalRoom8Contract(contract):expected.level===9?originalRoom9Contract(contract):expected.level===10?originalRoom10Contract(contract):expected.level===11?originalRoom11Contract(contract):expected.level===15?originalRoom15Contract(contract):contract;
+ const retained=expected.level===6?originalRoom6Contract(contract):expected.level===8?originalRoom8Contract(contract):expected.level===9?originalRoom9Contract(contract):expected.level===10?originalRoom10Contract(contract):expected.level===11?originalRoom11Contract(contract):expected.level===13?originalRoom13EntryContract(contract):expected.level===15?originalRoom15Contract(contract):contract;
  if(expected.nativeViewAudit){
-  // The v67 room16 entry aim changed deliberately. Keep its full current
-  // contract and independently retain the original collision/interaction
-  // golden by restoring only the explicitly audited camera yaw and pitch.
+  // Retain the historical collision/interaction golden after checking the
+  // exact authored entry view. Room13 and room16 each retain their precise
+  // independently audited prior architecture-finisher yaw/pitch.
   assert.deepEqual(contract.room.spawnView,expected.nativeViewAudit.current);
   const originalView=structuredClone(contract);
   originalView.room.spawnView=expected.nativeViewAudit.previous;
   assert.equal(digest(originalView),expected.nativeViewAudit.previousContract,
-   'Only the audited initial camera view may differ from the original room16 contract');
+   'Only the audited initial camera view may differ from the original room contract');
  }
- assert.equal(digest(retained),expected.contract,
+ const replacement=expected.level===14?loadRoom14DeflectorFixture():null,audited=replacement?.current??expected;
+ if(replacement){
+  assert.deepEqual(expected,replacement.legacy.room14,'Preserve the complete historical14 golden instead of replacing it in the all-room fixture');
+  assertRoom14DeflectorSnapshot(room14DeflectorContract(assets),replacement.current.contract);
+ }else assert.equal(digest(retained),expected.contract,
   'Authored colliders, portal frames, support geometry, camera blockers or interaction state changed');
- if(expected.physicalAudit){
-  assert.deepEqual(assets.firstLevel.puzzleGeometry.orders,expected.physicalAudit.allowedOrders,
+ if(audited.physicalAudit){
+  assert.deepEqual(assets.firstLevel.puzzleGeometry.orders,audited.physicalAudit.allowedOrders,
    'An added route must be physically audited before the art baseline can accept it');
-  for(const name of expected.physicalAudit.absentPanels)assert.equal(assets.firstLevel.panels[name],undefined,
+  for(const name of audited.physicalAudit.absentPanels)assert.equal(assets.firstLevel.panels[name],undefined,
    `The audited gravity-delivery room must not regain ${name}`);
  }
  const workload=sceneWorkload(assets),level=assets.firstLevel;
@@ -56,14 +62,14 @@ for(const expected of baseline.rooms)test(`room ${expected.level} matches the au
   // triangle count; the audited workload is an upper budget, not an image.
   assert.ok(Number.isSafeInteger(workload.triangles)&&workload.triangles>0,
    'The finished room must contain finite visible geometry');
-  assert.ok(workload.triangles<=expected.workload.triangles,
+  assert.ok(workload.triangles<=audited.workload.triangles,
    'The visual pass exceeds the audited source-scene triangle budget, including instances');
-  assert.equal(workload.lights,expected.workload.lights,'Batching must retain the lighting');
+  assert.equal(workload.lights,audited.workload.lights,'Batching must retain the lighting');
   // Two hidden, preallocated portal visuals add six materials. They avoid
   // allocation/compilation at the first shot and are not architectural art.
-  assert.ok(workload.materials<=expected.workload.materials+6,
+  assert.ok(workload.materials<=audited.workload.materials+6,
    'The finish exceeds the material budget including the reusable portal materials');
-  assert.ok(workload.visibleMeshes<=expected.workload.visibleMeshes,'Static batching must not add visible draw objects');
+  assert.ok(workload.visibleMeshes<=audited.workload.visibleMeshes,'Static batching must not add visible draw objects');
   assert.equal(level.earlyMechanismArt,undefined,'Early-room details leaked into a later room');
  }else{
   assert.ok(level.browser3DArt?.userData.visualOnly&&level.premiumBrowser3DArt?.userData.visualOnly);

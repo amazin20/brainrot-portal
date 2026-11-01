@@ -3,6 +3,7 @@ import {ResearchChamber} from './LabResearchArt.js';
 import {buildTransferFunnel} from './LabTransferFunnel.js';
 import {cargoLoadsPlate} from './LabPlateContact.js';
 import {dressPuzzleProgression45} from './LabPuzzleProgression45Art.js';
+import {omitCoveredDeckTop} from './LabCoveredDeckTop.js';
 const V=(...p)=>new THREE.Vector3(...p);
 export const PROGRESSION45_SPEC=Object.freeze({
  id:'puzzle-progression45-countercurrent',title:'Встречное течение',accent:0xe9b582,assets:[1,2,11,22,23,24],
@@ -33,7 +34,8 @@ export function buildPuzzleProgression45(game,index=44){
  k.ramp('Physical rear freight service incline',-26,-10,-32,-25,0,2);
  // The freight cavity is 1.55 metres high. Its same visible ceiling blocks a
  // standing traveller and allows the ordinary free cargo body.
- k.block([-18,1,-17],[10,2,16],'shell');
+ const freightPlinth=k.block([-18,1,-17],[10,2,16],'shell');
+ omitCoveredDeckTop(freightPlinth,berth.record);
  k.block([-18,7.8,-11],[10,8.5,4],'secondary');
  for(const x of [-23.3,-12.7])k.block([x,7,-17],[.6,14,17],'shell');
  const source=k.panel('source',[25,1.9,18],[-1,0,0],8,5.8);
@@ -75,6 +77,13 @@ export function buildPuzzleProgression45(game,index=44){
  k.block([20.5,24.3,-14.3],[5,13.4,.4],'secondary');
  k.block([26.2,23,-16],[.4,16,3.8],'shell');
  const goalDeck=k.deck('Lower side exit landing',14,26,-14,-4,15);
+ // The two genuine slabs overlap at the side exit. Keep both founded
+ // supports, but let the receiving bay own their common painted top. The
+ // inset is its 35 mm bevel: its full-height face begins at this boundary.
+ goalDeck.record.visibleTopExclusions=[{
+  minX:receive.record.minX+.035,maxX:receive.record.maxX-.035,
+  minZ:receive.record.minZ+.035,maxZ:receive.record.maxZ-.035,
+ }];
  const release=k.panel('release',[25.95,17.5,-16],[-1,0,0],2.8,4.8);release.mesh.userData.portalSize={width:.85,height:1.5};
  // A cargo mistake on any upper deck can walk or fall to the same unbroken
  // service foundation. No reset volume, checkpoint or synthetic return exists.

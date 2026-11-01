@@ -23,7 +23,7 @@ test('Independent lower wings work in another ordinary input order while upper p
  const game=await createHeadlessGame();game.chamberEdition='foundation';await game.selectLevel(40,true);
  try{const original=game.cargo,body=game.physics.cargoBody.id;const report=await runSingularityJourney(game,{order:['optics','sluice','freight'],stopAfter:'freight'});
   assert.equal(report.partial,true);assert.deepEqual(report.metrics.solvedIds,['optics','sluice','freight']);assert.equal(report.resets+report.respawns+report.cargoResets,0);assert.equal(report.sameCompanion,true);
-  assert.equal(game.cargo,original);assert.equal(game.physics.cargoBody.id,body);assert.equal(game.firstLevel.terminals.find(t=>t.id==='migrant:rail').action(),false);assert.equal(game.firstLevel.terminals.find(t=>t.id==='pendulum:catch-a').action(),false);
+  assert.equal(game.cargo,original);assert.equal(game.physics.cargoBody.id,body);assert.equal(game.firstLevel.terminals.some(t=>t.id==='migrant:rail'),false);assert.equal(game.firstLevel.terminals.find(t=>t.id==='pendulum:catch-a').action(),false);
   assert.ok(report.metrics.events.find(e=>e.id==='optics').proof.portalReflection);assert.ok(report.metrics.events.find(e=>e.id==='freight').proof.carriedPortalCrossings>=1);
  }finally{game.firstLevel.dispose();game.physics.dispose();game.portals.dispose();}
 });

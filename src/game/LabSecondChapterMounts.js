@@ -51,7 +51,7 @@ export function installSecondChapterMounts(game,level,parent){
    ],{mountRole:'receiver-standard',side:'south',sign,floorY:6,ringFront:[-10+sign*1.10,7.9,8.9162],clearOpticalRadius:1.05});
   }
  }
- if(level.index===13){
+ if(level.index===13&&!level.deflectorRoom){
   for(const sign of [-1,1]){
    const x=-10+sign*.82;
    add(`14 / light-sheet projector ${sign<0?'left':'right'} wall bracket`,[

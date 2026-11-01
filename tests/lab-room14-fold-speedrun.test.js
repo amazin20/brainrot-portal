@@ -1,26 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
-import {runV8Journey} from '../src/game/LabV8Journey.js';
-import {installRoom21Aim} from '../src/game/LabRoom21Journey.js';
-import {runRoom14FoldAttack} from '../scripts/lib/room14-fold-speedrun.mjs';
+import {disposeLabLevel} from '../src/game/LabLevelLifecycle.js';
+import {assertRoom14DeflectorGeometry} from './helpers/lab-room14-deflector-contract.js';
 
-for(const [label,options]of [
- ['reproduced jump5/E11',{jumpEvery:5,interactEvery:11}],
- ['jump7/E6',{jumpEvery:7,interactEvery:6}],
- ['jump11/E5',{jumpEvery:11,interactEvery:5}],
- ['precharged span rush after original cargo pickup',{jumpEvery:5,interactEvery:11,precharge:true}],
- ['free cargo push and bunnyhop',{jumpEvery:5,interactEvery:0,freePush:true}],
-])test(`room14 counterweight blocks ${label} after genuine first crossing`,async()=>{
- const g=await createHeadlessGame();g.chamberEdition='foundation';await g.selectLevel(13,false);let evidence;
+// The5retired jump/E/free-push folded-stair attacks are historical, not
+// silently reported as attempts on this completely different room. Their
+// current causal counterparts are the actual no/wrong-light recovery and
+// carried/glass attacks in lab-room14-deflector-journey.test.js and the live
+// current14 catalogue. This file independently protects their geometry causes.
+test('current14 has a genuine gap larger than any orientation of the original cargo, not a folded-span shortcut',async()=>{
+ const g=await createHeadlessGame();g.chamberEdition='foundation';await g.selectLevel(13,false);
  try{
-  const report=await runV8Journey(g,{scenario:async d=>{installRoom21Aim(d);evidence=await runRoom14FoldAttack(d,{...options,finish:false});}});
-  assert.equal(report.resets,0);assert.equal(report.respawns,0);
-  assert.equal(evidence.reachedStableIsland,true,'The attack must start after the genuine first light crossing');
-  assert.equal(evidence.cargoTransportsAfterFold,evidence.cargoTransportsBefore,'No free freight portal was used');
-  assert.ok(evidence.cargoAtFold[1]<11.8,'Original cargo must not reach the upper receiver through the folded span');
-  if(!options.freePush)assert.equal(evidence.northFoldReached,false,'Unweighted 6.3 m span blocks the sprint attack physically');
-  else assert.equal(evidence.northFoldReached,true,'Player alone may use the genuinely weighted stair while the cargo remains below');
-  assert.equal(g.state,'playing');
- }finally{g.firstLevel.dispose();g.physics.dispose();g.portals.dispose();}
+  const {gap,cargoSpaceDiagonal}=assertRoom14DeflectorGeometry(g);assert.ok(gap>cargoSpaceDiagonal);assert.equal(g.firstLevel.state.counterweightStair,undefined);assert.equal(g.firstLevel.state.lightBridge,undefined);
+  const legacy=JSON.parse(readFileSync(new URL('./fixtures/early-art-v35-contract.json',import.meta.url))).rooms.find(r=>r.level===14);
+  assert.equal(legacy.contract,'86108a1859f9d7e532d20462c91915355fda34565fa266b3c4fb6503311e84e2');assert.equal(legacy.physicalAudit.revision,'counterweighted-folded-stair-2026-10-04');
+ }finally{disposeLabLevel(g);}
 });

@@ -118,7 +118,7 @@ export function buildPost32(game,index=31){
  dockReadout(k,[0,10.6,-24.1],()=>`ВЕРХНИЙ ${optics.raw[1]&&!optics.shadow[1]?'СВЕТ':'НЕТ СВЕТА'} / НИЖНИЙ ${optics.shadow[0]?'ТЕНЬ ДРУГА':'СВЕТ'} / ${optics.latched?'ФИКСАТОР':'ЖИВАЯ ДИАФРАГМА'}`);
  finalSign(k,32,'ТОНКАЯ ТЕНЬ',[0,12.5,24.2]);
  installVisualAuditMiddleKit(k,32);
- return finish(k,[-6,0,20],[-9,.6,18],[0,0,-19],{dispatch,relay,source,sourceTrunk,hood,diaphragm,optics,access,spawnView:{yaw:0,pitch:-.05}},
+ return finish(k,[-6,0,20],[-4.5,.6,21.2],[0,0,-19],{dispatch,relay,source,sourceTrunk,hood,diaphragm,optics,access,spawnView:{yaw:-1.2,pitch:-.1}},
   {orders:['freight-before-light','inspect-optics-first'],portalRoles:{'shadow-dispatch':'transport the original opaque small rigid body into a low passage','shadow-mouth':'a shared aperture for freight and two light heights','double-ray-intake':'borrow both portals for two geometric parallel rays'},deductions:['the observer cannot enter the cargo-height hood','one small opaque body blocks only the lower ray','moving the portal pair from cargo to light leaves cargo on real support','the differential receiver moves a real door','the door can be mechanically retained before retrieving its own optical obstruction']});
 }
 

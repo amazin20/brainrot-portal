@@ -312,7 +312,10 @@ function retireCoat(level,target,owner){
 export function finishEarlyMachineConstruction(level,index,owner,replace,material){
  owner.retiredCoat??=[];owner.stats.serviceEnclosures=0;owner.stats.stairPans=0;owner.stats.integralGalleryGirders=0;owner.stats.machineSkids=0;owner.stats.bearingBlocks=0;owner.stats.opticalHousings=0;owner.stats.utilityBusBodies=0;owner.stats.workingPartitions=0;owner.stats.legibleCableBranches=0;
  const meshes=[];level.world.root.updateWorldMatrix(true,true);level.world.root.traverse(n=>{if(n.isMesh&&!n.isInstancedMesh&&!n.userData.collisionProxy)meshes.push(n);});
- for(const row of MASSES[index]??[]){
+ // The replacement fourteen has a low freight duct and sealed travel bays;
+ // these legacy mass drawings belong to the historical elevated room only.
+ const processMasses=index===13&&level.deflectorRoom?[]:MASSES[index]??[];
+ for(const row of processMasses){
   const [x,y,z,w,h,d]=row,target=meshes.find(n=>{
    const p=n.geometry?.parameters;return p&&Math.abs(p.width-w)<.015&&Math.abs(p.height-h)<.015&&Math.abs(p.depth-d)<.015&&n.getWorldPosition(V()).distanceTo(V(x,y,z))<.035;
   });

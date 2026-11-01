@@ -1,33 +1,9 @@
 import * as THREE from 'three';
-import {architecturalCassetteGeometry} from './LabArchitecturalModels.js';
-import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
+import {observatoryWallProfile,OBSERVATORY_WALL_PROFILE_REVISION} from './LabObservatoryWallProfiles.js';
 import {installObservatoryShadows} from './LabObservatoryShadows.js';
 
-export const OPTICS_ARCHITECTURE_REVISION='observatory-arched-archive-and-celestial-soffit-v1';
+export const OPTICS_ARCHITECTURE_REVISION=OBSERVATORY_WALL_PROFILE_REVISION;
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion();
-const C={indigo:0x303c66,deep:0x18233e,silver:0xa6b4cc,pearl:0xc1cadd,brass:0xa7a0bc,glass:0x2b4272};
-
-function archPath(path,x,bottom,spring,rise){
- path.moveTo(-x,bottom);path.lineTo(x,bottom);path.lineTo(x,spring);
- path.absellipse(0,spring,x,rise,0,Math.PI,false,0);path.lineTo(-x,bottom);path.closePath();return path;
-}
-function extrude(shape){
- const g=new THREE.ExtrudeGeometry(shape,{depth:1,bevelEnabled:false,curveSegments:16});
- g.translate(0,0,-.5);g.computeBoundingBox();g.computeBoundingSphere();return g;
-}
-function architectureGeometry(){
- const field=archPath(new THREE.Shape(),.405,-.45,.08,.37);
- const ring=archPath(new THREE.Shape(),.427,-.472,.08,.392);
- ring.holes.push(archPath(new THREE.Path(),.399,-.444,.08,.364));
- const circle=new THREE.Shape();circle.absarc(0,0,1,0,Math.PI*2,false);
- const hole=new THREE.Path();hole.absarc(0,0,.88,0,Math.PI*2,true);circle.holes.push(hole);
- const blade=new THREE.Shape();blade.moveTo(.23,-.01);blade.lineTo(.85,.02);blade.lineTo(.63,.50);blade.lineTo(.14,.18);blade.closePath();
- const g=extrude(blade),blades=[];
- for(let i=0;i<8;i++)blades.push(g.clone().rotateZ(i*Math.PI/4));
- const iris=mergeGeometries(blades,false);g.dispose();blades.forEach(g=>g.dispose());iris.computeBoundingBox();iris.computeBoundingSphere();
- const disk=new THREE.CylinderGeometry(1,1,1,32);disk.rotateX(Math.PI/2);
- return {box:new THREE.BoxGeometry(1,1,1),cassette:architecturalCassetteGeometry({corner:.018,inset:.008}),field:extrude(field),arch:extrude(ring),ring:extrude(circle),disk,iris};
-}
 
 /** An enclosed observatory, not a new puzzle. Replaces only the old 80 mm
  * mineral cladding; every new vertex stays in that same closed envelope.
@@ -43,12 +19,13 @@ export function installOpticsArchitecture(game,level){
  });
  if(sources.length!==1)throw new Error(`Observatory requires one original cladding owner, got ${sources.length}`);
  for(const source of sources)if(game.colliders.some(c=>c.mesh===source)||game.cameraBlockers.includes(source)||game.aimBlockers.includes(source)||game.portalPanels.includes(source))throw new Error('Refusing to hide a gameplay owner');
- const root=new THREE.Group();root.name='Optics / arched silver archive';root.userData={visualOnly:true,keepMaterial:true};world.add(root);
- const geometry=architectureGeometry(),time={value:0};
+ const root=new THREE.Group();root.name='Optics / distinct continuous instrument panels';root.userData={visualOnly:true,keepMaterial:true};world.add(root);
+ const profile=observatoryWallProfile(level.index+1),geometry={profile:profile.geometry},time={value:0};
  const make=(name,roughness,metalness)=>new THREE.MeshStandardMaterial({name,color:0xffffff,roughness,metalness});
  const materials={enamel:make('Observatory / indigo vitreous enamel',.56,.22),silver:make('Observatory / brushed silver frames',.38,.72),recess:make('Observatory / sealed dark optical cavities',.84,.08),glass:make('Observatory / opaque blue instrument glass',.24,.4)};
+ materials.enamel.vertexColors=true;
  const banks=new Map(),panels=[],changed=[],lights=[],sourceVisibility=sources.map(m=>[m,m.visible]);
- const stats={revision:OPTICS_ARCHITECTURE_REVISION,panels:0,irises:0,archives:0,parts:0,batches:0,triangles:0,newColliders:0,newLights:0};
+ const stats={revision:OPTICS_ARCHITECTURE_REVISION,profile:profile.name,rimAreaRatio:profile.rimAreaRatio,panels:0,parts:0,batches:0,triangles:0,newColliders:0,newLights:0};
  let envelope;
  function part(frame,kind,p,size,color,shape='box',angle=0){
   if([...p,...size,angle].some(n=>!Number.isFinite(n))||size.some(n=>n<=0))throw new Error('Invalid optical architecture dimensions');
@@ -69,38 +46,8 @@ export function installOpticsArchitecture(game,level){
    const frame=new THREE.Matrix4().compose(position,Q().setFromUnitVectors(V(0,0,1),normal),V(1,1,1));
    frame.premultiply(inv);envelope=new THREE.Box3(V(-ww/2,-hh/2,-.04),V(ww/2,hh/2,.04));
    const add=(kind,p,size,color,shape='box',angle=0)=>part(frame,kind,p,size,color,shape,angle);
-   // Opaque rear plate closes the old cassette footprint. The arch lining
-   // and its inset have distinct faces separated by centimetres, not z bias.
-   add('enamel',[0,0,-.031],[ww,hh,.018],C.indigo,'cassette');
-   add('recess',[0,0,-.012],[ww,hh,.014],C.deep,'field');
-   add('silver',[0,0,.008],[ww,hh,.025],C.silver,'arch');
-   for(const s of [-1,1])add('silver',[s*ww*.477,0,.010],[ww*.018,hh*.92,.024],C.silver);
-   const iris=(i+wallIndex+level.index)%3===0;
-   if(iris){
-    const radius=Math.min(ww*.31,hh*.25),cy=hh*.035;
-    add('glass',[0,cy,-.001],[radius,radius,.012],C.glass,'disk');
-    add('silver',[0,cy,.021],[radius,radius,.018],C.pearl,'ring');
-    add('enamel',[0,cy,.006],[radius*.91,radius*.91,.010],0x6575a0,'iris',(level.index%4)*Math.PI/8);
-    add('silver',[0,cy,.024],[radius*.29,radius*.29,.014],0x8d9dc5,'ring');
-    for(let t=0;t<12;t++){
-     const a=t*Math.PI/6,rr=radius*1.12;
-     add('silver',[Math.cos(a)*rr,cy+Math.sin(a)*rr,.017],[Math.min(.13,radius*.06),t%3===0?.25:.12,.014],C.silver,'box',a-Math.PI/2);
-    }
-    add('silver',[0,-hh*.33,.018],[ww*.44,.045,.016],C.brass);stats.irises++;
-   }else{
-    // Archive drawers stay in the straight lower part of the arch. Broad
-    // stepped faces read from the ordinary shoulder camera, without text.
-    for(let r=0;r<4;r++){
-     const yy=-hh*.345+r*hh*.105;
-     for(let c=0;c<3;c++){
-      add('enamel',[(c-1)*ww*.22,yy,.002],[ww*.195,hh*.077,.018],(r+c+level.index)%3===0?0x6f799c:0x414e77);
-      add('silver',[(c-1)*ww*.22,yy-hh*.024,.018],[ww*.13,.035,.012],C.silver);
-     }
-    }
-    const radius=Math.min(ww*.22,hh*.13);add('silver',[0,hh*.23,.017],[radius,radius,.016],C.silver,'ring');
-    add('glass',[0,hh*.23,-.001],[radius*.84,radius*.84,.012],C.glass,'disk');stats.archives++;
-   }
-   panels.push({frame:frame.toArray(),width:ww,height:hh,depth:.08,wall:wallIndex,type:iris?'sealed-iris':'archive'});stats.panels++;
+   add('enamel',[0,0,0],[ww,hh,1],0xffffff,'profile');
+   panels.push({frame:frame.toArray(),width:ww,height:hh,depth:.08,wall:wallIndex,type:profile.name});stats.panels++;
   }
  }
  for(const [key,entries]of banks){

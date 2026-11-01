@@ -81,7 +81,8 @@ function room37(d,options){
 
 function room40(d,options){
  const {game:g,level:l,walk,aim,until,mark,wait}=d;
- walk(18,23);aimPatch(d,0,l.input);
+ // Reach the rear gallery before crossing east, around the actual outlet panel.
+ walk(-13,23);walk(18,23);aimPatch(d,0,l.input);
  walk(18,24.5);walk(8,24.5);walk(-6,18);walk(-6,10);aimPatch(d,1,l.outlet);
  mark('One optical source is routed through two independently calibrated real slits');
  if(options.stopBeforeWeight)return;

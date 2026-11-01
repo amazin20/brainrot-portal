@@ -14,12 +14,13 @@ export class ResearchChamber extends OpenChamber {
   // Report the actual room wall, not the brighter paint on machine housings.
   this.world.root.traverse(o=>{if(o.isMesh&&o.material?.name==='Structural laboratory wall')this.world.materials.wall=o.material;});
   const foundation=this.envelopes[0];
-  // The large recovery floor occupies much of the frame in late campaign
-  // rooms. A near-black machine frame made it read as an unlit void, hiding
+  // The large recovery floor occupies much of the frame in these rooms.
+  // A near-black machine frame made it read as an unlit void, hiding
   // the physical return route beneath the raised platforms. Give that one
   // surface its own matte enamel, distinct from the lighter upper decks.
   const polishedMotorCourt=game.chamberEdition==='foundation'&&index===4;
-  const newCampaignRoom=game.chamberEdition==='foundation'&&(index>=30||index===17||index===19||polishedMotorCourt);
+  const earlyRecoveryCourt=game.chamberEdition==='foundation'&&index>=1&&index<=3;
+  const newCampaignRoom=game.chamberEdition==='foundation'&&(index>=30||index===17||index===19||polishedMotorCourt||earlyRecoveryCourt);
   if(newCampaignRoom){
    this.m.service=new THREE.MeshStandardMaterial({
     name:'Foundation service floor',
@@ -30,9 +31,9 @@ export class ResearchChamber extends OpenChamber {
    this.restoreLight=()=>{this.m.service.dispose();restore();};
   }
   const service=this.deck('Continuous service and recovery floor',bounds.minX+1,bounds.maxX-1,bounds.minZ+1,bounds.maxZ-1,base,{color:newCampaignRoom?'service':'dark'});
-  // Only the walking finish changes in the motor court. Keep the same
+  // Only the walking finish changes in these early courts. Keep the same
   // physical proxy identity as the former dark deck.
-  if(polishedMotorCourt)service.collider.mesh.name='Folded dark casing / collision';
+  if(polishedMotorCourt||earlyRecoveryCourt)service.collider.mesh.name='Folded dark casing / collision';
   service.record.portalBackingColliders.push(foundation);
   // These are roofed rooms: blue distance haze previously made the far wall
   // look like open sky and flattened the purpose-built mechanical silhouettes.

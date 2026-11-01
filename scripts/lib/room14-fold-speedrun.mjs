@@ -26,6 +26,9 @@ function collect(d){
  * Actor/portal/mechanism state is never assigned. `finish:false` observes the
  * physical folded passage only, for targeted timing/free-push regressions. */
 export async function runRoom14FoldAttack(d,{finish=true,jumpEvery=5,interactEvery=11,freePush=false,precharge=false}={}){
+ // Historical372089a counterweighted-island attack. Its input cadence is
+ // retained as evidence, never relabeled as a current deflector attempt.
+ if(d.level.deflectorRoom)throw new Error('Retired room14 folded-stair attack does not test the current deflector layout; use the current14 catalogue/journey negatives');
  const stopped=Symbol('island-prefix');let reached=false;
  try{await runRoom14({...d,mark:name=>{d.mark(name);if(name==='stable island reached'){reached=true;throw stopped;}}});}catch(e){if(e!==stopped)throw e;}
  if(!reached)throw Error('Setup did not physically reach the stable island');

@@ -123,7 +123,7 @@ export function buildCreative36(g,index=35){
  k.label('36 / УДАР ПО КАСАТЕЛЬНОЙ',[-29.5,16,12],[1,0,0],17,1.2);
  // Start at the existing promenade's open edge: from the old deep balcony
  // no shoulder orbit could reveal the rotor below the intervening floor.
- const level=finish(k,[-21.2,10,.7],[-23.3,10.6,-1.5],[19,10,-13],{rotor,bridge,fallPad:fall,outlet,spawnView:{yaw:-1.18,pitch:-.65}},
+ const level=finish(k,[-21.2,10,.7],[-23.3,10.6,-1.5],[19,10,-13],{rotor,bridge,fallPad:fall,outlet,spawnView:{yaw:0,pitch:-.2}},
   {'gravity-well':'the actual fall supplies kinetic energy','tangential-outlet':'horizontal cargo jet hits a real rotor away from its spindle'},['off-centre-impact','scout-impact-first']);
  const dispose=level.dispose;level.dispose=function(...args){rotorQuery?.dispose();return dispose?.apply(this,args);};return level;
 }
@@ -184,7 +184,7 @@ export function buildCreative37(g,index=36){
  k.ticks.push(dt=>{door.update(receiver.loaded()||latched,dt);coils.forEach((coil,i)=>{const active=selected===i;coil.rotation.z=k.time*(active?1.5:0);coil.material.emissive.setHex(active?0x49a99a:0x000000);coil.material.emissiveIntensity=active?.8+.15*Math.sin(k.time*4):0;});});
  k.resets.push(()=>{selected=-1;latched=false;door.reset();});
  k.display([0,12,-25.6],()=>`ПОЛЕ ${selected<0?'ВЫКЛЮЧЕНО':selected+1}\nПРИЁМНОЕ ГНЕЗДО ${receiver.loaded()?'НАГРУЖЕНО':'СВОБОДНО'} / ДВЕРЬ ${door.progress>.85?'ОТКРЫТА':'ЗАКРЫТА'}`,22,2.2);
- return finish(k,[-8,0,18],[-11,.6,16],[0,0,-22],{entry,mouth,receiver,door,getMagnet:()=>selected,isLatched:()=>latched,spawnView:{yaw:.14,pitch:-.05}},
+ return finish(k,[-8,0,18],[-11,.6,16],[0,0,-22],{entry,mouth,receiver,door,getMagnet:()=>selected,isLatched:()=>latched,spawnView:{yaw:.29,pitch:-.05}},
   {'magnetic-feed':'loads the original cargo into the low hood through a floor portal','low-channel-mouth':'cargo-only outlet followed by a physical two-bend magnetic duct','magnetic-receiver':'the original mass opens the remote door'},['coil-by-coil','prepare-fields-first']);
 }
 
@@ -222,6 +222,6 @@ export function buildCreative40(g,index=39){
  k.resets.push(()=>{trim=1.5;clamped=lit=false;arm=0;shutters[0].offset=2.7;shutters[1].offset=.3;door.reset();syncSlits(0);});
  k.display([-26.9,10,10],()=>`ПЛЕЧО ${arm.toFixed(1)} м / ОБЩИЙ СДВИГ ${trim.toFixed(1)} м\nОКНО I ${shutters[0].offset.toFixed(1)} / II ${shutters[1].offset.toFixed(1)}\n${lit?'ПРИЁМНИК ОСВЕЩЁН':'ЛУЧ ПЕРЕКРЫТ'} / ${clamped?'САЛАЗКИ ЗАЖАТЫ':'СВОБОДНЫЙ РЫЧАГ'}`,20,3,[1,0,0]);
  k.label('40 / ДИФФЕРЕНЦИАЛЬНЫЙ КАЛИБРАТОР',[0,15.4,-25.7],[0,0,1],24,1.2);
- return finish(k,[-10,0,22],[-12,.6,20],[0,0,-23],{lever,input,outlet,shutters,door,getCalibration:()=>({trim,arm,clamped,lit}),spawnView:{yaw:.1,pitch:-.06}},
+ return finish(k,[-13,0,10.8],[-11.4,.6,12.6],[0,0,-23],{lever,input,outlet,shutters,door,getCalibration:()=>({trim,arm,clamped,lit}),spawnView:{yaw:-1,pitch:-.1}},
   {'differential-load':'cargo lever arm displaces the two real windows in opposite directions','calibration-source':'intercepts the sole source ray','calibration-outlet':'routes it physically through both slits'},['balance-then-trim','trim-then-balance']);
 }

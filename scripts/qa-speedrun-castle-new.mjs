@@ -6,7 +6,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import * as THREE from 'three';
 import {createHeadlessGame} from './lab-headless.mjs';
-import {runSingularityJourney,prepareCrownSpatialRoom} from '../src/game/LabSingularityJourney.js';
+import {runSingularityJourney,prepareCrownSpatialRoom,releaseMigrantRecoilFreight} from '../src/game/LabSingularityJourney.js';
 import {SINGULARITY_ROOMS} from '../src/game/LabSingularityLayout.js';
 export async function runNewCastleCase(g, THREE, journey, name, {capture=async()=>{}}={}) {
   const V=(...p)=>new THREE.Vector3(...p), up=V(0,1,0), angle=x=>Math.atan2(Math.sin(x),Math.cos(x));
@@ -77,8 +77,8 @@ export async function runNewCastleCase(g, THREE, journey, name, {capture=async()
       g.yaw-=Math.max(-1,Math.min(1,q.x))*.21;g.pitch=Math.max(-1.15,Math.min(1.15,g.pitch+Math.max(-1,Math.min(1,q.y))*.19));await frame();
     }throw Error('Aim did not converge '+target);
   }
-  async function shoot(slot,panel,{required=true}={}){
-    const f=panel.frame(),p=f.center.clone();if(Math.abs(f.normal.y)<.1)p.y-=.4;
+  async function shoot(slot,panel,{required=true,center=false}={}){
+    const f=panel.frame(),p=f.center.clone();if(!center&&Math.abs(f.normal.y)<.1)p.y-=.4;
     await look(p);const accepted=g.firePortal(slot);
     for(let i=0;i<240&&(g.portalShots.queue.length||g.portalShots.active.length);i++)await frame();
     const result={slot,panel:panel.mesh.name,accepted,impact:g.portalShots.lastImpact,...snap()};r.shots.push(result);const valid=accepted&&result.impact?.valid;if(required&&!valid)throw Error('Setup portal shot rejected '+panel.mesh.name+' '+JSON.stringify(result.impact));return valid;
@@ -249,11 +249,23 @@ export async function runNewCastleCase(g, THREE, journey, name, {capture=async()
       await walk(P('magnet',-17,-14));await walk(P('magnet',-19,-9.5));await walk(P('magnet',-19,6.5));await use('magnet:coil-2');await wait(20);
       testMark('Only final coil pulls original cargo',{magnet:state('magnet').magnet,passed:state('magnet').passed});
     }else if(name==='migrant-no-rail-portal-push'||name==='migrant-readdress-moving-transit'){
-      await stage(first);await travel(l.rooms.get('migrant').door);await walk(P('migrant',-12,12));await shoot(0,state('migrant').intake);await walk(P('migrant',-13,0));await shoot(1,state('migrant').moving);
-      if(name.endsWith('moving-transit')){await use('migrant:rail');r.inputAttackStarted=true;r.readdressSucceeded=await shoot(1,state('migrant').moving,{required:false});r.physicalShotRejected=!r.readdressSucceeded;testMark(r.readdressSucceeded?'Portal successfully readdressed during real carriage movement':'Moving readdress shot hit physical obstruction; prior portal retained',{travel:state('migrant').travel,shot:r.shots.at(-1)});await walk(P('migrant',-12,12));}
-      await walk(P('migrant',-12,0));await walk(l.rooms.get('migrant').door);await travel([0,36,54]);await pickup();await travel(l.rooms.get('migrant').door);const beforePlayer=g.teleportCount,beforeCargo=g.physics.portalTransports;await enter(state('migrant').intake);
-      await force(P('migrant',12,10,3),9,{jump:true,skirt:true});testMark('Carriage receiver attacked',{travel:state('migrant').travel});
-      r.actualPlayerPortalTransfer=g.teleportCount>beforePlayer;r.actualCargoPortalTransfer=g.physics.portalTransports>beforeCargo;const event=l.getTowerMetrics().events.find(e=>e.id==='migrant');r.validAlternate=name.endsWith('moving-transit')&&!!event&&r.actualPlayerPortalTransfer&&r.actualCargoPortalTransfer&&event.proof.transportedOnMovingExit&&event.proof.travel>.98;
+      await stage(first);const machine=state('migrant'),beforeX=machine.carrierBody.position.x;r.expectedAlternate=false;r.validAlternate=false;
+      if(name.endsWith('moving-transit')){
+        await travel([0,36,54]);await pickup();await travel(l.rooms.get('migrant').door);
+        await releaseMigrantRecoilFreight({state:machine,P:(...p)=>P('migrant',...p),walk,dropAt,pickup,wait,
+          release:()=>{const accepted=!!g.heldCube&&g.interact();r.interactions.push({kind:'migrant-gravity-release',accepted,...snap()});if(!accepted)throw Error('Ordinary migrant gravity release rejected');},
+          shoot:(slot,target,options)=>{const panel=[machine.cargoIntake,machine.freightMouth].find(p=>p.frame().center.distanceTo(V().copy(target))<.08);if(!panel)throw Error('Unknown migrant freight surface');return shoot(slot,panel,options);}});
+        await until(()=>machine.travel>.005&&machine.carrierBody.velocity.x>.2,2,'Actual freight crossing did not start carrier motion');
+        r.actualFreightRecoil=!!machine.diagnostics().firstRecoil?.committed;r.velocityAtAttack=machine.carrierBody.velocity.toArray();r.inputAttackStarted=true;
+        const prior=g.portals.portals[1];r.readdressSucceeded=await shoot(1,machine.moving,{required:false});r.physicalShotRejected=!r.readdressSucceeded;r.priorPortalRetained=g.portals.portals[1]===prior;
+        await wait(5);testMark('Readdress attempted during actual freight-driven motion',{travel:machine.travel,actualFreightRecoil:r.actualFreightRecoil,physicalShotRejected:r.physicalShotRejected,priorPortalRetained:r.priorPortalRetained,diagnostics:machine.diagnostics()});
+      }else{
+        await travel(l.rooms.get('migrant').door);await walk(P('migrant',-15.6,0));await walk(P('migrant',-15.6,21.5));await walk(P('migrant',-14,18.75));
+        await shoot(0,machine.intake);const prior=g.portals.portals[1];r.inputAttackStarted=true;
+        r.parkedAddressRejected=!await shoot(1,machine.moving,{required:false});r.priorPortalRetained=g.portals.portals[1]===prior;
+        await walk(P('migrant',-11.75,18.75));await force(P('migrant',12,10,3),9,{jump:true,skirt:true});
+        r.emptyCarrierDisplacement=machine.carrierBody.position.x-beforeX;testMark('Empty pair and jump attempts cannot dispatch the finite-mass carrier',{parkedAddressRejected:r.parkedAddressRejected,emptyCarrierDisplacement:r.emptyCarrierDisplacement,diagnostics:machine.diagnostics()});
+      }
     }else if(name==='pendulum-catch-before-a'){
       await stage([...first,'migrant']);await travel(l.rooms.get('pendulum').door);await walk(P('pendulum',24,-19));await walk(P('pendulum',19,-19));
       await force(P('pendulum',15,11,6),12,{jump:true,skirt:true,interact:true});testMark('Exterior approach to upper catch attempted before A; catch remained inaccessible',{A:state('pendulum').A,B:state('pendulum').B});

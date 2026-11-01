@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {runV8Journey} from '../src/game/LabV8Journey.js';
 import {room13Access} from '../src/game/LabRoom13Journey.js';
+import {room14InputControls} from '../src/game/LabRoom14Journey.js';
 
 const views=[['wide',16/9],['portrait',390/844]];
 function horizontalDistance(p,b){return Math.hypot(Math.max(b.min.x-p.x,0,p.x-b.max.x),Math.max(b.min.z-p.z,0,p.z-b.max.z));}
@@ -13,17 +14,22 @@ async function observe(number,view,aspect,kind,scenario){
  const mounts=g.colliders.filter(c=>c.mesh.userData.secondChapterMount),row={number,view,aspect,kind,attempted:false,phases:[],samples:[],groundContacts:[],sideContacts:[],unsupportedUpperContacts:[],error:null};
  row.originalIds={group:original.group.uuid,body:original.body.id,shape:original.shape.id};
  row.mounts=mounts.map(c=>({name:c.mesh.name,id:c.mesh.uuid,min:c.box.min.toArray(),max:c.box.max.toArray(),bodyId:g.physics.solids.get(c.mesh.uuid)?.body.id}));
- assert.equal(mounts.length,number===13?14:10);assert.ok(row.mounts.every(m=>Number.isInteger(m.bodyId)));
+ if(number===14){
+  assert.equal(mounts.length,0,'Retired14brackets must not be reintroduced as shortcut supports');
+  row.equipment=g.colliders.filter(c=>['14 / projector pedestal','14 / projector barrel'].includes(c.mesh.name)).map(c=>({name:c.mesh.name,id:c.mesh.uuid,bodyId:g.physics.solids.get(c.mesh.uuid)?.body.id}));
+  assert.equal(row.equipment.length,2);assert.ok(row.equipment.every(m=>Number.isInteger(m.bodyId)));
+ }else{assert.equal(mounts.length,14);assert.ok(row.mounts.every(m=>Number.isInteger(m.bodyId)));}
  let phase='prefix',steps=0,lastGround=null;
  const snapshot=()=>({phase,step:original.world.stepnumber,player:g.playerPosition.toArray(),velocity:g.playerVelocity.toArray(),grounded:g.playerGrounded,cargo:g.cargo.position.toArray(),held:!!g.heldCube,teleports:g.teleportCount,cargoTransports:g.physics.portalTransports});
  const postStep=()=>{
   assert.equal(g.cargo,original.cargo);assert.equal(g.cargo.group,original.group);assert.equal(g.physics.cargoBody,original.body);assert.equal(original.body.shapes[0],original.shape);assert.equal(g.physics.world,original.world);assert.equal(original.world.stepnumber,++steps);
   if(steps%12===0)row.samples.push(snapshot());
   const p=g.playerPosition;
+  if(phase!=='prefix'&&number===14&&g.firstLevel.readability.cargoTarget.containsPoint(original.body.position))row.unsupportedUpperContacts.push(snapshot());
   if(g.playerGrounded){
    const contacts=g.colliders.filter(c=>c.enabled&&Math.abs(c.box.max.y-p.y)<.015&&horizontalDistance(p,c.box)<.431).map(c=>({id:c.mesh.uuid,name:c.mesh.name,mount:!!c.mesh.userData.secondChapterMount,top:c.box.max.y}));
    const key=phase+contacts.map(c=>c.id).sort().join(',');if(contacts.length&&key!==lastGround){row.groundContacts.push({...snapshot(),contacts});lastGround=key;}
-   if(phase!=='prefix'&&((number===13&&p.y>11.8)||(number===14&&p.y>7.3&&p.x>-3.2)))row.unsupportedUpperContacts.push(snapshot());
+   if(phase!=='prefix'&&(number===13&&p.y>11.8))row.unsupportedUpperContacts.push(snapshot());
   }
   if(phase!=='prefix')for(const c of mounts){const clearance=horizontalDistance(p,c.box);if(clearance<.431&&p.y<c.box.max.y-.03&&p.y+2.4>c.box.min.y+.03&&!row.sideContacts.some(s=>s.id===c.mesh.uuid))row.sideContacts.push({...snapshot(),id:c.mesh.uuid,name:c.mesh.name,clearance});}
  };
@@ -57,18 +63,16 @@ test(`13 ${view}: real ${side} receiver mounts do not replace the unpowered lift
  assert.deepEqual(s.optical.receivers,[false,false]);assert.equal(s.optical.loaded,false);assert.equal(s['north-cage'].position.y,6);assert.equal(s['south-cage'].position.y,6);assert.ok(d.game.cargo.position.y<1);assert.equal(d.game.heldCube,null);
 }));
 
+// The retired14wall brackets and bridge landing no longer exist. Preserve
+// the4view/carry probes by actually reaching the current founded projector,
+// then attacking its real roof/low-freight target without the configured field.
 for(const [view,aspect]of views)for(const carry of [false,true])
-test(`14 ${view}: ${carry?'original carried pair':'free observer'} reaches the projector but cannot replace the routed light crossing`,async()=>observe(14,view,aspect,carry?'held':'free',async(d,{begin,steer,rush,row,snapshot})=>{
- const g=d.game,p=d.level.panels,s=d.level.state;
- d.aim(0,p.access.getFrame().center);d.aim(1,p['weave-west'].getFrame().center);if(carry){d.walk(-14,12);d.pickup();}d.enter(p.access);d.walk(-16.5,0);d.walk(-14.3,-.6);d.wait(.2);
- assert.ok(g.playerGrounded&&Math.abs(g.playerPosition.y-6)<.02);assert.equal(s.lightBridge.segments.length,1);assert.equal(s.counterweightStair.supported,false);
- begin('sprint and jump from the real west landing');let jumped=false,landed=false;
- for(let n=0;n<240;n++){
-  steer(-10.82,-6.79,{brake:true});if(!jumped&&g.playerPosition.z< -2.55){g.input.jumpQueued=true;jumped=true;row.phases.push({...snapshot(),event:'jump input'});}d.frame();
-  if(jumped&&n>70&&g.playerGrounded){landed=true;row.phases.push({...snapshot(),event:'landed after jump'});break;}
- }
- d.stop();assert.ok(jumped&&landed,'The actual west-ledge jump did not finish');
- assert.ok(row.groundContacts.some(c=>c.phase!=='prefix'&&c.player[1]>=5.09&&c.player[1]<5.34&&c.player[0]>-12&&c.player[0]<-8&&c.player[2]<-6.4),'The real projector or its original light sheet must be reached before the attack');
- d.wait(.2);begin('attempt island from the reached support');rush(-1.5,0);begin('lower wall and bracket climb');for(const [x,z]of [[-10.82,-7.61],[-10.82,-8.35],[-9.18,-7.61]])rush(x,z,180);
- assert.equal(s.lightBridge.segments.length,1);assert.equal(s.counterweightStair.supported,false);assert.equal(s.counterweightStair.offset,-7.2);assert.equal(!!g.heldCube,carry);
+test(`14 ${view}: ${carry?'original carried pair':'free observer'} reaches the real projector but cannot replace the configured freight turn`,async()=>observe(14,view,aspect,carry?'held':'free',async(d,{begin,rush,row})=>{
+ const g=d.game,t=room14InputControls(d),level=d.level;
+ if(carry){for(let n=0;n<5&&!g.heldCube;n++){d.walk(g.cargo.position.x,g.cargo.position.z+1.2);g.interact();d.wait(.3);}assert.equal(g.heldCube,g.cargo);}
+ d.walk(-13.6,4.8);begin('approach the actual current projector pedestal and barrel');rush(-13.6,7,360);
+ assert.ok(row.groundContacts.some(s=>s.contacts.some(c=>c.name==='14 / projector pedestal'||c.name==='14 / projector barrel')),'The real current projector must be physically reached before calling its shortcut blocked');
+ d.walk(-13.6,4.75);t.north();d.walk(-7.6,0);begin('actual low freight mouth reached from the projector support');
+ rush(3,0,300);begin('attempt the sealed freight bay over the actual roof');rush(.55,-3.25,360);
+ assert.equal(level.readability.fan.enabled,false);assert.equal(level.state.lightContact.segments.length,1);assert.equal(level.readability.cargoTarget.containsPoint(g.cargo.position),false);assert.equal(!!g.heldCube,carry);assert.equal(g.teleportCount,0);assert.equal(g.physics.portalTransports,0);
 }));

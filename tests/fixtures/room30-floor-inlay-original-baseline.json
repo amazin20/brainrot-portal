@@ -1,0 +1,54 @@
+{
+  "kind": "assetless-THREE-drawing-regression-original-baseline",
+  "sourceCommit": "372089aae69ae49bae49c1ce4bb9c1dbd4c7f09e",
+  "sourcePath": "src/game/LabBiosphereArchitecture.js",
+  "sourceSha256": "c05e440beaff9044fbadc50a021dcb5c70d78f8129247c41c4418f46c55dbe70",
+  "scope": "Five declared mock scenes only. No GLB, Cannon, native shader or rendered-pixel proof.",
+  "rows": [
+    {
+      "id": "room21-existing-cassettes",
+      "index": 20,
+      "sourcePanels": 4,
+      "parts": 44,
+      "batches": 5,
+      "bronzeInstances": 17,
+      "protectedDrawingSha256": "61105464b1465f07c6446abb2eff61add9759bc8231b5c38cb73ad5238806e96"
+    },
+    {
+      "id": "room29-existing-cassettes",
+      "index": 28,
+      "sourcePanels": 4,
+      "parts": 44,
+      "batches": 5,
+      "bronzeInstances": 17,
+      "protectedDrawingSha256": "61105464b1465f07c6446abb2eff61add9759bc8231b5c38cb73ad5238806e96"
+    },
+    {
+      "id": "room30-existing-cassettes",
+      "index": 29,
+      "sourcePanels": 4,
+      "parts": 45,
+      "batches": 5,
+      "bronzeInstances": 18,
+      "protectedDrawingSha256": "d2852f188fb0be282a3c59f256fe39dfe739ef8116a936c982277176ac01a36d"
+    },
+    {
+      "id": "room30-fallback-visible-tiles",
+      "index": 29,
+      "sourcePanels": 228,
+      "parts": 1166,
+      "batches": 3,
+      "bronzeInstances": 912,
+      "protectedDrawingSha256": "28cfe7b01fcfb999fa8978a69d2b2f18853842f7ed772d9f2c322b9459923a36"
+    },
+    {
+      "id": "room30-fallback-no-tiles",
+      "index": 29,
+      "sourcePanels": 228,
+      "parts": 1166,
+      "batches": 3,
+      "bronzeInstances": 912,
+      "protectedDrawingSha256": "ad893e0cacf72dcb68e3e6ca6d9dc975ce7d018f9a1b9535311ac95d9c8ab170"
+    }
+  ]
+}

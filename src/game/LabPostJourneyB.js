@@ -60,12 +60,18 @@ function room38(d,{route='carry-freight-then-launch',recover=false}={}){
  check(g.playerPosition.y>14.9,'Real gravity did not supply sufficient flight height');
  mark('The player reaches the remote upper freight switch with earned speed');
  if(route!=='send-freight-early'){
-  walk(15.8,-19);check(g.interact()&&l.freight.target===1,'Upper console failed to dispatch the original companion');
+  walk(15.8,-19);d.look(new THREE.Vector3(17.45,17.9,5.8));
+  check(g.interact()&&l.freight.target===1,'Upper console failed to dispatch the original companion');
+  walk(14,-7);d.look(new THREE.Vector3(17.45,17.9,5.8));
+  until(()=>l.freight.floor.y>=13.65,12,'Actual carriage did not engage its upper docking cam');
+  if(!l.freight.at(1))mark('The moving carriage pushes the visible cam and lifts the actual final-bay rack');
   until(()=>l.freight.at(1),12,'Freight missed receiving dock');
   check(g.cargo.position.y>14,'Original cargo failed to rise with its platform');
   mark('High-gallery console raises original loose companion after independent flight');
  }
- collect(d);walk(15,-18);until(()=>g.state==='won',3,'Separated travellers failed to reunite at goal');
+ collect(d);walk(11,-4);walk(11,4);walk(11,11);
+ until(()=>g.state==='won',3,'Separated travellers failed to pass the actual dock-driven exit');
+ mark('The loaded freight ascent physically withdraws the final bay leaf for both travellers');
 }
 
 const room39=runThermalMemory;

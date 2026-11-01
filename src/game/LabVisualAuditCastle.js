@@ -212,7 +212,7 @@ export function buildCastleAuditConstruction({game,k,rooms,machines,edges}){
  }
  const migrant=rooms.get('migrant');
  if(migrant){
-  const platform=source.find(mesh=>mesh.userData.floor&&mesh.userData.collider?.kinematic&&roomFor(mesh)?.def.id==='migrant'&&
+  const platform=source.find(mesh=>mesh.userData.floor&&(mesh.userData.collider?.kinematic||mesh.userData.castleMigrantCarrier)&&roomFor(mesh)?.def.id==='migrant'&&
    Math.abs(mesh.scale.x-6)<.01&&Math.abs(mesh.scale.y-.4)<.01&&Math.abs(mesh.scale.z-8)<.01);
   const rail=source.find(mesh=>!mesh.userData.collider&&Math.abs(mesh.scale.x-30)<.01&&Math.abs(mesh.scale.y-.4)<.01&&Math.abs(mesh.scale.z-.5)<.01&&
    Math.abs(mesh.position.x-migrant.def.at[0])<.01&&Math.abs(mesh.position.z-migrant.def.at[2])<.01&&Math.abs(mesh.position.y-migrant.def.at[1]-10)<.01);

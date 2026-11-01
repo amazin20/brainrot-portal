@@ -1,6 +1,7 @@
 import {Workshop} from './LabWorkshopKit.js';
 import {installVisualAuditMiddleKit} from './LabVisualAuditMiddle.js';
 import {buildRoom23PhysicalMachine as buildRoom23Balance} from './LabRoom23PhysicalMachine.js';
+import {buildRoom23MechanismArt} from './LabRoom23MechanismArt.js';
 export const ROOM23_SPEC={id:'counterweight-reversal',title:'Вес возвращения',concept:'Передача настоящей нагрузки между противоположными кабинами под общим тормозом',description:'Две кабины и один барабан; грузовые поддоны и пассажирские площадки расположены на разных высотах.',accent:0xd9bb87,assets:[1,2,11,22,23,24],hints:['Пружинные грузовые поддоны меняют направление питаемого привода. Пассажир и друг действительно нагружают свои кабины.','На средней высоте края кабин сближаются. Общий тормоз держит барабан, пока нагрузка переходит с одного поддона на другой.','Муфта передаёт момент через прижатые диски. Снятый тормоз позволяет восточной кабине отвезти тебя на верхний обратный путь.']};
 
 /** Isolated, unaccepted dynamic Room23 prototype. The normal builder uses
@@ -26,7 +27,7 @@ export function buildRoom23PhysicalPrototype(game,index=22){
  // The initial remote freight mouth keeps the old cargo-only high hood;
  // its authored route and pan delivery are still an open prototype task.
  k.panel('freight-throat',[3.1,21,-1.5],[0,0,1],5.6,4.6);
- block([3.1,10,-1.85],[6.4,20,.6]);block([3.1,25.8,1.8],[6.4,6.4,3.5]);
+ const freightObservationBacking=block([3.1,10,-1.85],[6.4,20,.6]);block([3.1,25.8,1.8],[6.4,6.4,3.5]);
  for(const x of [-.25,6.45])block([x,24.5,.8],[.3,9,5.5]);
  // A real narrow guide slot clears the east travelling ear at x=6.4.
  deck('High car exit apron',-.1,6.2,6.6,10,20);deck('Outer high car exit apron',6.6,8,6.6,10,20);
@@ -34,19 +35,21 @@ export function buildRoom23PhysicalPrototype(game,index=22){
  deck('Upper maintenance crossover',-19,12,-16,-14,20);
  deck('West upper inspection walk',-19,-16,-17,10,20);
  deck('High receiving gallery',-5,22,-23,-17,20);
- block([14.8,9.9,-3.5],[.35,19.8,27]);
+ const eastObservationBacking=block([14.8,9.9,-3.5],[.35,19.8,27]);
  block([0,14.5,-17],[10,29,.4]);block([-5.2,14.5,-20],[.4,29,6]);block([5.2,9.9,-20],[.4,19.8,6]);block([5.2,26.5,-20],[.4,5,6]);
  k.panel('high-return',[-4.85,22.3,-20],[1,0,0],5.6,4.6);
  k.control('balance-brake',[7,10,4.5],()=>balance.requestBrake(!balance.brakeRequested),'E — привести в движение колодки общего тормоза');
  k.control('balance-coupling',[-6.5,0,5.6],()=>balance.requestClutch(!balance.clutchRequested),'E — прижать или отвести диски муфты');
  k.control('ground-brake-release',[-7,0,1],()=>balance.requestBrake(false),'E — отвести колодки общего тормоза');
+ const mechanismArt=buildRoom23MechanismArt(k,[freightObservationBacking,eastObservationBacking]);
  installVisualAuditMiddleKit(k,23);
  const level=k.finish(spawn,cargoSpawn,[0,20,-20],{workshop:k,spec:ROOM23_SPEC,room23PhysicalPrototype:true,portalPuzzle:true,balance,cargoOnAnyPad:()=>balance.west.loaded()||balance.east.loaded()});
  // A positive spring-pan contact is a command to stay on this load surface.
  // The shared passive guard also suppresses the powered upright recovery,
  // which otherwise runs before the ordinary onPad stay check.
  level.passiveCompanionSupport=()=>balance.west.loaded()||balance.east.loaded();
- level.dispose=()=>balance.dispose();level.spawnView={yaw:-.80,pitch:-.15};
+ level.dispose=()=>{mechanismArt?.dispose();balance.dispose();};level.spawnView={yaw:-.80,pitch:-.15};
+ level.room23MechanismArt=mechanismArt;
  level.mechanismArt={liftSurfaces:['west-load-car','east-load-car']};
  level.puzzleGeometry={footprint:46*45,occupiedHeights:[0,10,20],orders:['physical-direct-transfer-prototype'],noProgressFlags:true,
   portalRoles:{'west-load-car':'original cargo delivery and final retrieval on a real cabin','east-load-car':'the opposite massive carriage','freight-throat':'initial high delivery','high-return':'retrieve the original from the descended cabin'},

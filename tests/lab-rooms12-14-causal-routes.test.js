@@ -2,13 +2,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {runV8Journey} from '../src/game/LabV8Journey.js';
+import {ACTIVE_FOUNDATION_RUNTIME_FLAGS} from '../src/game/ReleaseIdentity.js';
 
 async function verify(levelIndex,order,check){
  const game=await createHeadlessGame();
- await game.selectLevel(levelIndex,false);
+ if(levelIndex===13)Object.assign(game,{chamberEdition:'foundation',...ACTIVE_FOUNDATION_RUNTIME_FLAGS});
+ await game.selectLevel(levelIndex,levelIndex===13);
  const body=game.physics.cargoBody;
  try{
-  const report=await runV8Journey(game,{journeyOptions:{order}});
+  const report=await runV8Journey(game,{journeyOptions:{order,...(levelIndex===13?{nativeStart:true}:{})}});
   assert.equal(game.state,'won');
   assert.equal(report.respawns+report.resets,0);
   assert.equal(game.physics.cargoBody,body,'The original companion completes the route');
@@ -42,15 +44,13 @@ test('13: companion and player ride the unweighted north lift before the compani
  });
 });
 
-test('14: player crosses the first light bridge alone, then retrieves the friend through the remote entry portal',async()=>{
- await verify(13,'remote-companion',(report,game)=>{
-  const names=report.milestones.map(m=>m.name);
-  const first=report.milestones.find(m=>m.name==='stable island reached');
-  const delivered=report.milestones.find(m=>m.name==='companion follows through the remote island address');
-  const upper=report.milestones.find(m=>m.name==='independent upper delivery');
-  assert.ok(first&&delivered&&upper&&first.cargo[1]<1&&delivered.cargo[1]>7.8&&upper.cargo[1]>12);
-  assert.ok(names.indexOf(first.name)<names.indexOf(delivered.name)&&names.indexOf(delivered.name)<names.indexOf(upper.name));
-  assert.ok(!names.includes('scout returns through the lower passage'));
-  assert.ok(game.physics.portalTransports>=2,'The same free companion crosses both cargo routes');
+// The former remote-island cargo address is historical. Current14scouts the
+// actual separate passenger bay before free freight, then reuses that pair.
+test('14: scout-first reaches the separate bay before the original free companion takes the unsupported contact turn',async()=>{
+ await verify(13,'scout-first',(report,game)=>{
+  const names=report.milestones.map(m=>m.name),scout=report.milestones.find(m=>m.name==='player scouts the separate glass-side travel bay'),delivered=report.milestones.find(m=>m.name==='light contact carries the original companion across the unsupported turn'),together=report.milestones.find(m=>m.name==='both travellers reach adjacent visible exit lanes');
+  assert.ok(scout&&delivered&&together&&scout.cargo[1]<0&&scout.player[1]< -1&&delivered.cargo[2]< -2.45);
+  assert.ok(names.indexOf(scout.name)<names.indexOf(delivered.name)&&names.indexOf(delivered.name)<names.indexOf(together.name));
+  assert.equal(game.physics.portalTransports,0,'The optical mouth transports a field, never the complete original cargo');assert.ok(game.teleportCount>=3,'The actual scout return and final passenger crossing must occur');
  });
 });

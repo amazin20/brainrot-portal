@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
+import {closedObservatoryCasingGeometry,observatoryMachinePalette} from './LabObservatoryRoomFinishes.js';
 
 const V=(...p)=>new THREE.Vector3(...p),Q=()=>new THREE.Quaternion(),Z=V(0,0,1);
 export const OBSERVATORY_ART_REVISION='v67-observatory-service-bay-butt-joints';
@@ -59,8 +60,8 @@ function serviceBayGeometry(size,{axis='z',paint=0x527888,accent=0xacae9a,deck=f
 }
 
 function refinishPrimaryVolumes(a,stable){
- const {k}=a,tones={31:[0x526f86,0xb6aa8b],32:[0x294551,0xa7b4ad],33:[0x4a7683,0xa6b9a7],34:[0x567d88,0xb5bea9],35:[0x365b73,0xa2bcc0],36:[0x486d83,0xc1a57e],37:[0x3b6972,0xbba274],38:[0x496778,0xa2b8b3],39:[0x4d687a,0xc4a383],40:[0x607b8b,0xb7b7a0]};
- const [paint,accent]=tones[stable],mat=new THREE.MeshStandardMaterial({name:'Observatory / recessed structural service bays',color:0xffffff,vertexColors:true,roughness:.72,metalness:.19});
+ const {k}=a,old35=[0x365b73,0xa2bcc0],palette=observatoryMachinePalette(stable);
+ const [paint,accent]=stable===35?old35:[palette.paint,palette.accent],mat=new THREE.MeshStandardMaterial({name:'Observatory / recessed structural service bays',color:0xffffff,vertexColors:true,roughness:.72,metalness:.19});
  mat.userData.keepMaterial=true;
  const sources=[...k.world.root.children].filter(m=>m.isMesh&&!m.isInstancedMesh&&m.visible&&m.material?.visible!==false&&!m.userData?.collisionProxy&&m.geometry?.parameters);
  a.stats.closedPartitionBays=0;a.stats.closedGalleryChassis=0;
@@ -89,8 +90,9 @@ function refinishPrimaryVolumes(a,stable){
  * masters, optical axes, moving body shapes and walking floors are untouched.
  * Sibling visual followers never enlarge a solver's setFromObject(owner). */
 function workshop(k){
+ const stable=k.index+1,palette=observatoryMachinePalette(stable);
  const mats={
-  paint:new THREE.MeshStandardMaterial({name:'Observatory / petrol enamel',color:0x527c83,roughness:.58,metalness:.25}),
+  paint:new THREE.MeshStandardMaterial({name:'Observatory / petrol enamel',color:stable===35?0x527c83:palette.paint,roughness:.58,metalness:.25}),
   dark:new THREE.MeshStandardMaterial({name:'Observatory / dark cast iron',color:0x243d49,roughness:.62,metalness:.45}),
   metal:new THREE.MeshStandardMaterial({name:'Observatory / machined alloy',color:0x9faea8,roughness:.39,metalness:.73}),
   copper:new THREE.MeshStandardMaterial({name:'Observatory / copper conductor',color:0xc48c53,roughness:.38,metalness:.72}),
@@ -99,6 +101,7 @@ function workshop(k){
  for(const m of Object.values(mats))m.userData.keepMaterial=true;
  const stats={revision:OBSERVATORY_ART_REVISION,stableLevel:k.index+1,physicalParts:[],followers:0,liveReadings:0};
  const updates=[],renders=[];
+ let formed=null;
  const raw=(g,p,mat='paint',name='machine member',{parent=k.world.root,batch=true,q=Q()}={})=>{
   const m=k.geometry(g,typeof mat==='string'?mats[mat]:mat,p,q,{parent,batch,name:'Observatory / '+name});
   m.userData.visualAuditObservatory=true;return m;
@@ -116,6 +119,11 @@ function workshop(k){
  // A closed back, full-depth folded perimeter and deep recessed field. The
  // one physical box covers the actual closed casing; no large hollow AABB.
  function casing(p,s,name,{mat='paint',axis='z'}={}){
+  if(stable!==35){
+   if(!formed){formed=new THREE.MeshStandardMaterial({name:'Observatory / source-bound formed casing',color:0xffffff,vertexColors:true,roughness:.59,metalness:.28});formed.userData.keepMaterial=true;}
+   const mesh=raw(closedObservatoryCasingGeometry(stable,s,{axis,role:mat}),p,formed,name+' / closed formed enclosure');
+   collider(p,s,name);return {p:V(...p),s,parts:[mesh]};
+  }
   const [a,b,c]=s,w=axis==='x'?c:a,h=b,d=axis==='x'?a:c;
   const q=axis==='x'?Q().setFromAxisAngle(V(0,1,0),Math.PI/2):Q(),parts=[];
   const add=(v,size,material)=>{

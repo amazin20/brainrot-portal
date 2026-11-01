@@ -108,7 +108,9 @@ function subtractRoom11Output(contract){
  * the exact service bus and the intentionally new finite-work output drive.
  * No generic collider, state field or interaction exception is permitted. */
 export function originalRoom11Contract(contract){
- const baseline=subtractClosedBodies(contract,'Wind test service bus / closed power casing',[
+ assert.deepEqual(contract.room.spawnView,{yaw:.4,pitch:-.15},'Only the visually audited room-eleven entry orbit may replace the absent initial view');
+ const originalView=structuredClone(contract);delete originalView.room.spawnView;
+ const baseline=subtractClosedBodies(originalView,'Wind test service bus / closed power casing',[
   [[-11.6,6.55,-3.7],[.42,.42,15.4]],
   [[-11.6,4.325,4],[.24,4.45,.24]],
   [[-11.6,3.275,-11.4],[.24,6.55,.24]],

@@ -47,7 +47,7 @@ export function installBiosphereArchitecture(game,level){
  world.traverse(n=>{if(n.isInstancedMesh&&n.name==='Architectural coat / cassette'&&n.visible)sources.push(n);});
  // The flight hangar deliberately retains its own long-span architecture.
  // Refinish its original deck footprints without moving its ballistic paths.
- const tileRestores=[];
+ const tileRestores=[];let room30FloorFallback=false;
  if(!sources.length&&level.index===29){
   const matrices=[],portals=level.world.surfaces.filter(s=>s.portal).map(s=>s.getFrame());
   for(const s of level.world.surfaces){
@@ -63,7 +63,7 @@ export function installBiosphereArchitecture(game,level){
    }
    for(const node of s.group.children)if(node.isInstancedMesh&&!node.userData.portalTile&&node.visible){tileRestores.push({source:node,visible:true});node.visible=false;}
   }
-  if(matrices.length)sources.push({visible:true,count:matrices.length,matrixWorld:world.matrixWorld,getMatrixAt:(i,m)=>m.copy(matrices[i])});
+  if(matrices.length){room30FloorFallback=true;sources.push({visible:true,count:matrices.length,matrixWorld:world.matrixWorld,getMatrixAt:(i,m)=>m.copy(matrices[i])});}
  }
  if(!sources.length)return level;
  const root=new THREE.Group();root.name='Biosphere / conservatory architecture';root.userData={visualOnly:true,keepMaterial:true,revision:BIOSPHERE_ARCHITECTURE_REVISION};world.add(root);
@@ -76,6 +76,27 @@ export function installBiosphereArchitecture(game,level){
   leaf:surfaceMaterial('Conservatory / folded botanical relief',{roughness:.73}),
   light:surfaceMaterial('Conservatory / shielded warm daylight diffuser',{color:0xffefc7,roughness:.63,emissive:0xffe2a3,emissiveIntensity:.43}),
  };
+ // The hangar's 18 mm floor inlays can become much smaller than one pixel.
+ // Fade only those owned drawings before sampling turns them into gold dots.
+ // Their closed geometry and all physical/query owners stay unchanged.
+ const floorMetalKind=room30FloorFallback?'floorInlay':'metal';
+ if(floorMetalKind==='floorInlay'){
+  const inlay=material.metal.clone();
+  inlay.name='Conservatory / hangar floor bronze with pixel coverage';
+  inlay.transparent=true;inlay.depthWrite=false;
+  inlay.onBeforeCompile=shader=>{
+   shader.vertexShader='varying vec3 vRoom30InlayBoxLocal;\n'+shader.vertexShader;
+   shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
+    vRoom30InlayBoxLocal=position;`);
+   shader.fragmentShader='varying vec3 vRoom30InlayBoxLocal;\n'+shader.fragmentShader;
+   shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
+    vec3 inlayWidthPixels=1.0/max(fwidth(vRoom30InlayBoxLocal),vec3(0.000001));
+    float inlayCoverage=smoothstep(1.0,2.0,min(inlayWidthPixels.x,min(inlayWidthPixels.y,inlayWidthPixels.z)));
+    diffuseColor.a*=inlayCoverage;`);
+  };
+  inlay.customProgramCacheKey=()=>BIOSPHERE_ARCHITECTURE_REVISION+'-room30-floor-inlay-pixel-coverage-v1';
+  material.floorInlay=inlay;
+ }
  material.leaf.side=THREE.DoubleSide;
  const time={value:0};
  material.leaf.onBeforeCompile=shader=>{
@@ -121,8 +142,8 @@ export function installBiosphereArchitecture(game,level){
     if(w>1.5&&h>1.5){
      const inset=Math.min(.13,w*.08,h*.08),d=.008;
      for(const sign of [-1,1]){
-      add('metal',[sign*(w/2-inset),0,front-.003],[.018,h-inset*2,d],PALETTE.brass);
-      add('metal',[0,sign*(h/2-inset),front-.003],[w-inset*2-.018,.018,d],PALETTE.brass);
+      add(floorMetalKind,[sign*(w/2-inset),0,front-.003],[.018,h-inset*2,d],PALETTE.brass);
+      add(floorMetalKind,[0,sign*(h/2-inset),front-.003],[w-inset*2-.018,.018,d],PALETTE.brass);
      }
      if(seed%9===0){
       add('enamel',[-w*.34,-h*.34,front-.003],[Math.min(.32,w*.12),Math.min(.32,h*.12),.008],PALETTE.jade,'box',Math.PI/4);

@@ -86,14 +86,14 @@ function stimulate(game,room,frame){
  if(frame===0){
   if(room===12)pair(game,'shared-drop','final');
   if(room===13)pair(game,'light-intake','light-output');
-  if(room===14)pair(game,'light-source','weave-west');
+  if(room===14)for(const [index,name]of ['contact-intake','contact-turn'].entries()){const panel=level.panels[name],at=panel.getFrame().center.clone().setY(1.25);assert.equal(game.placeOnPanel(index,panel.mesh,at),true);}
   if(room===15)pair(game,'intake','freight');
  }
  if(room===13){
   if(frame<100)game.cargo.position.copy(level.panels['mirror-cradle'].getFrame().center).add(V(0,.39,0));
   else game.cargo.position.set(100,100,100);
  }
- if(room===14&&frame===100)pair(game,'light-source','weave-north');
+ if(room===14){level.readability.fan.enabled=frame>=80&&frame<190;if(frame===100)pair(game,'contact-intake','passenger-arrival');}
  if(room===15){
   level.state.funnel.reversed=frame>=80;level.state.funnel.enabled=frame<190;
   if(frame===140)pair(game,'intake','lift');
@@ -120,7 +120,7 @@ for(const room of [12,13,14,15])test(`room ${room} art preserves its actual game
    stimulate(baseline,room,frame);stimulate(upgraded,room,frame);
    if(frame%30===0||frame===239)assert.deepEqual(contract(upgraded),contract(baseline),`mechanical behavior diverged at frame ${frame}`);
    if(room===13)observedMotion ||= baseline.firstLevel.state['north-cage'].progress>0||baseline.firstLevel.state['south-cage'].progress>0;
-   if(room===14)observedMotion ||= baseline.firstLevel.state.lightBridge.segments.length>1;
+   if(room===14)observedMotion ||= baseline.firstLevel.state.lightContact.segments.length>1;
    if(room===15)observedMotion ||= baseline.firstLevel.state.funnel.segments.length>1;
   }
   if(room>12)assert.ok(observedMotion,'comparison must exercise the moving or portal-routed mechanism');

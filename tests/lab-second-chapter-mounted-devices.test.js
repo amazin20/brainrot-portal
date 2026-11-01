@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {createHeadlessGame} from '../scripts/lab-headless.mjs';
 import {originalSecondChapterContract} from './helpers/lab-second-chapter-mount-contract.js';
+import {assertRoom14FieldOwnership,assertRoom14ProjectorSupport} from './helpers/lab-room14-deflector-contract.js';
 const V=(...p)=>new THREE.Vector3(...p);let game;
 before(async()=>{game=await createHeadlessGame();game.chamberEdition='foundation';});
 after(()=>{game.firstLevel?.dispose();game.physics.dispose();game.portals.dispose();});
@@ -43,15 +44,16 @@ test('room13 receiver castings bear on finite visible rails, existing lugs and p
  originalSecondChapterContract(game);
 });
 
-test('room14 closed brackets reach the real wall skin and the projector underside without covering its emitted sheet',async()=>{
- await game.selectLevel(13,true);const {meshes,castings}=game.firstLevel.secondChapterArt.mounting;
- for(const m of castings){const x=-10+m.metadata.sign*.82;
-  actualContact(m,[x,4.56,-8.3],[0,0,-1],.6,'Projector wall bearing');
-  actualContact(m,[x,4.6,-6.79],[0,1,0],.5,'Projector underside');
-  const b=new THREE.Box3();m.meshes.forEach(mesh=>b.union(new THREE.Box3().setFromObject(mesh)));assert.ok(b.min.y>4.19&&b.max.y<4.95);assert.ok(b.max.x<-10.65||b.min.x>-9.35);
- }
- const sheet=new THREE.Raycaster(V(-10,5.1,-7),V(0,0,-1),0,3);assert.equal(sheet.intersectObjects(meshes,true).length,0);
- originalSecondChapterContract(game);
+// Retired14brackets are preserved in the historical mounting fixture. The
+// current real projector is founded on its service court and its tilted
+// optical conduit owns4exact finite contact solids, not an enclosing AABB.
+test('current14 founded projector and actual tilted conduit remain physically joined and leave their emitted field open',async()=>{
+ await game.selectLevel(13,true);const level=game.firstLevel,field=level.readability.field;
+ assert.equal(level.secondChapterArt.mounting.meshes.length,0);assertRoom14ProjectorSupport(game);assertRoom14FieldOwnership(game);
+ const fixed=field.owned.filter(p=>p.fixed);assert.equal(fixed.length,4);
+ const cap=fixed.find(p=>p.mesh.name==='14 / optical conduit upper mass'),cheeks=fixed.filter(p=>p.mesh.name.startsWith('14 / optical conduit cheek '));assert.ok(cap);assert.equal(cheeks.length,2);
+ for(const cheek of cheeks)assert.ok(cap.collider.box.clone().expandByScalar(1e-6).intersectsBox(cheek.collider.box),'The actual upper conduit must meet each actual side solid');
+ for(const [index,name]of ['contact-intake','contact-turn'].entries()){const p=level.panels[name];assert.equal(game.placeOnPanel(index,p.mesh,p.getFrame().center.clone().setY(1.25)),true);}field.update();assert.ok(field.segments.length>1);assertRoom14FieldOwnership(game);originalSecondChapterContract(game);
 });
 
 test('the narrow mount exception rejects hidden, shifted, rescaled, duplicate and altered-triangle query owners',async()=>{
@@ -85,7 +87,14 @@ test('reachable southern standards have real Cannon contact with the original co
 
 test('every casting is a connected assembly of visible per-piece solids with no enclosing void collider',async()=>{
  for(const room of [13,14]){
-  await game.selectLevel(room-1,true);const mounting=game.firstLevel.secondChapterArt.mounting;
+  await game.selectLevel(room-1,true);
+  if(room===14&&game.firstLevel.deflectorRoom){
+   const art=game.firstLevel.secondChapterArt,field=game.firstLevel.readability.field,bodies=field.owned.map(p=>p.body),resources=new Map(art.ownedResources.map(r=>[r,0]));
+   assertRoom14FieldOwnership(game);assertRoom14ProjectorSupport(game);assert.equal(art.mounting.meshes.length,0);
+   for(const r of resources.keys())r.addEventListener('dispose',()=>resources.set(r,resources.get(r)+1));
+   art.dispose();art.dispose();assert.ok([...resources.values()].every(n=>n===1));assert.ok(bodies.every(b=>game.physics.world.bodies.includes(b)),'Releasing the empty legacy coat must not dispose current real contact owners');assertRoom14FieldOwnership(game);continue;
+  }
+  const mounting=game.firstLevel.secondChapterArt.mounting;
   for(const casting of mounting.castings){
    const boxes=casting.meshes.map(mesh=>game.colliders.find(c=>c.mesh===mesh).box),seen=new Set([0]);
    for(let pass=0;pass<boxes.length;pass++)for(let i=0;i<boxes.length;i++)if(!seen.has(i)&&[...seen].some(j=>boxes[i].intersectsBox(boxes[j])))seen.add(i);

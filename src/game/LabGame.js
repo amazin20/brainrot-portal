@@ -1339,14 +1339,20 @@ export class LabGame {
         const extent = CUBE_RADIUS * (Math.abs(n.x) + Math.abs(n.y) + Math.abs(n.z));
         const clear = extent + .07 - travel.position.clone().sub(exit.position).dot(exit.normal);
         if (clear > 0) travel.position.addScaledVector(exit.normal, clear);
-        this.physics.teleportCargo({ position: travel.position, rotation: travel.rotation });
+        const velocityTransfer = this.firstLevel?.prepareCargoPortalVelocityTransfer?.({
+          body:this.physics.cargoBody,travel,entryFrame:entry,exitFrame:exit,
+          entrySurfaceId:this.portalSurfaceIds[travel.entryIndex],exitSurfaceId:this.portalSurfaceIds[travel.exitIndex],
+        }) ?? null;
+        if (velocityTransfer && (velocityTransfer.entrySurfaceId !== this.portalSurfaceIds[travel.entryIndex]
+          || velocityTransfer.exitSurfaceId !== this.portalSurfaceIds[travel.exitIndex])) throw new TypeError('Cargo velocity transfer does not own this portal pair');
+        this.physics.teleportCargo({ position: travel.position, rotation: travel.rotation, velocityTransfer });
         // Sweep from the real exit plane through the complete clearance move.
         // An already shifted start can choose the far face of a thin obstacle
         // that overlaps the newly transported original rigid body.
         const exitStart = transformPortalPoint(travel.crossingPoint, entry, exit);
         const ignoreIds = new Set();
         for (const collider of this.colliders) if (collider.enabled && this.portalOpensCollider(collider, travel.position, CUBE_RADIUS, 0, this.physics.cargoBody.quaternion)) ignoreIds.add(collider.mesh.uuid);
-        this.physics.resolveCargoTransit(exitStart, { ignoreIds });
+        this.physics.resolveCargoTransit(exitStart, { ignoreIds, mode: this.firstLevel?.readability?.cargoPortalTransitMode ?? null });
         sample = this.physics.sample(1);
         this.companionBehavior?.reanchor(new THREE.Vector3().copy(sample.position)); this.companionAnimator.trigger('portal');
         this.cargoPortalCooldown = .07;

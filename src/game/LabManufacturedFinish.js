@@ -141,7 +141,8 @@ function finishMineralDecks(k){
    // caused by two differently painted, coincident triangles (not shadows).
    const exclusions=mesh.name==='Continuous service and recovery floor'?(k.decks||[])
     .filter(d=>d.name!==mesh.name&&Math.abs(d.y-y)<.002&&d.maxX>bounds.min.x&&d.minX<bounds.max.x&&d.maxZ>bounds.min.z&&d.minZ<bounds.max.z)
-    .map(d=>({minX:d.minX+.04,maxX:d.maxX-.04,minZ:d.minZ+.04,maxZ:d.maxZ-.04})):[];
+    .map(d=>({minX:d.minX+.04,maxX:d.maxX-.04,minZ:d.minZ+.04,maxZ:d.maxZ-.04})):
+    ((k.decks||[]).find(d=>d.name===mesh.name)?.visibleTopExclusions??[]);
    const contacts=k.game.colliders.filter(c=>c.enabled!==false&&!c.kinematic&&c.box.min.y<=y+.06&&c.box.max.y>=y+.18&&
     c.box.max.x>bounds.min.x&&c.box.min.x<bounds.max.x&&c.box.max.z>bounds.min.z&&c.box.min.z<bounds.max.z).map(c=>c.box);
    // Coarse box proxies may surround a whole machine. Avoid baking a large

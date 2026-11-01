@@ -9,6 +9,13 @@ const hash=array=>createHash('sha256').update(Buffer.from(array.buffer,array.byt
 export function originalSecondChapterContract(game){
  const c=gameplayContract(game),mounting=game.firstLevel.secondChapterArt?.mounting;
  if(!mounting)return c;
+ if(game.firstLevel.index===13&&game.firstLevel.deflectorRoom){
+  // The replacement has its own complete contract. Retired wall brackets
+  // must never be subtracted as an accepted exception in the new room.
+  assert.equal(mounting.meshes.length,0,'No retired14 bracket may enter the replacement');
+  for(const registry of [game.colliders.map(c=>c.mesh),game.cameraBlockers,game.aimBlockers])assert.equal(registry.some(m=>m.userData.secondChapterMount),false);
+  return c;
+ }
  const names=Object.keys(fixture).filter(name=>name.startsWith(`${game.firstLevel.index+1} / `));
  assert.deepEqual(mounting.meshes.map(m=>m.name).sort(),names.sort(),'Exact room-local visible mount membership');
  for(const registry of [game.cameraBlockers,game.aimBlockers]){

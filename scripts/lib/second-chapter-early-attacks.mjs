@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {runV8Journey} from '../../src/game/LabV8Journey.js';
 import {room12Access,room12FreightAim,room12CollectFreight,aimRoom12} from '../../src/game/LabRoom12Journey.js';
 import {room13Access,room13Light} from '../../src/game/LabRoom13Journey.js';
-import {runRoom14} from '../../src/game/LabRoom14Journey.js';
+import {room14InputControls} from '../../src/game/LabRoom14Journey.js';
 import {room15Extract,room15Ascend} from '../../src/game/LabRoom15Journey.js';
 
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
@@ -11,8 +11,12 @@ const vector=value=>value?.toArray?.()??Array.from(value??[]);
 const copy=value=>value===undefined?null:JSON.parse(JSON.stringify(value));
 function snapshot(g){
  const s=g.firstLevel.state??{},b=g.physics.cargoBody;
- return {player:vector(g.playerPosition),velocity:vector(g.playerVelocity),cargo:vector(g.cargo.position),cargoVelocity:[b.velocity.x,b.velocity.y,b.velocity.z],held:Boolean(g.heldCube),grounded:Boolean(g.playerGrounded),state:g.state,won:g.state==='won',teleports:g.teleportCount,cargoTransports:g.physics.portalTransports,worldStep:g.physics.world.stepnumber,
-  causes:{fanEnabled:s.blower?.enabled??null,drivePower:s.flywheel?.power??null,driveWork:s.flywheel?.wheel.work??null,ratchet:s.ratchet?.engaged??null,mirrorLoaded:s.optical?.loaded??null,opticalReceivers:s.optical?[...s.optical.receivers]:null,northCage:s['north-cage']?.position.y??null,southCage:s['south-cage']?.position.y??null,stairOffset:s.counterweightStair?.offset??null,stairSupported:s.counterweightStair?.supported??null,lightSegments:s.lightBridge?.segments.length??null,funnelReversed:s.funnel?.reversed??null,funnelSegments:s.funnel?.segments.map(p=>({a:vector(p.a),b:vector(p.b),direction:vector(p.direction)}))??null}};
+ const result={player:vector(g.playerPosition),velocity:vector(g.playerVelocity),cargo:vector(g.cargo.position),cargoVelocity:[b.velocity.x,b.velocity.y,b.velocity.z],held:Boolean(g.heldCube),grounded:Boolean(g.playerGrounded),state:g.state,won:g.state==='won',teleports:g.teleportCount,cargoTransports:g.physics.portalTransports,worldStep:g.physics.world.stepnumber,
+  causes:{fanEnabled:s.blower?.enabled??null,drivePower:s.flywheel?.power??null,driveWork:s.flywheel?.wheel.work??null,ratchet:s.ratchet?.engaged??null,mirrorLoaded:s.optical?.loaded??null,opticalReceivers:s.optical?[...s.optical.receivers]:null,northCage:s['north-cage']?.position.y??null,southCage:s['south-cage']?.position.y??null,stairOffset:s.counterweightStair?.offset??null,stairSupported:s.counterweightStair?.supported??null,lightSegments:s.lightBridge?.segments.length??null,funnelReversed:s.funnel?.reversed??null,funnelSegments:s.funnel?.segments.map(p=>({a:vector(p.a),b:vector(p.b),direction:vector(p.direction)}))??null}}; if(g.firstLevel.index===13&&g.firstLevel.deflectorRoom){
+  const l=g.firstLevel,field=l.readability.field;
+  Object.assign(result.causes,{deflectorFanEnabled:l.readability.fan.enabled,cargoInFreightTarget:l.readability.cargoTarget.containsPoint(b.position),playerInPassengerTarget:l.readability.passengerTarget.containsPoint(g.playerPosition),contactSegments:field.segments.map(s=>({a:vector(s.a),b:vector(s.b),direction:vector(s.direction),length:s.length})),contactOwners:field.pieces.filter(p=>p.collider.enabled).map(p=>({name:p.mesh.name,visible:p.mesh.visible,bodyPresent:g.physics.world.bodies.includes(p.body),sameShape:p.body?.shapes[0]===p.shape,bodyBox:g.physics.bodyBoxes.get(p.mesh.uuid)?.shape===p.shape,ccd:g.physics.cargoSweepBoxes.get(p.mesh.uuid)?.shape===p.shape,liveBounds:g.physics.inspectBodyBox(p.mesh.uuid,{bounds:p.collider.box,enabled:true}).valid,normal:V(0,0,1).applyQuaternion(p.mesh.getWorldQuaternion(new THREE.Quaternion())).toArray()}))});
+ }
+ return result;
 }
 function rush(d,x,y,z,seconds=5,{jumpEvery=31,interactEvery=0}={}){
  const g=d.game;g.input.keys.add('ShiftLeft');
@@ -24,10 +28,9 @@ function rush(d,x,y,z,seconds=5,{jumpEvery=31,interactEvery=0}={}){
  }
  d.stop();
 }
-async function prefix14(d,at){
- const cut=Symbol(at);let reached=false;
- try{await runRoom14({...d,mark:name=>{d.mark(name);if(name===at){reached=true;throw cut;}}});}catch(error){if(error!==cut)throw error;}
- check(reached,'The real room14 approach did not reach '+at);
+async function pickupCurrent14(d){
+ for(let n=0;n<5&&!d.game.heldCube;n++){d.walk(d.game.cargo.position.x,d.game.cargo.position.z+1.2);d.game.interact();d.wait(.3);}
+ check(d.game.heldCube===d.game.cargo,'The actual original companion was not picked up before the target');
 }
 
 export const SECOND_CHAPTER_EARLY_ATTACKS=[
@@ -74,15 +77,23 @@ export const SECOND_CHAPTER_EARLY_ATTACKS=[
   d.beginTarget('unloaded mirror raised the northern gallery while the friend remains below',!d.level.state.optical.loaded&&d.game.cargo.position.y<1&&d.game.playerPosition.y>11.9);
   for(const [x,z]of [[9,-10],[13,2.5],[9,2.5]])rush(d,x,12,z,3.5,{jumpEvery:17});d.mark('north dividing wall and receiving enclosure attacked from the earned gallery');
  }},
- {level:14,name:'unloaded-fold-sprint-with-carried-companion',async run(d){
-  await prefix14(d,'stable island reached');d.walk(-1.5,0);
-  d.beginTarget('first light crossing completed while the stair has no free load',d.game.heldCube&&d.game.playerPosition.y>7.3&&!d.level.state.counterweightStair.supported&&d.level.state.counterweightStair.offset<-7.1);
-  rush(d,-1.5,12,-12.7,10,{jumpEvery:13});d.mark('carried-companion sprint and repeated jumps meet the lowered fold');
+ // Retired14fold/jump approaches remain in the372089a history. These are
+ // actual attacks on the current roof and light-only input, never renamed
+ // old prefixes or geometry assignments.
+ {level:14,name:'carried-companion-roof-run-cannot-enter-the-freight-bay',async run(d){
+  const g=d.game,t=room14InputControls(d);await pickupCurrent14(d);t.north();d.walk(-7.6,0);d.wait(.2);
+  d.beginTarget('same carried original at the actual low freight mouth',g.heldCube===g.cargo&&g.playerGrounded&&Math.abs(g.playerPosition.x+7.6)<.3&&Math.abs(g.playerPosition.z)<.3&&!d.level.readability.fan.enabled);
+  rush(d,3,0,0,6,{jumpEvery:13});d.mark('actual roof and freight mouth met by the carried sprint');
+  rush(d,.55,-1.4,-3.25,6,{jumpEvery:17});d.mark('the original carried pair attempts the sealed freight bay from the real roof');
+  check(g.heldCube===g.cargo&&!d.level.readability.cargoTarget.containsPoint(g.cargo.position),'The carried roof approach entered the free freight target');
  }},
- {level:14,name:'west-landing-jump-before-light-is-routed',async run(d){
-  await prefix14(d,'light landing reached');d.walk(-13.5,0);
-  d.beginTarget('real west landing reached before the source sheet is routed',d.game.heldCube&&d.game.playerPosition.y>5.9&&d.level.state.lightBridge.segments.length===1);
-  rush(d,-1.5,7.4,0,5,{jumpEvery:17});d.mark('first air gap approached without its projected support');
+ {level:14,name:'charged-light-only-input-rejects-the-complete-carried-pair',async run(d){
+  const g=d.game,t=room14InputControls(d);d.walk(-15,4);t.shot(0,'contact-intake');t.north();d.walk(2,5);t.shot(1,'contact-turn');t.west();await pickupCurrent14(d);
+  d.walk(-12,8.5);d.walk(-11.7,8.5);d.look(d.level.panels['contact-intake'].getFrame().center.clone().setY(1.25));d.wait(.2);
+  check(d.level.state.lightContact.segments.length>1,'Both genuine charged optical addresses must produce the actual turning face');
+  d.beginTarget('same carried original at the genuinely charged optical-only source',g.heldCube===g.cargo&&g.portals.ready&&g.playerGrounded&&g.playerPosition.x< -11&&!d.level.readability.fan.enabled);
+  rush(d,-9,-.8,7,6,{jumpEvery:17});d.mark('full original actors repeatedly approach the actual small optical aperture');
+  check(g.teleportCount===0&&g.physics.portalTransports===0&&g.heldCube===g.cargo,'The small optical address transported a whole original actor');
  }},
  {level:15,name:'front-freight-observation-jump-and-grab',run(d){
   d.walk(-20,18.3);d.walk(-20,9);d.walk(-20,-4);d.walk(-14.5,-4);d.walk(-14.5,-4.5);
@@ -156,7 +167,7 @@ export function assertSecondChapterEarlyAttacks(report){
   check(row.pass===true&&row.error===null&&!row.completed,'Attack failed or completed the room: '+row.name);check(row.nativeStart===true&&row.normalSpawn===true,'Attack did not use the untouched native Play spawn');check(row.approachComplete===true&&row.targetStarted===true&&row.targetFrames>=120&&row.jumpInputs>=1,'Attack never exercised its real target');
   check(row.sameCargo===true&&row.sameBody===true&&row.sameGeometry===true&&row.geometryMeshes>0,'Attack replaced an original actor or geometry');check(row.resets===0&&row.respawns===0&&row.journey?.pass===true&&row.journey.resets===0&&row.journey.respawns===0,'Attack used reset/recovery');
   check(Number.isSafeInteger(row.physicsSteps)&&row.physicsSteps>0&&row.physicsSteps===row.worldStepDelta&&row.journeyFrames===row.journey.frames&&row.physicsSteps===row.journeyFrames*2,'Attack clock does not bind to the production world');check(Math.abs(row.simulationSeconds-row.physicsSteps/120)<1e-6,'Attack simulation duration mismatch');
-  check(Array.isArray(row.shots)&&row.shots.length===[0,2,0,4,5,4,3,2,0,4][i]&&row.shots.every(s=>s.accepted===true&&s.impact?.valid===true&&typeof s.expectedSurfaceId==='string'&&s.actualSurfaceId===s.expectedSurfaceId&&s.error===null),'Rejected/incomplete or missing charged shot');
+  check(Array.isArray(row.shots)&&row.shots.length===[0,2,0,4,5,4,0,2,0,4][i]&&row.shots.every(s=>s.accepted===true&&s.impact?.valid===true&&typeof s.expectedSurfaceId==='string'&&s.actualSurfaceId===s.expectedSurfaceId&&s.error===null),'Rejected/incomplete or missing charged shot');
   let lastShot=0;for(const shot of row.shots){check(Number.isSafeInteger(shot.physicsStepBefore)&&shot.physicsStepBefore>=lastShot&&Number.isSafeInteger(shot.physicsStepAfter)&&shot.physicsStepAfter>shot.physicsStepBefore&&shot.physicsStepAfter<=row.physicsSteps,'Actual charged projectile clock');lastShot=shot.physicsStepAfter;}
   check(row.trajectory.length===Math.floor(row.physicsSteps/24)+1&&row.milestones.some(m=>m.phase==='target'),'Missing retained 24-step attack observations');
   for(const[j,s]of row.trajectory.entries()){snap(s);check(s.worldStep===j*24,'Actual ordered physics trajectory');check(s.player[1]<=row.peak.playerY+1e-7&&s.cargo[1]<=row.peak.cargoY+1e-7,'Observed peak does not bound the trajectory');}
@@ -169,9 +180,13 @@ export function assertSecondChapterEarlyAttacks(report){
   if(i===3)check(row.final.teleports>=2&&row.final.cargoTransports>=2&&row.final.player[0]>7&&row.final.player[1]>8.9&&row.final.player[2]<.2&&row.final.held,'Actual cargo-height traveller or low freight-mouth arrest missing');
   if(i===4){const start=row.milestones.find(m=>m.name==='live southern lift has not completed its ascent');check(start?.causes.mirrorLoaded===true&&start.causes.opticalReceivers[1]===true&&start.causes.southCage>8&&row.final.causes.mirrorLoaded===false&&same(row.final.causes.opticalReceivers,[false,false])&&row.final.causes.southCage<start.causes.southCage-.5&&row.final.cargoTransports>start.cargoTransports,'Releasing the physical mirror no longer releases the same powered lift');}
   if(i===5)check(row.final.causes.mirrorLoaded===false&&same(row.final.causes.opticalReceivers,[true,false])&&row.final.causes.southCage===6&&row.final.cargo[1]<1&&!row.final.held,'Unloaded northern route gained the southern power or original companion');
-  if(row.level===14)check(row.final.causes.stairSupported===false&&row.final.causes.stairOffset===-7.2&&row.final.held,'Carried companion supplied an undeclared counterweight');
-  if(i===6)check(row.final.player[2]>-4&&row.final.player[1]<10&&row.final.causes.lightSegments===2,'Lowered folded stair failed to arrest the loaded sprint');
-  if(i===7)check(row.final.causes.lightSegments===1&&row.final.player[1]<2,'Unrouted first light crossing retained a useful projected support');
+  if(row.level===14){
+   const c=row.final.causes;check(c.deflectorFanEnabled===false&&c.cargoInFreightTarget===false&&c.playerInPassengerTarget===false&&row.final.held,'Incomplete carried setup reached a protected current14bay');
+   check(Array.isArray(c.contactOwners)&&c.contactOwners.length>0&&c.contactOwners.every(o=>o.visible&&o.bodyPresent&&o.sameShape&&o.bodyBox&&o.ccd&&o.liveBounds&&vector(o.normal)),'Missing actual finite light geometry/contact ownership');
+   check(row.final.teleports===0&&row.final.cargoTransports===0,'Incomplete carried attack used an undeclared actor transport');
+  }
+  if(i===6){const start=row.milestones.find(m=>m.name==='same carried original at the actual low freight mouth');check(start?.held&&start.grounded&&Math.abs(start.player[0]+7.6)<.3&&Math.abs(start.player[2])<.3&&row.peak.playerY>1.4,'The actual low roof must be reached by real jumps before reporting the blocked freight target');}
+  if(i===7){const start=row.milestones.find(m=>m.name==='same carried original at the genuinely charged optical-only source');check(start?.held&&start.causes.contactSegments.length>1&&row.final.causes.contactOwners.some(o=>Math.abs(o.normal[0])>.6&&Math.abs(o.normal[2])>.6),'The charged small-mouth attack did not actually retain an oblique contact face');}
   if(i===8)check(!row.final.held&&row.final.cargo[1]>2&&row.final.teleports===0&&row.final.cargoTransports===0&&row.peak.playerY>1.4,'Original companion escaped the unpowered freight duct or full jumps were not exercised');
   if(i===9)check(row.final.held&&row.final.teleports===0&&row.final.causes.funnelSegments.some(s=>s.direction[1]>.8)&&row.final.causes.funnelSegments.every(s=>Math.abs(s.direction[0])<.9||s.a[1]<3),'Upper loaded jump gained an unrequested transverse air route');
  }

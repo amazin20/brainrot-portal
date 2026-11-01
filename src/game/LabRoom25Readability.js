@@ -34,7 +34,14 @@ export function buildRoom25Readability(k,{pad,optical,passengers}){
   replace(surface.backing,finish);
   const marks=group(surface.group,freight?'Freight metal tread / inlaid finish':'Passenger metal tread / inlaid finish');
   mounts.push({group:marks,host:surface.mesh});
-  const halfX=surface.width/2,halfY=surface.height/2,z=TILE_PAINT;
+  // A home passenger car meets the recovery floor. Its recessed GLB tiles
+  // were only 0.6 mm above that floor's stone, causing visible depth fighting.
+  // A closed metal tread ends at the EXISTING collision plane (local Z=0),
+  // entirely inside the same support. The original tiles/owners stay intact.
+  const geometry=new THREE.BoxGeometry(surface.width-.004,surface.height-.004,.028);geometries.push(geometry);
+  const tread=new THREE.Mesh(geometry,finish);tread.name='Closed metal car tread / actual support plane';
+  tread.position.z=-.014;tread.userData.visualOnly=true;marks.add(tread);
+  const halfX=surface.width/2,halfY=surface.height/2,z=.0005;
   for(const sign of [-1,1]){
    plane(marks,'Copper metal edge',0,sign*(halfY-.12),z,surface.width-.24,.075,edge);
    plane(marks,'Copper metal edge',sign*(halfX-.12),0,z,.075,surface.height-.24,edge);
@@ -42,10 +49,10 @@ export function buildRoom25Readability(k,{pad,optical,passengers}){
   // Short oblique grip marks identify a manufactured metal tread. They are
   // ink inside its existing solid top, rather than another walkable object.
   for(const side of [-1,1])for(let n=-3;n<=3;n++)plane(marks,'Inset grip mark',side*(halfX-.35),n*.48,z,.32,.055,ink,Math.PI/4);
-  if(!freight)return {surface,marks};
+  if(!freight)return {surface,marks,tread};
   const loadMaterial=lens(),loadLenses=[];
   for(const sx of [-1,1])for(const sy of [-1,1])loadLenses.push(plane(marks,'Original load contact glass',sx*1.89,sy*1.89,z,.22,.22,loadMaterial));
-  return {surface,marks,loadMaterial,loadLenses};
+  return {surface,marks,tread,loadMaterial,loadLenses};
  }
  const freight=surfaceFinish(pad.surface,metal,{freight:true});
  const passengerDecks=passengers.map(car=>surfaceFinish(car.surface,passenger));

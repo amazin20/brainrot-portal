@@ -59,7 +59,7 @@ export function buildThermalMemory(g,index=38){
  k.display([0,12,-26.1],()=>`ШТОК ${thermal.temperature.toFixed(0)} °C / ${Math.round(thermal.energy/1000)} кДж\n${thermal.powered?'НАГРЕВ ШТОКА':thermal.remote?'МОЩНОСТЬ НА ДАЛЬНЕМ ПРИЁМНИКЕ':'ОСТЫВАНИЕ'}`,26,2);
  k.label('39 / ТЕПЛОВАЯ ПАМЯТЬ',[0,14,26.1],[0,0,-1],25,1.1);
  k.label('ВЕРХ АДРЕСА ВОЗВРАЩАЕТ НАГРЕВ',[-11.9,8.8,17],[1,0,0],10,.65);
- const l=k.finishResearch([-5,0,22],[-9,.6,21],[0,0,-21],{postCampaign:true,heater,outlet,emitter,receiver,first,second,thermal,spawnView:{yaw:.2,pitch:-.06}});
+ const l=k.finishResearch([-5,0,22],[-9,.6,21],[0,0,-21],{postCampaign:true,heater,outlet,emitter,receiver,first,second,thermal,spawnView:{yaw:.7,pitch:-.1}});
  l.puzzleGeometry={noProgressFlags:true,recoveryFloor:0,portalRoles:{'thermal-collector':'takes real optical input power away from an expanding heat store','thermal-remote-mouth':'delivers that same power to a second physical door'},orders:['heat-then-route','receiver-first'],deductions:['only a ray terminating on the material adds thermal energy','loss continues while power is sent elsewhere','extension continuously controls the first real door','the second door needs current remote illumination','raising the interception aperture restores a failed thermal charge']};
  return l;
 }
